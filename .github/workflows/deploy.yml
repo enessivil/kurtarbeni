@@ -1,0 +1,87 @@
+name: Güvenlik Kontrolü ve GitHub Pages Yayını
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  verify-and-build:
+    name: Güvenlik & Kalite Denetimi
+    runs-on: ubuntu-latest
+    steps:
+      - name: Kodu çek
+        uses: actions/checkout@v4
+
+      - name: JavaScript sözdizimi kontrolü
+        run: |
+          node --check app.js
+          node --check sw.js
+
+      - name: Güvenlik, CSP ve Manifest doğrulaması
+        run: |
+          python3 - <<'PY'
+          import json, re, sys
+
+          html = open("index.html", encoding="utf-8").read()
+          css = open("styles.css", encoding="utf-8").read()
+          js = open("app.js", encoding="utf-8").read()
+          manifest = json.loads(open("manifest.json", encoding="utf-8").read())
+
+          checks = {
+              "CSP meta etiketi var": "Content-Security-Policy" in html,
+              "HTML içinde inline style yok": re.search(r"\sstyle\s*=", html) is None,
+              "HTML içinde inline event yok": re.search(r"\son[a-z]+\s*=", html) is None,
+              "Sıfır harici URL (HTML/CSS/JS)": all(re.search(r"https?://", s) is None for s in (html, css, js)),
+              "innerHTML/outerHTML yok": "innerHTML" not in js and "outerHTML" not in js,
+              "eval/Function yok": "eval(" not in js and "new Function" not in js,
+              "Manifest adı geçerli": bool(manifest.get("name")) and bool(manifest.get("icons")),
+          }
+
+          failed = [k for k, v in checks.items() if not v]
+          for k, v in checks.items():
+              print(f"{'PASS' if v else 'FAIL'}: {k}")
+          if failed:
+              sys.exit(1)
+          PY
+
+      - name: Yalnızca canlı web dosyalarını paketle
+        if: github.event_name != 'pull_request'
+        run: |
+          mkdir -p _site
+          cp -r index.html styles.css app.js sw.js manifest.json icons _site/
+          touch _site/.nojekyll
+
+      - name: Pages yapılandır
+        if: github.event_name != 'pull_request'
+        uses: actions/configure-pages@v5
+
+      - name: Pages artefaktını yükle
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "_site"
+
+  deploy:
+    name: Canlıya Yayınla
+    if: github.event_name != 'pull_request'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: verify-and-build
+    steps:
+      - name: GitHub Pages'e dağıt
+        id: deployment
+        uses: actions/deploy-pages@v4
