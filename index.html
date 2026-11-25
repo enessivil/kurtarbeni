@@ -26,13 +26,13 @@
       </div>
       <h1 class="brand-title">Kurtar<span>Beni</span></h1>
       <p class="brand-desc">
-        İstemediğin bir sohbetten veya uzayan bir toplantıdan nazikçe sıyrıl. Süreyi ayarla, başlat ve telefonunu masaya bırak; zamanı gelince gerçekçi bir arama veya bildirim akışı başlasın.
+        İstemediğin bir sohbetten veya uzayan bir toplantıdan nazikçe sıyrıl. Süreyi ayarla, başlat ve telefonunu masaya bırak; ekran tamamen kararır ve zamanı gelince gerçekçi bir arama veya bildirim akışı başlar.
       </p>
 
       <div class="feature-list">
         <div class="feature-item">
-          <strong>Cihazına Uyumlu Arayüz</strong>
-          <span>Android ve iOS otomatik algılanır; gelen arama ve kilit ekranı telefonuna göre şekillenir.</span>
+          <strong>Cihazına Uyumlu Arayüz &amp; Ses</strong>
+          <span>Android ve iOS otomatik algılanır; stüdyo kalitesinde sentezlenmiş zil sesleri veya kendi ses dosyanla çalışır.</span>
         </div>
         <div class="feature-item">
           <strong>Sıfır Sunucu, Tam Gizlilik</strong>
@@ -51,7 +51,7 @@
       </div>
     </aside>
 
-    <!-- Uygulama Gövdesi (Masaüstünde şık telefon önizlemesi, mobilde tam ekran) -->
+    <!-- Uygulama Gövdesi -->
     <section class="phone-shell" id="appShell" aria-label="KurtarBeni Uygulaması">
       <div class="phone-notch" aria-hidden="true"></div>
 
@@ -173,10 +173,10 @@ Acil beni ara!</textarea>
             </div>
             <select class="input" id="toneSelect">
               <option value="auto">Cihaz Stiline Uygun (Otomatik)</option>
-              <option value="ios_melody">iOS Tarzı Polifonik Zil</option>
-              <option value="android_melody">Android Tarzı Modern Zil</option>
-              <option value="classic">Klasik Analog Telefon</option>
-              <option value="soft">Yumuşak / Minimal</option>
+              <option value="ios_melody">iOS Tarzı Marimba / Modern</option>
+              <option value="android_melody">Android Tarzı Melodik</option>
+              <option value="soft">Akustik Arp / Yumuşak</option>
+              <option value="classic">Gerçekçi Klasik Zil</option>
               <option value="custom">Kendi Ses Dosyam (Cihazdan)</option>
               <option value="none">Sessiz (Yalnızca Titreşim)</option>
             </select>
@@ -191,6 +191,16 @@ Acil beni ara!</textarea>
               <p class="helper-note" id="customAudioStatus">Tarayıcı güvenliği gereği sistem zil sesine doğrudan erişilemez; kendi ses dosyanı seçersen yalnızca cihazında (çevrimdışı) saklanır.</p>
             </div>
           </div>
+
+          <!-- Kilitli Ekran Bildirim & Titreşim Desteği -->
+          <label class="toggle-card" for="bgNotiToggle">
+            <div class="toggle-text">
+              <strong>Kilitli Ekran Titreşim Desteği</strong>
+              <span>Telefonu güç tuşundan kilitlersen Android sistem bildirimiyle titretmeyi dener (önerilen: ekranı kilitlemeden siyah modda bırak).</span>
+            </div>
+            <input class="toggle-input" type="checkbox" id="bgNotiToggle">
+            <span class="toggle-track" aria-hidden="true"></span>
+          </label>
 
           <!-- Alt Yasal Özet -->
           <div class="mini-legal-bar">
@@ -209,8 +219,8 @@ Acil beni ara!</textarea>
       <div class="screen screen-wait" id="screenWait" tabindex="0" aria-label="Bekleme ekranı">
         <div class="wait-content" id="waitHint">
           <div class="wait-timer" id="waitTimer">5</div>
-          <p class="wait-text">Ekran karartılıyor… Süre bitince arama/mesaj başlayacak.</p>
-          <p class="wait-sub">İptal etmek için ekrana <strong>çift dokun</strong> veya alttaki butonu kullan.</p>
+          <p class="wait-text">Güç tuşuyla ekranı kilitleme — ekran 2 sn içinde tamamen kararacak.</p>
+          <p class="wait-sub">Telefonu masaya bırak. İptal için ekrana <strong>çift dokun</strong>.</p>
         </div>
         <button type="button" class="wait-cancel-btn" id="cancelWaitBtn">İptal Et</button>
       </div>
@@ -322,7 +332,7 @@ Acil beni ara!</textarea>
           </button>
         </div>
 
-        <!-- DTMF Mini Tuş Takımı (Klavye'ye basınca açılır) -->
+        <!-- DTMF Mini Tuş Takımı -->
         <div class="dtmf-pad is-hidden" id="dtmfPad" aria-label="Tuş takımı">
           <div class="dtmf-display" id="dtmfDisplay"></div>
           <div class="dtmf-keys" id="dtmfKeys">
