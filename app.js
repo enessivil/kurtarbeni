@@ -7,7 +7,9 @@
   const STORAGE_KEY = "kurtarbeni_prefs_v1";
   const DB_NAME = "kurtarbeni_audio_db";
   const DB_STORE = "ringtones";
-  const MAX_AUDIO_BYTES = 15 * 1024 * 1024; // 15 MB
+  const KEY_AUDIO = "user_tone";
+  const KEY_WALLPAPER = "user_wallpaper";
+  const MAX_MEDIA_BYTES = 15 * 1024 * 1024; // 15 MB
   const SAMPLE_RATE = 22050;
 
   // ---------- Uygulama Durumu ----------
@@ -29,6 +31,9 @@
     customAudioBlob: null,
     customAudioName: "",
     customAudioUrl: null,
+    wallpaperBlob: null,
+    wallpaperName: "",
+    wallpaperUrl: null,
     deferredPrompt: null,
     lastTapTime: 0,
     isTestingSound: false
@@ -59,6 +64,15 @@
     msgGapInput: $("msgGapInput"),
     msgTextInput: $("msgTextInput"),
     osStyleSelect: $("osStyleSelect"),
+    wallpaperInput: $("wallpaperInput"),
+    clearWallpaperBtn: $("clearWallpaperBtn"),
+    wpThumb: $("wpThumb"),
+    wallpaperStatus: $("wallpaperStatus"),
+    wpBlurCallToggle: $("wpBlurCallToggle"),
+    homeBgImg: $("homeBgImg"),
+    homeBgScrim: $("homeBgScrim"),
+    callBgImg: $("callBgImg"),
+    callBgScrim: $("callBgScrim"),
     toneLabel: $("toneLabel"),
     toneSelect: $("toneSelect"),
     testSoundBtn: $("testSoundBtn"),
@@ -66,7 +80,6 @@
     customAudioInput: $("customAudioInput"),
     clearAudioBtn: $("clearAudioBtn"),
     customAudioStatus: $("customAudioStatus"),
-    bgNotiToggle: $("bgNotiToggle"),
     startBtn: $("startBtn"),
     screenSetup: $("screenSetup"),
     screenWait: $("screenWait"),
@@ -94,6 +107,15 @@
     declineLabel: $("declineLabel"),
     acceptWrap: $("acceptWrap"),
     acceptBtn: $("acceptBtn"),
+    tipsModal: $("tipsModal"),
+    openTipsBtn: $("openTipsBtn"),
+    openTipsBanner: $("openTipsBanner"),
+    openTipsDesktop: $("openTipsDesktop"),
+    openWallpaperTipBtn: $("openWallpaperTipBtn"),
+    openRingtoneGuideBtn: $("openRingtoneGuideBtn"),
+    closeTipsBtn: $("closeTipsBtn"),
+    acceptTipsBtn: $("acceptTipsBtn"),
+    ringtoneGuideList: $("ringtoneGuideList"),
     legalModal: $("legalModal"),
     openLegalBtn: $("openLegalBtn"),
     openLegalInline: $("openLegalInline"),
@@ -155,7 +177,7 @@
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => {
       el.toast.classList.add("is-hidden");
-    }, 3000);
+    }, 2800);
   }
 
   // ---------- 3. Ekran Yönetimi ----------
@@ -178,7 +200,7 @@
         msgText: el.msgTextInput.value.slice(0, 300),
         osStyle: el.osStyleSelect.value,
         tone: el.toneSelect.value,
-        bgNoti: Boolean(el.bgNotiToggle && el.bgNotiToggle.checked)
+        wpBlurCall: Boolean(el.wpBlurCallToggle && el.wpBlurCallToggle.checked)
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     } catch {
@@ -208,8 +230,8 @@
       ) {
         el.toneSelect.value = data.tone;
       }
-      if (el.bgNotiToggle && typeof data.bgNoti === "boolean") {
-        el.bgNotiToggle.checked = data.bgNoti && ("Notification" in window && Notification.permission === "granted");
+      if (el.wpBlurCallToggle && typeof data.wpBlurCall === "boolean") {
+        el.wpBlurCallToggle.checked = data.wpBlurCall;
       }
     } catch {
       try {
@@ -220,8 +242,8 @@
     }
   }
 
-  // ---------- 5. IndexedDB (Cihaz İçi Özel Zil Sesi) ----------
-  function openAudioDB() {
+  // ---------- 5. IndexedDB (Cihaz İçi Özel Ses & Duvar Kağıdı) ----------
+  function openMediaDB() {
     return new Promise((resolve, reject) => {
       if (!("indexedDB" in window)) {
         reject(new Error("IndexedDB desteklenmiyor"));
@@ -239,27 +261,41 @@
     });
   }
 
-  async function saveCustomAudio(file) {
-    const db = await openAudioDB();
+  async function saveMediaItem(key, file) {
+    const db = await openMediaDB();
     return new Promise((resolve, reject) => {
       const tx = db.transaction(DB_STORE, "readwrite");
-      tx.objectStore(DB_STORE).put({ blob: file, name: file.name }, "user_tone");
+      tx.objectStore(DB_STORE).put({ blob: file, name: file.name }, key);
       tx.oncomplete = () => resolve();
       tx.onerror = () => reject(tx.error);
     });
   }
 
-  async function loadCustomAudio() {
+  async function loadMediaItem(key) {
     try {
-      const db = await openAudioDB();
+      const db = await openMediaDB();
       return await new Promise((resolve, reject) => {
         const tx = db.transaction(DB_STORE, "readonly");
-        const req = tx.objectStore(DB_STORE).get("user_tone");
+        const req = tx.objectStore(DB_STORE).get(key);
         req.onsuccess = () => resolve(req.result || null);
         req.onerror = () => reject(req.error);
       });
     } catch {
       return null;
+    }
+  }
+
+  async function deleteMediaItem(key) {
+    try {
+      const db = await openMediaDB();
+      await new Promise((resolve, reject) => {
+        const tx = db.transaction(DB_STORE, "readwrite");
+        tx.objectStore(DB_STORE).delete(key);
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => reject(tx.error);
+      });
+    } catch {
+      // yoksay
     }
   }
 
@@ -270,18 +306,19 @@
     }
     state.customAudioBlob = null;
     state.customAudioName = "";
-    try {
-      const db = await openAudioDB();
-      await new Promise((resolve, reject) => {
-        const tx = db.transaction(DB_STORE, "readwrite");
-        tx.objectStore(DB_STORE).delete("user_tone");
-        tx.oncomplete = () => resolve();
-        tx.onerror = () => reject(tx.error);
-      });
-    } catch {
-      // yoksay
-    }
+    await deleteMediaItem(KEY_AUDIO);
     updateCustomAudioUI();
+  }
+
+  async function deleteCustomWallpaper() {
+    if (state.wallpaperUrl) {
+      URL.revokeObjectURL(state.wallpaperUrl);
+      state.wallpaperUrl = null;
+    }
+    state.wallpaperBlob = null;
+    state.wallpaperName = "";
+    await deleteMediaItem(KEY_WALLPAPER);
+    applyWallpaperUI();
   }
 
   function updateCustomAudioUI() {
@@ -294,8 +331,51 @@
       el.clearAudioBtn.classList.remove("is-hidden");
     } else {
       el.customAudioStatus.textContent =
-        "Tarayıcı güvenliği gereği sistem zil sesine doğrudan erişilemez; kendi ses dosyanı seçersen yalnızca cihazında (çevrimdışı) saklanır.";
+        "Kendi telefonunun zil sesini seçersen yalnızca cihazında (çevrimdışı) saklanır.";
       el.clearAudioBtn.classList.add("is-hidden");
+    }
+  }
+
+  function applyWallpaperUI() {
+    const hasWp = Boolean(state.wallpaperBlob);
+    const useOnCall = Boolean(el.wpBlurCallToggle && el.wpBlurCallToggle.checked);
+
+    if (hasWp) {
+      if (!state.wallpaperUrl) {
+        state.wallpaperUrl = URL.createObjectURL(state.wallpaperBlob);
+      }
+      el.wpThumb.src = state.wallpaperUrl;
+      el.wpThumb.classList.remove("is-hidden");
+      el.clearWallpaperBtn.classList.remove("is-hidden");
+      el.wallpaperStatus.textContent =
+        "Aktif duvar kağıdı: " + state.wallpaperName + " (yalnızca bu cihazda)";
+
+      el.homeBgImg.src = state.wallpaperUrl;
+      el.homeBgImg.classList.remove("is-hidden");
+      el.homeBgScrim.classList.remove("is-hidden");
+
+      if (useOnCall) {
+        el.callBgImg.src = state.wallpaperUrl;
+        el.callBgImg.classList.remove("is-hidden");
+        el.callBgScrim.classList.remove("is-hidden");
+      } else {
+        el.callBgImg.removeAttribute("src");
+        el.callBgImg.classList.add("is-hidden");
+        el.callBgScrim.classList.add("is-hidden");
+      }
+    } else {
+      el.wpThumb.removeAttribute("src");
+      el.wpThumb.classList.add("is-hidden");
+      el.clearWallpaperBtn.classList.add("is-hidden");
+      el.wallpaperStatus.textContent =
+        "Kendi duvar kağıdını veya boş ana ekran SS'ini seç; yalnızca bu cihazda saklanır.";
+
+      el.homeBgImg.removeAttribute("src");
+      el.homeBgImg.classList.add("is-hidden");
+      el.homeBgScrim.classList.add("is-hidden");
+      el.callBgImg.removeAttribute("src");
+      el.callBgImg.classList.add("is-hidden");
+      el.callBgScrim.classList.add("is-hidden");
     }
   }
 
@@ -315,9 +395,9 @@
     view.setUint32(4, 36 + len * 2, true);
     writeStr(8, "WAVE");
     writeStr(12, "fmt ");
-    view.setUint32(16, 16, true); // PCM
-    view.setUint16(20, 1, true); // Linear PCM
-    view.setUint16(22, 1, true); // Mono
+    view.setUint32(16, 16, true);
+    view.setUint16(20, 1, true);
+    view.setUint16(22, 1, true);
     view.setUint32(24, sampleRate, true);
     view.setUint32(28, sampleRate * 2, true);
     view.setUint16(32, 2, true);
@@ -338,7 +418,6 @@
 
   function getSilentWavUrl() {
     if (!state.silentWavUrl) {
-      // 1 saniyelik sessiz WAV: mobil tarayıcıda ses oturumunu açık tutar
       const silent = new Float32Array(8000);
       state.silentWavUrl = encodeWavBlobUrl(silent, 8000);
     }
@@ -407,7 +486,6 @@
     return out;
   }
 
-  // Sıcak Marimba / Cam Çan Sentezi (iOS Modern Tarzı)
   function addMarimbaNote(buf, freq, startSec, durSec, amp) {
     const i0 = Math.floor(startSec * SAMPLE_RATE);
     const len = Math.floor(durSec * SAMPLE_RATE);
@@ -428,7 +506,6 @@
     }
   }
 
-  // Sıcak Elektrik Piyano / Kalimba Sentezi (Android Modern Tarzı)
   function addElectricPianoNote(buf, freq, startSec, durSec, amp) {
     const i0 = Math.floor(startSec * SAMPLE_RATE);
     const len = Math.floor(durSec * SAMPLE_RATE);
@@ -447,7 +524,6 @@
     }
   }
 
-  // Yumuşak Arka Plan Akor Pedi
   function addSoftPad(buf, freqs, startSec, durSec, amp) {
     const i0 = Math.floor(startSec * SAMPLE_RATE);
     const len = Math.floor(durSec * SAMPLE_RATE);
@@ -468,7 +544,6 @@
     }
   }
 
-  // Akustik Arp / Telli Çekme Sentezi
   function addHarpPluck(buf, freq, startSec, durSec, amp) {
     const i0 = Math.floor(startSec * SAMPLE_RATE);
     const len = Math.floor(durSec * SAMPLE_RATE);
@@ -487,7 +562,6 @@
     }
   }
 
-  // Gerçekçi Pirinç Çanlı Klasik Telefon Zili
   function addClassicBellBurst(buf, startSec, durSec, amp) {
     const i0 = Math.floor(startSec * SAMPLE_RATE);
     const len = Math.floor(durSec * SAMPLE_RATE);
@@ -507,7 +581,6 @@
       const gate =
         Math.min(1, t / 0.015) *
         Math.max(0, 1 - Math.max(0, t - (durSec - 0.05)) / 0.05);
-      // 19 Hz mekanik çekiç vuruşu
       const clapper = 0.42 + 0.58 * Math.pow(Math.abs(Math.sin(Math.PI * 19 * t)), 0.7);
       let bell = 0;
       for (let p = 0; p < partials.length; p++) {
@@ -523,7 +596,6 @@
 
     let buf;
     if (style === "ios_melody") {
-      // 3.1 sn modern parlak cam-marimba teması (döngü dostu)
       buf = new Float32Array(Math.floor(SAMPLE_RATE * 3.1));
       addSoftPad(buf, [207.65, 261.63, 311.13], 0.02, 1.0, 0.12);
       addSoftPad(buf, [174.61, 220.0, 261.63], 1.08, 1.15, 0.12);
@@ -542,7 +614,6 @@
       phrase.forEach(([f, s, d, a]) => addMarimbaNote(buf, f, s, d, a));
       buf = applyStudioReverb(buf, 0.3);
     } else if (style === "android_melody") {
-      // 3.2 sn modern sıcak elektrik piyano + melodik arpej (One UI / Pixel hissiyatı)
       buf = new Float32Array(Math.floor(SAMPLE_RATE * 3.2));
       addSoftPad(buf, [293.66, 349.23, 440.0, 523.25], 0.02, 1.1, 0.14);
       addSoftPad(buf, [261.63, 329.63, 392.0, 493.88], 1.15, 1.25, 0.14);
@@ -560,7 +631,6 @@
       notes.forEach(([f, s, d, a]) => addElectricPianoNote(buf, f, s, d, a));
       buf = applyStudioReverb(buf, 0.32);
     } else if (style === "soft") {
-      // 3.2 sn sıcak akustik arp
       buf = new Float32Array(Math.floor(SAMPLE_RATE * 3.2));
       const arp = [
         [329.63, 0.04, 0.9, 0.42],
@@ -576,7 +646,6 @@
       arp.forEach(([f, s, d, a]) => addHarpPluck(buf, f, s, d, a));
       buf = applyStudioReverb(buf, 0.36);
     } else {
-      // Gerçekçi çift vuruşlu klasik pirinç zil (BRRRING — BRRRING)
       buf = new Float32Array(Math.floor(SAMPLE_RATE * 2.8));
       addClassicBellBurst(buf, 0.05, 0.58, 0.55);
       addClassicBellBurst(buf, 0.78, 0.58, 0.55);
@@ -611,7 +680,6 @@
       addClassicBellBurst(buf, 0.2, 0.16, 0.5);
       buf = applyStudioReverb(buf, 0.18);
     } else {
-      // Android tarzı parlak ikili damla çınlaması
       buf = new Float32Array(Math.floor(SAMPLE_RATE * 0.85));
       addElectricPianoNote(buf, 880.0, 0.01, 0.38, 0.52);
       addElectricPianoNote(buf, 1318.51, 0.11, 0.58, 0.58);
@@ -700,9 +768,7 @@
     player.loop = true;
     player.volume = 1.0;
     player.currentTime = 0;
-    player.play().catch(() => {
-      // Bazı tarayıcılarda ses kilitliyse kullanıcı etkileşimi bekler
-    });
+    player.play().catch(() => {});
   }
 
   function stopRinging() {
@@ -772,66 +838,14 @@
     });
   }
 
-  // ---------- 7. Kilitli Ekran Sistem Bildirimi (Android OS Seviyesi Titreşim) ----------
-  async function requestNotificationPermissionIfNeeded() {
-    if (!("Notification" in window)) {
-      showToast("Bu tarayıcı sistem bildirimlerini desteklemiyor.");
-      if (el.bgNotiToggle) el.bgNotiToggle.checked = false;
-      return false;
-    }
-    if (Notification.permission === "granted") return true;
-    if (Notification.permission === "denied") {
-      showToast("Bildirim izni engelli. Tarayıcı site ayarlarından açabilirsin.");
-      if (el.bgNotiToggle) el.bgNotiToggle.checked = false;
-      return false;
-    }
-    try {
-      const result = await Notification.requestPermission();
-      const ok = result === "granted";
-      if (!ok && el.bgNotiToggle) el.bgNotiToggle.checked = false;
-      return ok;
-    } catch {
-      if (el.bgNotiToggle) el.bgNotiToggle.checked = false;
-      return false;
-    }
-  }
-
-  async function fireSystemNotificationFallback(title, body, isCall) {
-    if (!el.bgNotiToggle || !el.bgNotiToggle.checked) return;
-    if (!("Notification" in window) || Notification.permission !== "granted") return;
-
-    const options = {
-      body: body,
-      icon: "./icons/icon-192.png",
-      badge: "./icons/icon-192.png",
-      vibrate: isCall ? [700, 300, 700, 300, 700, 300, 700] : [200, 100, 200],
-      tag: isCall ? "kurtarbeni-call" : "kurtarbeni-msg",
-      renotify: true,
-      requireInteraction: isCall
-    };
-
-    try {
-      if ("serviceWorker" in navigator) {
-        const reg = await navigator.serviceWorker.ready;
-        if (reg && reg.showNotification) {
-          await reg.showNotification(title, options);
-          return;
-        }
-      }
-      new Notification(title, options);
-    } catch {
-      // desteklenmiyorsa yoksay
-    }
-  }
-
-  // ---------- 8. Wake Lock & Tam Ekran ----------
+  // ---------- 7. Wake Lock & Tam Ekran ----------
   async function requestWakeLock() {
     try {
       if ("wakeLock" in navigator) {
         state.wakeLock = await navigator.wakeLock.request("screen");
       }
     } catch {
-      // Desteklenmiyor veya izin verilmedi; normal devam et
+      // yoksay
     }
   }
 
@@ -854,7 +868,7 @@
         root.requestFullscreen().catch(() => {});
       }
     } catch {
-      // iOS Safari fullscreen kısıtlı olabilir
+      // yoksay
     }
   }
 
@@ -868,7 +882,7 @@
     }
   }
 
-  // ---------- 9. Zamanlayıcı & Simülasyon Akışı (Gerçek Saat Bazlı) ----------
+  // ---------- 8. Zamanlayıcı & Simülasyon Akışı ----------
   function clearAllTimers() {
     state.isWaiting = false;
     state.targetEndTime = 0;
@@ -949,8 +963,8 @@
     clearAllTimers();
     savePrefs();
     applyOSTheme();
+    applyWallpaperUI();
 
-    // Seçili zil/bildirim sesini şimdiden hazırla (anlık gecikmesiz çalsın)
     const resolved = resolveToneStyle();
     if (resolved !== "none" && resolved !== "custom") {
       if (state.mode === "call") {
@@ -960,7 +974,6 @@
       }
     }
 
-    // Kullanıcı dokunuş anında sessiz ses oturumunu kilitten çıkar
     startSilentKeepAlive();
     ensureAudioContext();
 
@@ -976,7 +989,6 @@
     requestWakeLock();
     enterFullscreenIfMobile();
 
-    // 2 saniye sonra AMOLED saf siyah gizli moda geç
     if (delaySec >= 3) {
       state.timers.push(
         setTimeout(() => {
@@ -985,7 +997,6 @@
       );
     }
 
-    // 250ms aralıkla gerçek saat üzerinden kontrol et (ekran kısıtlamasında kayma olmaz)
     const tick = setInterval(checkCountdownProgress, 250);
     state.timers.push(tick);
   }
@@ -1012,10 +1023,6 @@
 
     showScreen(el.screenCall);
     startRinging();
-
-    if (document.hidden) {
-      fireSystemNotificationFallback(caller, sub + " · Gelen arama…", true);
-    }
   }
 
   function answerCall() {
@@ -1099,9 +1106,6 @@
         const node = createNotificationNode(sender, text, formatClock(new Date()));
         el.notiStack.prepend(node);
         playNotificationSound();
-        if (document.hidden) {
-          fireSystemNotificationFallback(sender, text, false);
-        }
       }, i * gap * 1000);
       state.timers.push(tId);
     }
@@ -1113,7 +1117,7 @@
     showScreen(el.screenSetup);
   }
 
-  // ---------- 10. Ses Testi ----------
+  // ---------- 9. Ses Testi ----------
   function stopTestSound() {
     if (!state.isTestingSound) return;
     stopRinging();
@@ -1146,7 +1150,33 @@
     }
   }
 
-  // ---------- 11. Mod & Arayüz Olayları ----------
+  // ---------- 10. Pano Kopyalama (Güvenli) ----------
+  async function copyTextSafe(text) {
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(text);
+        showToast("Arama metni kopyalandı: " + text);
+        return;
+      }
+    } catch {
+      // yedek yönteme geç
+    }
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.className = "sr-only";
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand("copy");
+      showToast("Arama metni kopyalandı.");
+    } catch {
+      showToast("Kopyalanamadı, metni manuel aratabilirsin.");
+    }
+    document.body.removeChild(ta);
+  }
+
+  // ---------- 11. Mod, PWA & Modallar ----------
   function setMode(mode, persist = true) {
     state.mode = mode;
     const isCall = mode === "call";
@@ -1216,6 +1246,14 @@
     }
   }
 
+  function openTipsModal() {
+    el.tipsModal.classList.remove("is-hidden");
+  }
+
+  function closeTipsModal() {
+    el.tipsModal.classList.add("is-hidden");
+  }
+
   function openLegalModal() {
     el.legalModal.classList.remove("is-hidden");
   }
@@ -1231,6 +1269,7 @@
       // yoksay
     }
     await deleteCustomAudio();
+    await deleteCustomWallpaper();
     if ("caches" in window) {
       try {
         const keys = await caches.keys();
@@ -1244,9 +1283,10 @@
     el.delayInput.value = "5";
     el.osStyleSelect.value = "auto";
     el.toneSelect.value = "auto";
-    if (el.bgNotiToggle) el.bgNotiToggle.checked = false;
+    if (el.wpBlurCallToggle) el.wpBlurCallToggle.checked = true;
     applyOSTheme();
     updateCustomAudioUI();
+    applyWallpaperUI();
     closeLegalModal();
     showToast("Tüm yerel veriler cihazından silindi.");
   }
@@ -1294,21 +1334,53 @@
       savePrefs();
     });
 
+    // Duvar kağıdı seçme / silme
+    el.wallpaperInput.addEventListener("change", async (e) => {
+      const file = e.target.files && e.target.files[0];
+      e.target.value = "";
+      if (!file) return;
+
+      if (!file.type || !file.type.startsWith("image/")) {
+        showToast("Lütfen geçerli bir görsel dosyası (.jpg, .png, .webp) seç.");
+        return;
+      }
+      if (file.size > MAX_MEDIA_BYTES) {
+        showToast("Görsel dosyası en fazla 15 MB olabilir.");
+        return;
+      }
+
+      if (state.wallpaperUrl) {
+        URL.revokeObjectURL(state.wallpaperUrl);
+        state.wallpaperUrl = null;
+      }
+      state.wallpaperBlob = file;
+      state.wallpaperName = file.name.slice(0, 60);
+
+      try {
+        await saveMediaItem(KEY_WALLPAPER, file);
+        showToast("Arka plan yalnızca bu cihaza kaydedildi.");
+      } catch {
+        showToast("Arka plan bu oturum için yüklendi.");
+      }
+      applyWallpaperUI();
+    });
+
+    el.clearWallpaperBtn.addEventListener("click", async () => {
+      await deleteCustomWallpaper();
+      showToast("Arka plan varsayılana döndürüldü.");
+    });
+
+    el.wpBlurCallToggle.addEventListener("change", () => {
+      applyWallpaperUI();
+      savePrefs();
+    });
+
+    // Zil sesi seçme / test / özel ses
     el.toneSelect.addEventListener("change", () => {
       stopTestSound();
       updateCustomAudioUI();
       savePrefs();
     });
-
-    if (el.bgNotiToggle) {
-      el.bgNotiToggle.addEventListener("change", async () => {
-        if (el.bgNotiToggle.checked) {
-          const ok = await requestNotificationPermissionIfNeeded();
-          if (ok) showToast("Kilitli ekran bildirim desteği açıldı.");
-        }
-        savePrefs();
-      });
-    }
 
     el.testSoundBtn.addEventListener("click", toggleTestSound);
 
@@ -1321,7 +1393,7 @@
         showToast("Lütfen geçerli bir ses dosyası (.mp3, .wav, .m4a) seç.");
         return;
       }
-      if (file.size > MAX_AUDIO_BYTES) {
+      if (file.size > MAX_MEDIA_BYTES) {
         showToast("Ses dosyası en fazla 15 MB olabilir.");
         return;
       }
@@ -1334,7 +1406,7 @@
       state.customAudioName = file.name.slice(0, 60);
 
       try {
-        await saveCustomAudio(file);
+        await saveMediaItem(KEY_AUDIO, file);
         showToast("Özel ses cihazına kaydedildi.");
       } catch {
         showToast("Ses bu oturum için yüklendi.");
@@ -1348,6 +1420,7 @@
       showToast("Özel ses kaldırıldı.");
     });
 
+    // Simülasyon kontrolleri
     el.startBtn.addEventListener("click", startSimulation);
     el.cancelWaitBtn.addEventListener("click", returnToSetup);
 
@@ -1392,16 +1465,36 @@
       el.inCallGrid.classList.remove("is-hidden");
     });
 
-    // Ekran kilidinden geri dönünce Wake Lock'u yenile ve zamanı anında eşitle
     document.addEventListener("visibilitychange", () => {
-      if (document.visibilityState === "visible") {
-        if (state.isWaiting) {
-          requestWakeLock();
-          checkCountdownProgress();
-        }
+      if (document.visibilityState === "visible" && state.isWaiting) {
+        requestWakeLock();
+        checkCountdownProgress();
       }
     });
 
+    // Gerçekçilik Tüyoları Modalı
+    [
+      el.openTipsBtn,
+      el.openTipsBanner,
+      el.openTipsDesktop,
+      el.openWallpaperTipBtn,
+      el.openRingtoneGuideBtn
+    ].forEach((btn) => {
+      if (btn) btn.addEventListener("click", openTipsModal);
+    });
+    el.closeTipsBtn.addEventListener("click", closeTipsModal);
+    el.acceptTipsBtn.addEventListener("click", closeTipsModal);
+    el.tipsModal.addEventListener("click", (e) => {
+      if (e.target === el.tipsModal) closeTipsModal();
+    });
+
+    el.ringtoneGuideList.addEventListener("click", (e) => {
+      const btn = e.target.closest(".copy-pill");
+      if (!btn || !btn.dataset.copy) return;
+      copyTextSafe(btn.dataset.copy);
+    });
+
+    // KVKK Modalı
     [el.openLegalBtn, el.openLegalInline, el.openLegalDesktop].forEach((btn) => {
       if (btn) btn.addEventListener("click", openLegalModal);
     });
@@ -1413,8 +1506,9 @@
     });
 
     document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && !el.legalModal.classList.contains("is-hidden")) {
-        closeLegalModal();
+      if (e.key === "Escape") {
+        if (!el.tipsModal.classList.contains("is-hidden")) closeTipsModal();
+        if (!el.legalModal.classList.contains("is-hidden")) closeLegalModal();
       }
     });
   }
@@ -1426,12 +1520,22 @@
     updateClocks();
     setInterval(updateClocks, 1000);
 
-    const savedAudio = await loadCustomAudio();
+    const [savedAudio, savedWp] = await Promise.all([
+      loadMediaItem(KEY_AUDIO),
+      loadMediaItem(KEY_WALLPAPER)
+    ]);
+
     if (savedAudio && savedAudio.blob) {
       state.customAudioBlob = savedAudio.blob;
       state.customAudioName = savedAudio.name || "Özel Ses";
     }
+    if (savedWp && savedWp.blob) {
+      state.wallpaperBlob = savedWp.blob;
+      state.wallpaperName = savedWp.name || "Duvar Kağıdı";
+    }
+
     updateCustomAudioUI();
+    applyWallpaperUI();
 
     bindEvents();
     setupPWAInstall();

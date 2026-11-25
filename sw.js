@@ -1,4 +1,4 @@
-const CACHE_NAME = "kurtarbeni-v1.1.0";
+const CACHE_NAME = "kurtarbeni-v1.2.0";
 const ASSETS = [
   "./",
   "./index.html",
@@ -50,18 +50,6 @@ self.addEventListener("fetch", (event) => {
           return response;
         })
         .catch(() => caches.match("./index.html"));
-    })
-  );
-});
-
-self.addEventListener("notificationclick", (event) => {
-  event.notification.close();
-  event.waitUntil(
-    self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((clients) => {
-      for (const client of clients) {
-        if ("focus" in client) return client.focus();
-      }
-      if (self.clients.openWindow) return self.clients.openWindow("./");
     })
   );
 });

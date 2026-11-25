@@ -26,13 +26,13 @@
       </div>
       <h1 class="brand-title">Kurtar<span>Beni</span></h1>
       <p class="brand-desc">
-        İstemediğin bir sohbetten veya uzayan bir toplantıdan nazikçe sıyrıl. Süreyi ayarla, başlat ve telefonunu masaya bırak; ekran tamamen kararır ve zamanı gelince gerçekçi bir arama veya bildirim akışı başlar.
+        İstemediğin bir sohbetten veya uzayan bir toplantıdan nazikçe sıyrıl. Süreyi ayarla, başlat ve ekranı kilitlemeden masaya bırak; ekran tamamen kararır ve zamanı gelince gerçekçi bir arama veya bildirim akışı başlar.
       </p>
 
       <div class="feature-list">
         <div class="feature-item">
-          <strong>Cihazına Uyumlu Arayüz &amp; Ses</strong>
-          <span>Android ve iOS otomatik algılanır; stüdyo kalitesinde sentezlenmiş zil sesleri veya kendi ses dosyanla çalışır.</span>
+          <strong>Kendi Duvar Kağıdın &amp; Zil Sesin</strong>
+          <span>Telefonunun kendi duvar kağıdını ve zil sesini yalnızca cihazında saklayarak birebir gerçekçi görünüm elde et.</span>
         </div>
         <div class="feature-item">
           <strong>Sıfır Sunucu, Tam Gizlilik</strong>
@@ -45,6 +45,8 @@
       </div>
 
       <div class="desktop-footer">
+        <button type="button" class="link-btn" id="openTipsDesktop">Gerçekçilik Tüyoları</button>
+        <span class="sep" aria-hidden="true">•</span>
         <button type="button" class="link-btn" id="openLegalDesktop">KVKK &amp; Yasal Uyarı</button>
         <span class="sep" aria-hidden="true">•</span>
         <span id="offlineStatusDesktop" class="status-pill">Çevrimdışı Hazır</span>
@@ -63,6 +65,13 @@
             <p class="os-caption" id="detectedOsLabel">Cihaz algılanıyor…</p>
           </div>
           <div class="header-actions">
+            <button type="button" class="icon-chip icon-chip-accent" id="openTipsBtn" aria-label="Gerçekçilik Tüyoları ve Zil Sesi Rehberi" title="Gerçekçilik Tüyoları">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M9 18h6"/>
+                <path d="M10 22h4"/>
+                <path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/>
+              </svg>
+            </button>
             <button type="button" class="icon-chip" id="openLegalBtn" aria-label="KVKK ve Yasal Uyarı" title="KVKK &amp; Yasal Uyarı">
               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
@@ -165,6 +174,31 @@ Acil beni ara!</textarea>
             </select>
           </div>
 
+          <!-- Arka Plan / Duvar Kağıdı Seçici -->
+          <div class="field-group">
+            <div class="label-row">
+              <span class="field-label">Arka Plan / Duvar Kağıdı</span>
+              <button type="button" class="test-sound-btn" id="openWallpaperTipBtn">Nasıl daha gerçekçi olur?</button>
+            </div>
+            <div class="wallpaper-box">
+              <div class="wallpaper-row">
+                <img class="wp-thumb is-hidden" id="wpThumb" alt="Seçili arka plan önizlemesi">
+                <div class="wp-controls">
+                  <div class="custom-audio-row">
+                    <label class="file-btn" for="wallpaperInput">Duvar Kağıdı / SS Seç</label>
+                    <input class="sr-only" id="wallpaperInput" type="file" accept="image/*">
+                    <button type="button" class="btn-ghost-danger is-hidden" id="clearWallpaperBtn">Kaldır</button>
+                  </div>
+                  <p class="helper-note" id="wallpaperStatus">Kendi duvar kağıdını veya boş ana ekran SS'ini seç; yalnızca bu cihazda saklanır.</p>
+                </div>
+              </div>
+              <label class="wp-check-row" for="wpBlurCallToggle">
+                <input type="checkbox" id="wpBlurCallToggle" checked>
+                <span>Arama ekranında da bulanık arka plan olarak kullan</span>
+              </label>
+            </div>
+          </div>
+
           <!-- Ses Ayarları -->
           <div class="field-group">
             <div class="label-row">
@@ -188,19 +222,19 @@ Acil beni ara!</textarea>
                 <input class="sr-only" id="customAudioInput" type="file" accept="audio/*">
                 <button type="button" class="btn-ghost-danger is-hidden" id="clearAudioBtn">Kaldır</button>
               </div>
-              <p class="helper-note" id="customAudioStatus">Tarayıcı güvenliği gereği sistem zil sesine doğrudan erişilemez; kendi ses dosyanı seçersen yalnızca cihazında (çevrimdışı) saklanır.</p>
+              <p class="helper-note" id="customAudioStatus">Kendi telefonunun zil sesini seçersen yalnızca cihazında (çevrimdışı) saklanır.</p>
+              <button type="button" class="inline-tip-btn" id="openRingtoneGuideBtn">Cihazına göre zil sesi isimleri &amp; rehber →</button>
             </div>
           </div>
 
-          <!-- Kilitli Ekran Bildirim & Titreşim Desteği -->
-          <label class="toggle-card" for="bgNotiToggle">
-            <div class="toggle-text">
-              <strong>Kilitli Ekran Titreşim Desteği</strong>
-              <span>Telefonu güç tuşundan kilitlersen Android sistem bildirimiyle titretmeyi dener (önerilen: ekranı kilitlemeden siyah modda bırak).</span>
+          <!-- Gerçekçilik Rehberi Kartı -->
+          <button type="button" class="tips-banner" id="openTipsBanner">
+            <div class="tips-banner-text">
+              <strong>Gerçekçilik Tüyoları &amp; Zil Sesi Listesi</strong>
+              <span>SS alma ipucu, marka zil sesi isimleri ve ekranı kilitlememe kuralı</span>
             </div>
-            <input class="toggle-input" type="checkbox" id="bgNotiToggle">
-            <span class="toggle-track" aria-hidden="true"></span>
-          </label>
+            <span class="tips-arrow" aria-hidden="true">›</span>
+          </button>
 
           <!-- Alt Yasal Özet -->
           <div class="mini-legal-bar">
@@ -219,7 +253,7 @@ Acil beni ara!</textarea>
       <div class="screen screen-wait" id="screenWait" tabindex="0" aria-label="Bekleme ekranı">
         <div class="wait-content" id="waitHint">
           <div class="wait-timer" id="waitTimer">5</div>
-          <p class="wait-text">Güç tuşuyla ekranı kilitleme — ekran 2 sn içinde tamamen kararacak.</p>
+          <p class="wait-text">Güç tuşuna basma — ekran 2 sn içinde tamamen kararacak.</p>
           <p class="wait-sub">Telefonu masaya bırak. İptal için ekrana <strong>çift dokun</strong>.</p>
         </div>
         <button type="button" class="wait-cancel-btn" id="cancelWaitBtn">İptal Et</button>
@@ -227,7 +261,10 @@ Acil beni ara!</textarea>
 
       <!-- 3. KİLİT EKRANI + MESAJ BİLDİRİMLERİ -->
       <div class="screen screen-home" id="screenHome">
-        <div class="status-bar" aria-hidden="true">
+        <img class="screen-bg-img is-hidden" id="homeBgImg" alt="">
+        <div class="screen-bg-scrim is-hidden" id="homeBgScrim" aria-hidden="true"></div>
+
+        <div class="status-bar screen-fg" aria-hidden="true">
           <span class="sb-time" id="sbTimeHome">12:00</span>
           <div class="sb-icons">
             <span class="sb-signal">5G</span>
@@ -235,7 +272,7 @@ Acil beni ara!</textarea>
           </div>
         </div>
 
-        <div class="lock-header">
+        <div class="lock-header screen-fg">
           <div class="lock-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
               <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
@@ -245,16 +282,19 @@ Acil beni ara!</textarea>
           <div class="lock-clock" id="lockClock">23:48</div>
         </div>
 
-        <div class="noti-stack" id="notiStack" aria-live="polite"></div>
+        <div class="noti-stack screen-fg" id="notiStack" aria-live="polite"></div>
 
-        <div class="lock-bottom">
+        <div class="lock-bottom screen-fg">
           <button type="button" class="back-pill" id="homeBackBtn">Ayarlara Dön</button>
         </div>
       </div>
 
       <!-- 4. GELEN ARAMA & AKTİF GÖRÜŞME EKRANI -->
       <div class="screen screen-call" id="screenCall">
-        <div class="status-bar" aria-hidden="true">
+        <img class="screen-bg-img is-blur is-hidden" id="callBgImg" alt="">
+        <div class="screen-bg-scrim is-call-scrim is-hidden" id="callBgScrim" aria-hidden="true"></div>
+
+        <div class="status-bar screen-fg" aria-hidden="true">
           <span class="sb-time" id="sbTimeCall">12:00</span>
           <div class="sb-icons">
             <span class="sb-signal">5G</span>
@@ -262,7 +302,7 @@ Acil beni ara!</textarea>
           </div>
         </div>
 
-        <div class="call-top">
+        <div class="call-top screen-fg">
           <div class="call-avatar-wrap">
             <div class="call-ripple" id="callRipple" aria-hidden="true"></div>
             <div class="call-avatar" id="callInitial">A</div>
@@ -272,7 +312,7 @@ Acil beni ara!</textarea>
         </div>
 
         <!-- Arama Cevaplandığında Görünecek Gerçekçi Kontrol Izgarası -->
-        <div class="incall-grid is-hidden" id="inCallGrid">
+        <div class="incall-grid screen-fg is-hidden" id="inCallGrid">
           <button type="button" class="call-tool-btn" data-tool="mute" aria-pressed="false">
             <span class="tool-circle">
               <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -333,7 +373,7 @@ Acil beni ara!</textarea>
         </div>
 
         <!-- DTMF Mini Tuş Takımı -->
-        <div class="dtmf-pad is-hidden" id="dtmfPad" aria-label="Tuş takımı">
+        <div class="dtmf-pad screen-fg is-hidden" id="dtmfPad" aria-label="Tuş takımı">
           <div class="dtmf-display" id="dtmfDisplay"></div>
           <div class="dtmf-keys" id="dtmfKeys">
             <button type="button" class="dtmf-key" data-k="1">1</button>
@@ -353,7 +393,7 @@ Acil beni ara!</textarea>
         </div>
 
         <!-- Cevapla / Reddet Butonları -->
-        <div class="call-actions" id="callActions">
+        <div class="call-actions screen-fg" id="callActions">
           <div class="call-btn-wrap" id="declineWrap">
             <button type="button" class="round-btn btn-decline" id="declineBtn" aria-label="Reddet veya Kapat">
               <svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor" aria-hidden="true">
@@ -376,6 +416,91 @@ Acil beni ara!</textarea>
     </section>
   </main>
 
+  <!-- GERÇEKÇİLİK TÜYOLARI & ZİL SESİ REHBERİ MODALI -->
+  <div class="modal-backdrop is-hidden" id="tipsModal" role="dialog" aria-modal="true" aria-labelledby="tipsModalTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="tipsModalTitle">Gerçekçilik Tüyoları &amp; Zil Sesi Rehberi</h3>
+        <button type="button" class="btn-close-mini" id="closeTipsBtn" aria-label="Kapat">×</button>
+      </div>
+      <div class="modal-body">
+        <h4>1. Kendi Duvar Kağıdınla Birebir Görünüm</h4>
+        <p>
+          Telefonunun galerisindeki mevcut duvar kağıdını (veya üzerinde simge olmayan boş bir ana ekran sayfasının ekran görüntüsünü) <strong>Arka Plan / Duvar Kağıdı</strong> alanına ekle.
+        </p>
+        <ul>
+          <li>Kilit ekranı SS'i yerine ham duvar kağıdı seçersen üstteki saat her zaman gerçek zamanlı görünür.</li>
+          <li><strong>Arama ekranında bulanık kullan</strong> seçeneği açıkken, gelen arama ekranı da kendi telefonunla birebir aynı görünür.</li>
+        </ul>
+
+        <h4>2. Güç Tuşuna Basma &amp; Medya Sesini Kontrol Et</h4>
+        <ul>
+          <li><strong>Ekranı kilitleme:</strong> Tarayıcılar ekran kilitlendiğinde titreşimi ve zamanlayıcıyı durdurur. Başlat'a bastıktan 2 saniye sonra ekran zaten tamamen siyah olur; telefonu o hâlde masaya bırak.</li>
+          <li><strong>Medya ses seviyesi:</strong> Web uygulamaları zil sesi kanalı yerine <em>Medya</em> ses kanalını kullanır. Başlatmadan önce medya sesini orta-yüksek seviyeye al.</li>
+        </ul>
+
+        <h4>3. Cihazının Gerçek Zil Sesini Nasıl Eklersin?</h4>
+        <p>
+          Marka zil sesleri telifli olduğu için koda eklenmez ve güvenlik nedeniyle dış indirme sitelerine bağlantı verilmez. En temiz yöntem: telefonundaki <code>Ringtones</code> / <code>Notifications</code> klasöründen kendi ses dosyanı seçmek veya kısa bir ses kaydını <strong>Zil Sesi → Kendi Ses Dosyam</strong> bölümüne yüklemektir.
+        </p>
+        <p>
+          Kendi cihazının varsayılan zil sesi adını bilmiyorsan aşağıdan arama terimini kopyalayıp YouTube veya güvendiğin bir zil sesi kaynağında aratabilirsin:
+        </p>
+
+        <div class="ringtone-guide-list" id="ringtoneGuideList">
+          <div class="rg-item">
+            <div class="rg-info">
+              <strong>iPhone (iOS 17+)</strong>
+              <span>Reflection (Yansıma) / Radial</span>
+            </div>
+            <button type="button" class="copy-pill" data-copy="iPhone Reflection default ringtone">Kopyala</button>
+          </div>
+          <div class="rg-item">
+            <div class="rg-info">
+              <strong>iPhone (Klasik)</strong>
+              <span>Opening (Açılış) / Marimba</span>
+            </div>
+            <button type="button" class="copy-pill" data-copy="iPhone Opening default ringtone">Kopyala</button>
+          </div>
+          <div class="rg-item">
+            <div class="rg-info">
+              <strong>Samsung (One UI)</strong>
+              <span>Over the Horizon / Galaxy Bells</span>
+            </div>
+            <button type="button" class="copy-pill" data-copy="Samsung Over the Horizon default ringtone">Kopyala</button>
+          </div>
+          <div class="rg-item">
+            <div class="rg-info">
+              <strong>Xiaomi (HyperOS / MIUI)</strong>
+              <span>Mi Remix / Mi Jazz</span>
+            </div>
+            <button type="button" class="copy-pill" data-copy="Xiaomi Mi Remix default ringtone">Kopyala</button>
+          </div>
+          <div class="rg-item">
+            <div class="rg-info">
+              <strong>Google Pixel / Saf Android</strong>
+              <span>Your New Adventure</span>
+            </div>
+            <button type="button" class="copy-pill" data-copy="Google Pixel Your New Adventure ringtone">Kopyala</button>
+          </div>
+          <div class="rg-item">
+            <div class="rg-info">
+              <strong>Huawei / Honor</strong>
+              <span>Huawei Tune Living</span>
+            </div>
+            <button type="button" class="copy-pill" data-copy="Huawei Tune Living default ringtone">Kopyala</button>
+          </div>
+        </div>
+        <p class="helper-note rg-disclaimer">
+          Not: Üçüncü parti indirme sitelerindeki sahte reklamlara dikkat et; yalnızca güvendiğin kaynaklardan aldığın <code>.mp3</code>, <code>.wav</code> veya <code>.m4a</code> dosyalarını kullan.
+        </p>
+      </div>
+      <div class="modal-footer modal-footer-end">
+        <button type="button" class="btn-confirm" id="acceptTipsBtn">Tamam</button>
+      </div>
+    </div>
+  </div>
+
   <!-- KVKK & Yasal Uyarı Modalı -->
   <div class="modal-backdrop is-hidden" id="legalModal" role="dialog" aria-modal="true" aria-labelledby="legalModalTitle">
     <div class="modal-card">
@@ -389,7 +514,7 @@ Acil beni ara!</textarea>
           <strong>KurtarBeni</strong> tamamen tarayıcınızda (istemci tarafında) çalışan açık kaynaklı bir statik web uygulamasıdır. Hiçbir sunucu, veritabanı, çerez (cookie), reklam ağı, harici yazı tipi veya analitik aracı içermez.
         </p>
         <p>
-          Girdiğiniz arayan adı, mesaj metni veya seçtiğiniz özel zil sesi dosyası <strong>hiçbir şekilde internete gönderilmez</strong> ve geliştirici dahil üçüncü kişilerle paylaşılmaz. Ayarlar yalnızca kullanım kolaylığı için kendi cihazınızın yerel tarayıcı deposunda (<code>localStorage</code> / <code>IndexedDB</code>) tutulur.
+          Girdiğiniz arayan adı, mesaj metni, seçtiğiniz duvar kağıdı veya özel zil sesi dosyası <strong>hiçbir şekilde internete gönderilmez</strong> ve geliştirici dahil üçüncü kişilerle paylaşılmaz. Ayarlar yalnızca kullanım kolaylığı için kendi cihazınızın yerel tarayıcı deposunda (<code>localStorage</code> / <code>IndexedDB</code>) tutulur.
         </p>
 
         <h4>2. Yasal Kullanım ve Sorumluluk Reddi</h4>
@@ -403,7 +528,7 @@ Acil beni ara!</textarea>
         </ul>
 
         <h4>3. Cihaz Verilerini Yönet</h4>
-        <p>Cihazınızda kayıtlı tüm tercihleri, özel zil sesini ve çevrimdışı önbelleği tek dokunuşla kalıcı olarak silebilirsiniz.</p>
+        <p>Cihazınızda kayıtlı tüm tercihleri, duvar kağıdını, özel zil sesini ve çevrimdışı önbelleği tek dokunuşla kalıcı olarak silebilirsiniz.</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn-danger-outline" id="wipeDataBtn">Tüm Yerel Verileri Sil</button>
