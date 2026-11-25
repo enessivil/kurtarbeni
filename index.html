@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none';">
+  <meta name="referrer" content="no-referrer">
+  <meta name="theme-color" content="#050608">
+  <meta name="description" content="Çevrimdışı çalışan, gizlilik odaklı, Android ve iOS uyumlu sahte arama ve mesaj simülatörü.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="KurtarBeni">
+  <title>KurtarBeni — Sahte Arama &amp; Mesaj</title>
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" type="image/svg+xml" href="./icons/icon.svg">
+  <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="layout">
+    <!-- Masaüstü Bilgi Paneli (Mobilde gizlenir, doğrudan uygulama açılır) -->
+    <aside class="desktop-info" aria-label="Uygulama hakkında">
+      <div class="brand-badge">
+        <span class="dot" aria-hidden="true"></span>
+        <span>%100 Çevrimdışı &amp; Açık Kaynak</span>
+      </div>
+      <h1 class="brand-title">Kurtar<span>Beni</span></h1>
+      <p class="brand-desc">
+        İstemediğin bir sohbetten veya uzayan bir toplantıdan nazikçe sıyrıl. Süreyi ayarla, başlat ve telefonunu masaya bırak; zamanı gelince gerçekçi bir arama veya bildirim akışı başlasın.
+      </p>
+
+      <div class="feature-list">
+        <div class="feature-item">
+          <strong>Cihazına Uyumlu Arayüz</strong>
+          <span>Android ve iOS otomatik algılanır; gelen arama ve kilit ekranı telefonuna göre şekillenir.</span>
+        </div>
+        <div class="feature-item">
+          <strong>Sıfır Sunucu, Tam Gizlilik</strong>
+          <span>Hiçbir veri dışarıya gönderilmez. Çerez, izleyici ve üçüncü parti kütüphane içermez.</span>
+        </div>
+        <div class="feature-item">
+          <strong>İnternetsiz Çalışır (PWA)</strong>
+          <span>Chrome veya Safari üzerinden ana ekranına kısayol ekleyip uçak modunda bile kullanabilirsin.</span>
+        </div>
+      </div>
+
+      <div class="desktop-footer">
+        <button type="button" class="link-btn" id="openLegalDesktop">KVKK &amp; Yasal Uyarı</button>
+        <span class="sep" aria-hidden="true">•</span>
+        <span id="offlineStatusDesktop" class="status-pill">Çevrimdışı Hazır</span>
+      </div>
+    </aside>
+
+    <!-- Uygulama Gövdesi (Masaüstünde şık telefon önizlemesi, mobilde tam ekran) -->
+    <section class="phone-shell" id="appShell" aria-label="KurtarBeni Uygulaması">
+      <div class="phone-notch" aria-hidden="true"></div>
+
+      <!-- 1. AYAR EKRANI -->
+      <div class="screen is-active" id="screenSetup">
+        <header class="app-header">
+          <div>
+            <h2 class="app-name">Kurtar<span>Beni</span></h2>
+            <p class="os-caption" id="detectedOsLabel">Cihaz algılanıyor…</p>
+          </div>
+          <div class="header-actions">
+            <button type="button" class="icon-chip" id="openLegalBtn" aria-label="KVKK ve Yasal Uyarı" title="KVKK &amp; Yasal Uyarı">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+            </button>
+          </div>
+        </header>
+
+        <!-- PWA Yükleme / Kısayol Çubuğu -->
+        <div class="install-card is-hidden" id="installCard">
+          <div class="install-text">
+            <strong id="installTitle">Ana Ekrana Ekle</strong>
+            <span id="installDesc">İnternetsiz tek dokunuşla açmak için kısayol oluştur.</span>
+          </div>
+          <button type="button" class="btn-small" id="installActionBtn">Yükle</button>
+          <button type="button" class="btn-close-mini" id="dismissInstallBtn" aria-label="Kapat">×</button>
+        </div>
+
+        <div class="setup-scroll">
+          <!-- Mod Seçici -->
+          <div class="segmented" role="tablist" aria-label="Simülasyon türü">
+            <button type="button" class="seg-btn is-selected" role="tab" aria-selected="true" data-mode="call" id="tabCall">
+              <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.58 2.81.7A2 2 0 0 1 22 16.92z"/>
+              </svg>
+              <span>Arama</span>
+            </button>
+            <button type="button" class="seg-btn" role="tab" aria-selected="false" data-mode="msg" id="tabMsg">
+              <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+              <span>Mesaj</span>
+            </button>
+          </div>
+
+          <!-- Hızlı Şablonlar -->
+          <div class="field-group">
+            <span class="field-label">Hızlı Senaryo</span>
+            <div class="preset-row" id="presetRow">
+              <button type="button" class="chip" data-who="Annem" data-sub="Cep" data-msg="Neredesin? Acil eve gelmen lazım!">Annem</button>
+              <button type="button" class="chip" data-who="Müdür / İş" data-sub="İş" data-msg="Toplantı öne çekildi, hemen döner misin?">İş</button>
+              <button type="button" class="chip" data-who="Kurye" data-sub="+90 532 ••• •• 41" data-msg="Kapıdayım, paketi teslim edeceğim.">Kurye</button>
+              <button type="button" class="chip" data-who="Ev Arkadaşım" data-sub="Cep" data-msg="Anahtarı içeride unuttum, acil ara!">Ev</button>
+            </div>
+          </div>
+
+          <!-- Kimden & Alt Etiket -->
+          <div class="field-grid">
+            <div class="field-group">
+              <label class="field-label" for="whoInput">Kimden?</label>
+              <input class="input" id="whoInput" type="text" maxlength="40" value="Annem" autocomplete="off" spellcheck="false">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="subInput">Etiket / Numara</label>
+              <input class="input" id="subInput" type="text" maxlength="28" value="Cep" autocomplete="off" spellcheck="false">
+            </div>
+          </div>
+
+          <!-- Süre -->
+          <div class="field-group">
+            <div class="label-row">
+              <label class="field-label" for="delayInput">Gecikme Süresi (sn)</label>
+              <div class="quick-delays" id="quickDelays">
+                <button type="button" class="mini-pill is-active" data-sec="5">5 sn</button>
+                <button type="button" class="mini-pill" data-sec="15">15 sn</button>
+                <button type="button" class="mini-pill" data-sec="30">30 sn</button>
+                <button type="button" class="mini-pill" data-sec="60">1 dk</button>
+              </div>
+            </div>
+            <input class="input" id="delayInput" type="number" min="1" max="3600" inputmode="numeric" value="5">
+          </div>
+
+          <!-- Mesaj Seçenekleri -->
+          <div class="msg-panel is-hidden" id="msgOptions">
+            <div class="field-grid">
+              <div class="field-group">
+                <label class="field-label" for="msgCountInput">Mesaj Sayısı</label>
+                <input class="input" id="msgCountInput" type="number" min="1" max="10" inputmode="numeric" value="3">
+              </div>
+              <div class="field-group">
+                <label class="field-label" for="msgGapInput">Aralık (sn)</label>
+                <input class="input" id="msgGapInput" type="number" min="1" max="60" inputmode="numeric" value="3">
+              </div>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="msgTextInput">Mesajlar (her satır ayrı bildirim)</label>
+              <textarea class="input textarea" id="msgTextInput" rows="3" maxlength="300">Neredesin? Hemen eve gelmen lazım!
+Mesajımı görmedin mi?
+Acil beni ara!</textarea>
+            </div>
+          </div>
+
+          <!-- Cihaz Arayüz Stili -->
+          <div class="field-group">
+            <label class="field-label" for="osStyleSelect">Ekran Stili (Android / iOS)</label>
+            <select class="input" id="osStyleSelect">
+              <option value="auto">Otomatik (Cihazıma göre)</option>
+              <option value="android">Android (Material / One UI)</option>
+              <option value="ios">iOS (iPhone Stili)</option>
+            </select>
+          </div>
+
+          <!-- Ses Ayarları -->
+          <div class="field-group">
+            <div class="label-row">
+              <label class="field-label" for="toneSelect" id="toneLabel">Zil Sesi</label>
+              <button type="button" class="test-sound-btn" id="testSoundBtn">▶ Sesi Test Et</button>
+            </div>
+            <select class="input" id="toneSelect">
+              <option value="auto">Cihaz Stiline Uygun (Otomatik)</option>
+              <option value="ios_melody">iOS Tarzı Polifonik Zil</option>
+              <option value="android_melody">Android Tarzı Modern Zil</option>
+              <option value="classic">Klasik Analog Telefon</option>
+              <option value="soft">Yumuşak / Minimal</option>
+              <option value="custom">Kendi Ses Dosyam (Cihazdan)</option>
+              <option value="none">Sessiz (Yalnızca Titreşim)</option>
+            </select>
+
+            <!-- Özel Ses Dosyası Seçici -->
+            <div class="custom-audio-box is-hidden" id="customAudioBox">
+              <div class="custom-audio-row">
+                <label class="file-btn" for="customAudioInput">Ses Dosyası Seç (.mp3/.wav/.m4a)</label>
+                <input class="sr-only" id="customAudioInput" type="file" accept="audio/*">
+                <button type="button" class="btn-ghost-danger is-hidden" id="clearAudioBtn">Kaldır</button>
+              </div>
+              <p class="helper-note" id="customAudioStatus">Tarayıcı güvenliği gereği sistem zil sesine doğrudan erişilemez; kendi ses dosyanı seçersen yalnızca cihazında (çevrimdışı) saklanır.</p>
+            </div>
+          </div>
+
+          <!-- Alt Yasal Özet -->
+          <div class="mini-legal-bar">
+            <span>Verilerin sunucuya gönderilmez.</span>
+            <button type="button" class="link-btn" id="openLegalInline">KVKK &amp; Koşullar</button>
+          </div>
+        </div>
+
+        <!-- Fitts Yasası: Başparmak Bölgesi Tek İzole Birincil CTA -->
+        <div class="cta-dock">
+          <button type="button" class="btn-primary" id="startBtn">Başlat ve Ekranı Karart</button>
+        </div>
+      </div>
+
+      <!-- 2. BEKLEME EKRANI (AMOLED SAF SİYAH) -->
+      <div class="screen screen-wait" id="screenWait" tabindex="0" aria-label="Bekleme ekranı">
+        <div class="wait-content" id="waitHint">
+          <div class="wait-timer" id="waitTimer">5</div>
+          <p class="wait-text">Ekran karartılıyor… Süre bitince arama/mesaj başlayacak.</p>
+          <p class="wait-sub">İptal etmek için ekrana <strong>çift dokun</strong> veya alttaki butonu kullan.</p>
+        </div>
+        <button type="button" class="wait-cancel-btn" id="cancelWaitBtn">İptal Et</button>
+      </div>
+
+      <!-- 3. KİLİT EKRANI + MESAJ BİLDİRİMLERİ -->
+      <div class="screen screen-home" id="screenHome">
+        <div class="status-bar" aria-hidden="true">
+          <span class="sb-time" id="sbTimeHome">12:00</span>
+          <div class="sb-icons">
+            <span class="sb-signal">5G</span>
+            <span class="sb-battery"><span class="sb-bat-fill"></span></span>
+          </div>
+        </div>
+
+        <div class="lock-header">
+          <div class="lock-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+            </svg>
+          </div>
+          <div class="lock-date" id="lockDate">Çarşamba, 25 Kasım</div>
+          <div class="lock-clock" id="lockClock">23:48</div>
+        </div>
+
+        <div class="noti-stack" id="notiStack" aria-live="polite"></div>
+
+        <div class="lock-bottom">
+          <button type="button" class="back-pill" id="homeBackBtn">Ayarlara Dön</button>
+        </div>
+      </div>
+
+      <!-- 4. GELEN ARAMA & AKTİF GÖRÜŞME EKRANI -->
+      <div class="screen screen-call" id="screenCall">
+        <div class="status-bar" aria-hidden="true">
+          <span class="sb-time" id="sbTimeCall">12:00</span>
+          <div class="sb-icons">
+            <span class="sb-signal">5G</span>
+            <span class="sb-battery"><span class="sb-bat-fill"></span></span>
+          </div>
+        </div>
+
+        <div class="call-top">
+          <div class="call-avatar-wrap">
+            <div class="call-ripple" id="callRipple" aria-hidden="true"></div>
+            <div class="call-avatar" id="callInitial">A</div>
+          </div>
+          <div class="call-name" id="callName">Annem</div>
+          <div class="call-sub" id="callSub">Cep · arıyor…</div>
+        </div>
+
+        <!-- Arama Cevaplandığında Görünecek Gerçekçi Kontrol Izgarası -->
+        <div class="incall-grid is-hidden" id="inCallGrid">
+          <button type="button" class="call-tool-btn" data-tool="mute" aria-pressed="false">
+            <span class="tool-circle">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="1" y1="1" x2="23" y2="23"/>
+                <path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6"/>
+                <path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2a7 7 0 0 1-.11 1.23"/>
+                <line x1="12" y1="19" x2="12" y2="23"/>
+                <line x1="8" y1="23" x2="16" y2="23"/>
+              </svg>
+            </span>
+            <span class="tool-label">Sessiz</span>
+          </button>
+          <button type="button" class="call-tool-btn" data-tool="keypad" aria-pressed="false">
+            <span class="tool-circle">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true">
+                <circle cx="6" cy="5" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="18" cy="5" r="2"/>
+                <circle cx="6" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="18" cy="12" r="2"/>
+                <circle cx="6" cy="19" r="2"/><circle cx="12" cy="19" r="2"/><circle cx="18" cy="19" r="2"/>
+              </svg>
+            </span>
+            <span class="tool-label">Klavye</span>
+          </button>
+          <button type="button" class="call-tool-btn" data-tool="speaker" aria-pressed="false">
+            <span class="tool-circle">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+              </svg>
+            </span>
+            <span class="tool-label">Hoparlör</span>
+          </button>
+          <button type="button" class="call-tool-btn" data-tool="hold" aria-pressed="false">
+            <span class="tool-circle">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>
+              </svg>
+            </span>
+            <span class="tool-label">Beklet</span>
+          </button>
+          <button type="button" class="call-tool-btn" data-tool="add" aria-pressed="false">
+            <span class="tool-circle">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </span>
+            <span class="tool-label">Arama Ekle</span>
+          </button>
+          <button type="button" class="call-tool-btn" data-tool="contacts" aria-pressed="false">
+            <span class="tool-circle">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+            </span>
+            <span class="tool-label">Kişiler</span>
+          </button>
+        </div>
+
+        <!-- DTMF Mini Tuş Takımı (Klavye'ye basınca açılır) -->
+        <div class="dtmf-pad is-hidden" id="dtmfPad" aria-label="Tuş takımı">
+          <div class="dtmf-display" id="dtmfDisplay"></div>
+          <div class="dtmf-keys" id="dtmfKeys">
+            <button type="button" class="dtmf-key" data-k="1">1</button>
+            <button type="button" class="dtmf-key" data-k="2">2</button>
+            <button type="button" class="dtmf-key" data-k="3">3</button>
+            <button type="button" class="dtmf-key" data-k="4">4</button>
+            <button type="button" class="dtmf-key" data-k="5">5</button>
+            <button type="button" class="dtmf-key" data-k="6">6</button>
+            <button type="button" class="dtmf-key" data-k="7">7</button>
+            <button type="button" class="dtmf-key" data-k="8">8</button>
+            <button type="button" class="dtmf-key" data-k="9">9</button>
+            <button type="button" class="dtmf-key" data-k="*">*</button>
+            <button type="button" class="dtmf-key" data-k="0">0</button>
+            <button type="button" class="dtmf-key" data-k="#">#</button>
+          </div>
+          <button type="button" class="dtmf-hide-btn" id="hideDtmfBtn">Gizle</button>
+        </div>
+
+        <!-- Cevapla / Reddet Butonları -->
+        <div class="call-actions" id="callActions">
+          <div class="call-btn-wrap" id="declineWrap">
+            <button type="button" class="round-btn btn-decline" id="declineBtn" aria-label="Reddet veya Kapat">
+              <svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor" aria-hidden="true">
+                <path d="M12 9c-1.6 0-3.15.25-4.6.72v3.1c0 .39-.23.74-.56.9-.98.49-1.87 1.12-2.66 1.85-.18.18-.43.28-.7.28-.28 0-.53-.11-.71-.29L.29 13.08a.956.956 0 0 1-.29-.7c0-.28.11-.53.29-.71C3.34 8.78 7.46 7 12 7s8.66 1.78 11.71 4.67c.18.18.29.43.29.71 0 .28-.11.53-.29.71l-2.48 2.48c-.18.18-.43.29-.71.29-.27 0-.52-.11-.7-.28a11.27 11.27 0 0 0-2.67-1.85.996.996 0 0 1-.56-.9v-3.1C15.15 9.25 13.6 9 12 9z"/>
+              </svg>
+            </button>
+            <span class="call-btn-label" id="declineLabel">Reddet</span>
+          </div>
+
+          <div class="call-btn-wrap" id="acceptWrap">
+            <button type="button" class="round-btn btn-accept" id="acceptBtn" aria-label="Cevapla">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor" aria-hidden="true">
+                <path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 0 0-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/>
+              </svg>
+            </button>
+            <span class="call-btn-label">Cevapla</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- KVKK & Yasal Uyarı Modalı -->
+  <div class="modal-backdrop is-hidden" id="legalModal" role="dialog" aria-modal="true" aria-labelledby="legalModalTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="legalModalTitle">KVKK Aydınlatma &amp; Yasal Uyarı</h3>
+        <button type="button" class="btn-close-mini" id="closeLegalBtn" aria-label="Kapat">×</button>
+      </div>
+      <div class="modal-body">
+        <h4>1. 6698 Sayılı KVKK Kapsamında Gizlilik</h4>
+        <p>
+          <strong>KurtarBeni</strong> tamamen tarayıcınızda (istemci tarafında) çalışan açık kaynaklı bir statik web uygulamasıdır. Hiçbir sunucu, veritabanı, çerez (cookie), reklam ağı, harici yazı tipi veya analitik aracı içermez.
+        </p>
+        <p>
+          Girdiğiniz arayan adı, mesaj metni veya seçtiğiniz özel zil sesi dosyası <strong>hiçbir şekilde internete gönderilmez</strong> ve geliştirici dahil üçüncü kişilerle paylaşılmaz. Ayarlar yalnızca kullanım kolaylığı için kendi cihazınızın yerel tarayıcı deposunda (<code>localStorage</code> / <code>IndexedDB</code>) tutulur.
+        </p>
+
+        <h4>2. Yasal Kullanım ve Sorumluluk Reddi</h4>
+        <p>
+          Bu uygulama yalnızca sosyal ortamlardan nazikçe ayrılmak, kişisel güvenlik hissi sağlamak veya simülasyon amacıyla geliştirilmiştir.
+        </p>
+        <ul>
+          <li>Gerçek bir acil durumda bu uygulama yerine doğrudan <strong>112 Acil Çağrı Merkezi</strong>'ni arayın.</li>
+          <li>Uygulamanın; dolandırıcılık, tehdit, taciz, kişilik haklarına saldırı, sahte delil üretme veya 5237 sayılı Türk Ceza Kanunu'na aykırı herhangi bir amaçla kullanılması kesinlikle yasaktır.</li>
+          <li>Uygulama "olduğu gibi" (MIT Lisansı ile) sunulur; kullanımından doğabilecek tüm hukuki sorumluluk kullanıcıya aittir.</li>
+        </ul>
+
+        <h4>3. Cihaz Verilerini Yönet</h4>
+        <p>Cihazınızda kayıtlı tüm tercihleri, özel zil sesini ve çevrimdışı önbelleği tek dokunuşla kalıcı olarak silebilirsiniz.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-danger-outline" id="wipeDataBtn">Tüm Yerel Verileri Sil</button>
+        <button type="button" class="btn-confirm" id="acceptLegalBtn">Anladım</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Bildirimi -->
+  <div class="toast is-hidden" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="./app.js" defer></script>
+</body>
+</html>

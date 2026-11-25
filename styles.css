@@ -1,0 +1,1326 @@
+/* =========================================================
+   KurtarBeni — Bilimsel UX & AMOLED Koyu Tasarım Sistemi
+   Sıfır dış kütüphane, doğal sistem fontları (SF Pro / Roboto)
+   ========================================================= */
+
+:root {
+  --bg-page: #050608;
+  --bg-surface: #0D1016;
+  --bg-elevated: #151A24;
+  --bg-input: #121620;
+  --border-subtle: #232A38;
+  --border-focus: #3B82F6;
+
+  /* Kırık beyaz metinler: saf siyah üstünde halasyonu önler */
+  --text-primary: #EDEDEF;
+  --text-secondary: #9CA3AF;
+  --text-muted: #7C8594;
+
+  /* İzole tek birincil CTA rengi (WCAG AAA kontrast) */
+  --accent-primary: #22C55E;
+  --accent-primary-hover: #16A34A;
+  --accent-primary-ink: #031B0E;
+  --accent-info: #3B82F6;
+  --accent-danger: #EF4444;
+
+  --radius-card: 18px;
+  --radius-control: 14px;
+  --radius-pill: 999px;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --t-fast: 100ms;
+  --t-mid: 220ms;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  background: var(--bg-page);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.is-hidden {
+  display: none !important;
+}
+
+/* ---------- Masaüstü & Mobil Yerleşim ---------- */
+.layout {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 56px;
+  padding: 28px;
+  background:
+    radial-gradient(600px circle at 18% 12%, rgba(59, 130, 246, 0.12), transparent 65%),
+    radial-gradient(500px circle at 82% 88%, rgba(34, 197, 94, 0.08), transparent 60%),
+    var(--bg-page);
+}
+
+.desktop-info {
+  max-width: 390px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.brand-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.28);
+  color: #86EFAC;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.brand-badge .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+}
+
+.brand-title {
+  margin: 0;
+  font-size: 40px;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  font-weight: 800;
+}
+
+.brand-title span,
+.app-name span {
+  color: var(--accent-primary);
+}
+
+.brand-desc {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.feature-item {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-control);
+  padding: 13px 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.feature-item strong {
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.feature-item span {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.desktop-footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.status-pill {
+  color: #86EFAC;
+  font-weight: 500;
+}
+
+/* ---------- Telefon Kabuğu (Masaüstünde Çerçeve, Mobilde Tam Ekran) ---------- */
+.phone-shell {
+  width: 380px;
+  height: 760px;
+  max-height: calc(100dvh - 48px);
+  border-radius: 42px;
+  background: var(--bg-surface);
+  border: 8px solid #181D27;
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.72), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.phone-notch {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 104px;
+  height: 24px;
+  border-radius: 20px;
+  background: #000;
+  z-index: 20;
+  pointer-events: none;
+}
+
+/* ---------- Ekran Geçişleri ---------- */
+.screen {
+  position: absolute;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  opacity: 0;
+  transition: opacity var(--t-mid) var(--ease-out);
+}
+
+.screen.is-active {
+  display: flex;
+  opacity: 1;
+}
+
+/* ---------- 1. Kurulum Ekranı ---------- */
+#screenSetup {
+  background: var(--bg-surface);
+  padding-top: 42px;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 18px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.app-name {
+  margin: 0;
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.os-caption {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.icon-chip {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background var(--t-fast) ease, color var(--t-fast) ease, transform var(--t-fast) ease;
+}
+
+.icon-chip:hover {
+  color: var(--text-primary);
+  border-color: #364154;
+}
+
+.icon-chip:active {
+  transform: scale(0.95);
+}
+
+/* PWA Kurulum Kartı */
+.install-card {
+  margin: 12px 18px 0;
+  padding: 11px 12px;
+  border-radius: var(--radius-control);
+  background: rgba(59, 130, 246, 0.12);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.install-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.install-text strong {
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.install-text span {
+  font-size: 12px;
+  color: #BFDBFE;
+  line-height: 1.35;
+}
+
+.btn-small {
+  border: 0;
+  border-radius: 10px;
+  padding: 8px 12px;
+  min-height: 36px;
+  background: var(--accent-info);
+  color: #FFFFFF;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform var(--t-fast) ease, opacity var(--t-fast) ease;
+}
+
+.btn-small:active {
+  transform: scale(0.96);
+}
+
+.btn-close-mini {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  border: 0;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.btn-close-mini:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.setup-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  scrollbar-width: thin;
+  scrollbar-color: #273042 transparent;
+}
+
+/* Segmented Control */
+.segmented {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  padding: 5px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-control);
+}
+
+.seg-btn {
+  min-height: 44px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: background var(--t-mid) var(--ease-out), color var(--t-mid) var(--ease-out), transform var(--t-fast) ease;
+}
+
+.seg-btn.is-selected {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.seg-btn:active {
+  transform: scale(0.98);
+}
+
+/* Form Alanları */
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.field-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.input {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 13px;
+  border-radius: var(--radius-control);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-size: 15px;
+  outline: none;
+  transition: border-color var(--t-fast) ease, box-shadow var(--t-fast) ease;
+}
+
+.input:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.textarea {
+  min-height: 82px;
+  resize: vertical;
+  line-height: 1.45;
+}
+
+.preset-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  min-height: 36px;
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color var(--t-fast) ease, color var(--t-fast) ease, transform var(--t-fast) ease;
+}
+
+.chip:hover,
+.chip.is-active {
+  border-color: var(--accent-info);
+  color: var(--text-primary);
+  background: rgba(59, 130, 246, 0.14);
+}
+
+.chip:active {
+  transform: scale(0.96);
+}
+
+.quick-delays {
+  display: flex;
+  gap: 5px;
+}
+
+.mini-pill {
+  padding: 4px 8px;
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--t-fast) ease, color var(--t-fast) ease;
+}
+
+.mini-pill.is-active {
+  border-color: var(--accent-info);
+  background: rgba(59, 130, 246, 0.18);
+  color: #DBEAFE;
+}
+
+.msg-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+  border-radius: var(--radius-control);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-subtle);
+}
+
+.test-sound-btn {
+  border: 0;
+  background: transparent;
+  color: #93C5FD;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 6px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.test-sound-btn:hover {
+  background: rgba(59, 130, 246, 0.12);
+}
+
+.custom-audio-box {
+  margin-top: 6px;
+  padding: 11px 12px;
+  border-radius: var(--radius-control);
+  background: var(--bg-elevated);
+  border: 1px dashed #334155;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.custom-audio-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.file-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 7px 12px;
+  border-radius: 10px;
+  background: rgba(59, 130, 246, 0.16);
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  color: #DBEAFE;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-ghost-danger {
+  min-height: 38px;
+  padding: 7px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  background: transparent;
+  color: #FCA5A5;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.helper-note {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.mini-legal-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 4px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.link-btn {
+  border: 0;
+  background: transparent;
+  color: #93C5FD;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 2px;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Alt CTA Alanı */
+.cta-dock {
+  padding: 12px 18px calc(16px + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(180deg, rgba(13, 16, 22, 0), var(--bg-surface) 24%);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.btn-primary {
+  width: 100%;
+  min-height: 52px;
+  border: 0;
+  border-radius: 16px;
+  background: var(--accent-primary);
+  color: var(--accent-primary-ink);
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  box-shadow: 0 10px 26px rgba(34, 197, 94, 0.25);
+  transition: background var(--t-fast) ease, transform var(--t-fast) ease;
+}
+
+.btn-primary:hover {
+  background: var(--accent-primary-hover);
+}
+
+.btn-primary:active {
+  transform: scale(0.985);
+}
+
+/* ---------- 2. Bekleme Ekranı (AMOLED Saf Siyah) ---------- */
+.screen-wait {
+  background: #000000;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+  text-align: center;
+  user-select: none;
+}
+
+.wait-content {
+  transition: opacity 400ms var(--ease-out);
+}
+
+.screen-wait.is-stealth .wait-content {
+  opacity: 0.04;
+}
+
+.wait-timer {
+  font-size: 72px;
+  font-weight: 200;
+  color: #3A3F4B;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.wait-text {
+  margin: 14px 0 6px;
+  font-size: 14px;
+  color: #555D6D;
+}
+
+.wait-sub {
+  margin: 0;
+  font-size: 12px;
+  color: #3F4654;
+}
+
+.wait-cancel-btn {
+  position: absolute;
+  bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+  min-height: 44px;
+  padding: 10px 22px;
+  border-radius: var(--radius-pill);
+  border: 1px solid #1C2029;
+  background: transparent;
+  color: #4B5563;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 300ms ease, color 150ms ease;
+}
+
+.screen-wait.is-stealth .wait-cancel-btn {
+  opacity: 0.14;
+}
+
+.wait-cancel-btn:hover {
+  opacity: 1;
+  color: #9CA3AF;
+}
+
+/* ---------- Durum Çubuğu (Kilit & Arama Ekranı) ---------- */
+.status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: calc(12px + env(safe-area-inset-top, 0px)) 24px 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  z-index: 5;
+}
+
+.sb-icons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sb-signal {
+  font-size: 11px;
+  letter-spacing: 0.02em;
+}
+
+.sb-battery {
+  width: 22px;
+  height: 11px;
+  border-radius: 3px;
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+  padding: 1.5px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.sb-bat-fill {
+  width: 78%;
+  height: 100%;
+  border-radius: 1.5px;
+  background: #FFFFFF;
+}
+
+/* ---------- 3. Kilit Ekranı & Bildirimler (Android & iOS) ---------- */
+.screen-home {
+  background:
+    radial-gradient(circle at 22% 18%, #283C63 0%, transparent 52%),
+    radial-gradient(circle at 80% 78%, #1E293B 0%, transparent 55%),
+    linear-gradient(170deg, #0D1524 0%, #070A12 100%);
+  color: #FFFFFF;
+}
+
+.lock-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 22px;
+  padding: 0 20px;
+}
+
+.lock-icon {
+  opacity: 0.85;
+  margin-bottom: 8px;
+}
+
+.lock-date {
+  font-size: 16px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.lock-clock {
+  font-size: 72px;
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin-top: 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* iOS Kilit Ekranı Farkı */
+.os-ios .lock-clock {
+  font-weight: 700;
+  font-size: 74px;
+}
+
+.os-ios .screen-home {
+  background:
+    radial-gradient(circle at 30% 15%, #3B2F63 0%, transparent 55%),
+    radial-gradient(circle at 75% 85%, #1E3A5F 0%, transparent 55%),
+    linear-gradient(180deg, #121526 0%, #080A12 100%);
+}
+
+/* Android Kilit Ekranı Farkı */
+.os-android .lock-header {
+  align-items: flex-start;
+  padding-left: 26px;
+}
+
+.os-android .lock-clock {
+  font-size: 68px;
+  font-weight: 400;
+}
+
+.noti-stack {
+  flex: 1;
+  overflow-y: auto;
+  padding: 22px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.noti-card {
+  border-radius: 20px;
+  padding: 12px 14px;
+  background: rgba(24, 28, 38, 0.84);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
+  animation: notiIn 260ms var(--ease-out);
+}
+
+.os-ios .noti-card {
+  border-radius: 22px;
+  background: rgba(34, 36, 44, 0.78);
+}
+
+.os-android .noti-card {
+  border-radius: 24px;
+  background: rgba(22, 27, 36, 0.92);
+}
+
+.noti-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.noti-sender-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.noti-badge {
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  background: var(--accent-primary);
+  color: #031B0E;
+  font-size: 12px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.os-android .noti-badge {
+  border-radius: 50%;
+}
+
+.noti-sender {
+  font-size: 14px;
+  font-weight: 700;
+  color: #F3F4F6;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.noti-time {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.62);
+  flex-shrink: 0;
+}
+
+.noti-body {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.4;
+  color: rgba(243, 244, 246, 0.92);
+  padding-left: 30px;
+}
+
+.lock-bottom {
+  padding: 12px 18px calc(22px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  justify-content: center;
+}
+
+.back-pill {
+  min-height: 44px;
+  padding: 10px 20px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(0, 0, 0, 0.42);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+}
+
+@keyframes notiIn {
+  from {
+    opacity: 0;
+    transform: translateY(-16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ---------- 4. Gelen Arama & Aktif Görüşme Ekranı ---------- */
+.screen-call {
+  background: linear-gradient(180deg, #1E293B 0%, #0F172A 48%, #070A12 100%);
+  color: #FFFFFF;
+  justify-content: space-between;
+}
+
+.os-ios .screen-call {
+  background:
+    radial-gradient(circle at 50% 18%, rgba(99, 102, 241, 0.24), transparent 55%),
+    linear-gradient(180deg, #1C2230 0%, #10131C 58%, #07080D 100%);
+}
+
+.os-android .screen-call {
+  background:
+    radial-gradient(circle at 50% 22%, rgba(34, 197, 94, 0.16), transparent 50%),
+    linear-gradient(180deg, #131B26 0%, #0B1018 100%);
+}
+
+.call-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 28px 24px 0;
+}
+
+.os-ios .call-top {
+  padding-top: 38px;
+}
+
+.call-avatar-wrap {
+  position: relative;
+  width: 108px;
+  height: 108px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.os-ios .call-avatar-wrap {
+  width: 92px;
+  height: 92px;
+}
+
+.call-ripple {
+  position: absolute;
+  inset: -10px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.22);
+  animation: ringPulse 1.8s var(--ease-out) infinite;
+}
+
+.call-ripple.is-paused {
+  display: none;
+}
+
+.call-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #475569, #334155);
+  border: 2px solid rgba(255, 255, 255, 0.16);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 42px;
+  font-weight: 600;
+  color: #F8FAFC;
+  position: relative;
+  z-index: 2;
+}
+
+.call-name {
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  max-width: 100%;
+  word-break: break-word;
+}
+
+.call-sub {
+  margin-top: 6px;
+  font-size: 16px;
+  color: rgba(226, 232, 240, 0.78);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Arama İçi Kontroller (3x2 Izgara) */
+.incall-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px 12px;
+  padding: 0 30px;
+  margin: auto 0;
+}
+
+.call-tool-btn {
+  border: 0;
+  background: transparent;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+}
+
+.tool-circle {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--t-fast) ease, color var(--t-fast) ease, transform var(--t-fast) ease;
+}
+
+.call-tool-btn[aria-pressed="true"] .tool-circle {
+  background: #FFFFFF;
+  color: #0B1018;
+}
+
+.call-tool-btn:active .tool-circle {
+  transform: scale(0.94);
+}
+
+.tool-label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* DTMF Tuş Takımı */
+.dtmf-pad {
+  padding: 0 36px;
+  margin: auto 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.dtmf-display {
+  min-height: 28px;
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: #FFFFFF;
+}
+
+.dtmf-keys {
+  display: grid;
+  grid-template-columns: repeat(3, 64px);
+  gap: 12px;
+}
+
+.dtmf-key {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 0;
+  background: rgba(255, 255, 255, 0.14);
+  color: #FFFFFF;
+  font-size: 24px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background var(--t-fast) ease;
+}
+
+.dtmf-key:active {
+  background: rgba(255, 255, 255, 0.32);
+}
+
+.dtmf-hide-btn {
+  border: 0;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 6px 14px;
+  cursor: pointer;
+}
+
+/* Arama Cevapla / Reddet Butonları */
+.call-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 16px 28px calc(38px + env(safe-area-inset-bottom, 0px));
+}
+
+.call-actions.is-single {
+  justify-content: center;
+}
+
+.call-btn-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.round-btn {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 0;
+  color: #FFFFFF;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform var(--t-fast) ease;
+}
+
+.round-btn:active {
+  transform: scale(0.93);
+}
+
+.btn-decline {
+  background: #FF3B30;
+  box-shadow: 0 10px 26px rgba(255, 59, 48, 0.35);
+}
+
+.btn-accept {
+  background: #30D158;
+  box-shadow: 0 10px 26px rgba(48, 209, 88, 0.35);
+  animation: acceptBounce 1.4s ease-in-out infinite;
+}
+
+.call-btn-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+@keyframes ringPulse {
+  0% {
+    transform: scale(0.96);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1.36);
+    opacity: 0;
+  }
+}
+
+@keyframes acceptBounce {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.07);
+  }
+}
+
+/* ---------- Modal (KVKK & Yasal Uyarı) ---------- */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.78);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  z-index: 100;
+}
+
+.modal-card {
+  width: 100%;
+  max-width: 480px;
+  max-height: 86dvh;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.75);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.modal-body {
+  padding: 16px 18px;
+  overflow-y: auto;
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+.modal-body h4 {
+  margin: 14px 0 6px;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.modal-body h4:first-child {
+  margin-top: 0;
+}
+
+.modal-body p {
+  margin: 0 0 10px;
+}
+
+.modal-body ul {
+  margin: 0 0 10px;
+  padding-left: 18px;
+}
+
+.modal-body li {
+  margin-bottom: 6px;
+}
+
+.modal-body code {
+  background: var(--bg-elevated);
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #E5E7EB;
+}
+
+.modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 14px 18px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.btn-danger-outline {
+  min-height: 44px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(239, 68, 68, 0.45);
+  background: rgba(239, 68, 68, 0.08);
+  color: #FCA5A5;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-confirm {
+  min-height: 44px;
+  padding: 10px 22px;
+  border-radius: 12px;
+  border: 0;
+  background: var(--accent-primary);
+  color: var(--accent-primary-ink);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ---------- Toast ---------- */
+.toast {
+  position: fixed;
+  bottom: calc(22px + env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1E293B;
+  border: 1px solid #334155;
+  color: var(--text-primary);
+  padding: 10px 16px;
+  border-radius: var(--radius-pill);
+  font-size: 13px;
+  font-weight: 600;
+  z-index: 120;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+  max-width: calc(100vw - 32px);
+  text-align: center;
+}
+
+/* ---------- Mobil Tam Ekran Uyumluluğu ---------- */
+@media (max-width: 820px) {
+  .layout {
+    padding: 0;
+    background: var(--bg-surface);
+  }
+
+  .desktop-info,
+  .phone-notch {
+    display: none;
+  }
+
+  .phone-shell {
+    width: 100%;
+    height: 100dvh;
+    max-height: none;
+    border-radius: 0;
+    border: 0;
+    box-shadow: none;
+  }
+
+  #screenSetup {
+    padding-top: calc(10px + env(safe-area-inset-top, 0px));
+  }
+}
+
+/* ---------- Erişilebilirlik: Hareket Azaltma ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
