@@ -1,3 +1,6 @@
+[![Canlı Uygulama](https://img.shields.io/badge/Canl%C4%B1_Uygulama-GitHub_Pages-22C55E?style=for-the-badge)](https://enessivil.github.io/kurtarbeni/)
+[![Deploy Durumu](https://github.com/enessivil/kurtarbeni/actions/workflows/deploy.yml/badge.svg)](https://github.com/enessivil/kurtarbeni/actions)
+[![Lisans: MIT](https://img.shields.io/badge/Lisans-MIT-3B82F6.svg)](LICENSE)
 # KurtarBeni — Çevrimdışı Sahte Arama & Mesaj (PWA)
 
 İstemediğiniz bir sohbetten veya uzayan bir toplantıdan nazikçe ayrılmak için tasarlanmış, **%100 çevrimdışı çalışan**, **sıfır dış bağımlılıklı** ve **gizlilik odaklı** açık kaynak web uygulaması.
