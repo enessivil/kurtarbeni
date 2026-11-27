@@ -22,7 +22,7 @@
     <aside class="desktop-info" aria-label="Uygulama hakkında">
       <div class="brand-badge">
         <span class="dot" aria-hidden="true"></span>
-        <span data-i18n="desktopBadge">v3.0 · %100 Çevrimdışı &amp; Açık Kaynak</span>
+        <span data-i18n="desktopBadge">v3.0.1 · %100 Çevrimdışı &amp; Açık Kaynak</span>
       </div>
       <h1 class="brand-title"><span data-i18n="brandPart1">Kurtar</span><span class="brand-accent" data-i18n="brandPart2">Beni</span></h1>
       <p class="brand-desc" data-i18n="desktopDesc">
@@ -445,6 +445,20 @@ Acil beni ara!</textarea>
                   <strong data-i18n="voiceCardCustom">Ses Kaydım</strong>
                   <span data-i18n="voiceCardCustomSub">Ahize filtresi</span>
                 </button>
+              </div>
+
+              <div class="voice-vol-box is-hidden" id="voiceVolBox">
+                <div class="voice-vol-head">
+                  <label class="field-label" for="voiceVolSlider" data-i18n="voiceVolLabel">Ahize Fısıltı Seviyesi</label>
+                  <span class="voice-vol-pill" id="voiceVolBadge">8% · Fısıltı</span>
+                </div>
+                <input class="range-slider" id="voiceVolSlider" type="range" min="2" max="30" step="1" value="8" aria-label="Ahize ses seviyesi">
+                <div class="range-scale" aria-hidden="true">
+                  <span data-i18n="voiceVolMin">Çok kısık</span>
+                  <span data-i18n="voiceVolMid">Fısıltı (Önerilen)</span>
+                  <span data-i18n="voiceVolMax">Orta</span>
+                </div>
+                <p class="helper-note" data-i18n="voiceSpeakerHint">Tarayıcı kısıtı gereği kulaklık yoksa ses ana hoparlörden kısık çalar; kulağına yaklaştırdığında yalnızca senin duyacağın düzeye ayarla. Görüşmede Hoparlör'e basınca ses yükselir.</p>
               </div>
 
               <div class="custom-audio-box is-hidden" id="customVoiceBox">

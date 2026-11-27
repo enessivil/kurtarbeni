@@ -20,7 +20,7 @@
       pageTitle: "KurtarBeni — Sahte Arama & Mesaj",
       brandPart1: "Kurtar",
       brandPart2: "Beni",
-      desktopBadge: "v3.0 · %100 Çevrimdışı & Açık Kaynak",
+      desktopBadge: "v3.0.1 · %100 Çevrimdışı & Açık Kaynak",
       desktopDesc:
         "Sıradan sahte aramaların ötesinde: tırmanan mesaj→arama senaryo zinciri, çalışan hesap makinesi kılığı, telefon filtreli karşı taraf sesi ve sessiz güvenlik kısayolu.",
       feat1Title: "Tırmanan Senaryo Zinciri",
@@ -159,6 +159,15 @@
       voiceCardCustom: "Ses Kaydım",
       voiceCardCustomSub: "Ahize filtresi",
       voiceChooseBtn: "Konuşma Ses Kaydı Seç",
+      voiceVolLabel: "Ahize Fısıltı Seviyesi",
+      voiceVolMin: "Çok kısık",
+      voiceVolMid: "Fısıltı (Önerilen)",
+      voiceVolMax: "Orta",
+      voiceVolWhisperTag: "Fısıltı",
+      voiceVolLowTag: "Kısık",
+      voiceVolMedTag: "Orta",
+      voiceSpeakerHint:
+        "Tarayıcı kısıtı gereği kulaklık yoksa ses ana hoparlörden kısık çalar; kulağına yaklaştırdığında yalnızca senin duyacağın düzeye ayarla. Görüşmede Hoparlör'e basınca ses yükselir.",
       voiceEmptyStatus:
         "Seçtiğin kayıt 300–3400 Hz telefon filtresinden geçirilerek gerçek ahize konuşması gibi çalar; yalnızca cihazında kalır.",
       voiceActiveStatus: "Yüklü kayıt: {name} (300–3400 Hz telefon filtresiyle çalar)",
@@ -288,7 +297,7 @@
       pageTitle: "RescueMe — Fake Call & Message Simulator",
       brandPart1: "Rescue",
       brandPart2: "Me",
-      desktopBadge: "v3.0 · 100% Offline & Open Source",
+      desktopBadge: "v3.0.1 · 100% Offline & Open Source",
       desktopDesc:
         "Beyond basic fake calls: an escalating message→call scenario chain, a working calculator disguise, phone-filtered caller audio, and a silent SOS shortcut.",
       feat1Title: "Escalating Scenario Chain",
@@ -427,6 +436,15 @@
       voiceCardCustom: "Voice Clip",
       voiceCardCustomSub: "Phone filter",
       voiceChooseBtn: "Pick Voice Recording",
+      voiceVolLabel: "Earpiece Whisper Level",
+      voiceVolMin: "Ultra low",
+      voiceVolMid: "Whisper (Best)",
+      voiceVolMax: "Medium",
+      voiceVolWhisperTag: "Whisper",
+      voiceVolLowTag: "Low",
+      voiceVolMedTag: "Medium",
+      voiceSpeakerHint:
+        "Due to browser limits, audio plays quietly from the main speaker without headphones; tune it low enough to hear only near your ear. Tapping Speaker boosts volume.",
       voiceEmptyStatus:
         "Passed through a 300–3400 Hz telephone bandpass filter for realistic earpiece sound; stays on your device.",
       voiceActiveStatus: "Loaded clip: {name} (300–3400 Hz phone filter active)",
@@ -570,6 +588,7 @@
     mode: "call", // "call" | "msg" | "chain"
     osPref: "auto", // "auto" | "android" | "ios"
     voicePref: "none", // "none" | "ambient" | "custom_voice"
+    voiceVolume: 8, // 2..30 (%) — Hoparlör kapalıyken fısıltı seviyesi
     detectedOS: detectOS(),
     activeOS: "android",
     timers: [],
@@ -686,6 +705,9 @@
     openCalcBtn: $("openCalcBtn"),
     openCalcCardBtn: $("openCalcCardBtn"),
     voiceChoiceGrid: $("voiceChoiceGrid"),
+    voiceVolBox: $("voiceVolBox"),
+    voiceVolSlider: $("voiceVolSlider"),
+    voiceVolBadge: $("voiceVolBadge"),
     testVoiceBtn: $("testVoiceBtn"),
     customVoiceBox: $("customVoiceBox"),
     customVoiceInput: $("customVoiceInput"),
@@ -1061,6 +1083,7 @@
         tone: el.toneSelect.value,
         wpBlurCall: Boolean(el.wpBlurCallToggle && el.wpBlurCallToggle.checked),
         voiceMode: state.voicePref,
+        voiceVolume: clampInt(state.voiceVolume, 2, 30, 8),
         sosPhone: sanitizePhone(el.sosPhoneInput.value),
         sosMsg: el.sosMsgInput.value.slice(0, 160)
       };
@@ -1112,6 +1135,10 @@
       }
       if (typeof data.wpBlurCall === "boolean") {
         el.wpBlurCallToggle.checked = data.wpBlurCall;
+      }
+      if (data.voiceVolume !== undefined) {
+        state.voiceVolume = clampInt(data.voiceVolume, 2, 30, 8);
+        el.voiceVolSlider.value = String(state.voiceVolume);
       }
       if (["none", "ambient", "custom_voice"].includes(data.voiceMode)) {
         setVoiceChoice(data.voiceMode, false);
@@ -1237,8 +1264,21 @@
     }
   }
 
+  function updateVoiceVolBadge() {
+    const dict = t();
+    const v = clampInt(state.voiceVolume, 2, 30, 8);
+    const label =
+      v <= 10 ? dict.voiceVolWhisperTag : v <= 18 ? dict.voiceVolLowTag : dict.voiceVolMedTag;
+    el.voiceVolBadge.textContent = v + "% · " + label;
+  }
+
   function updateCustomVoiceUI() {
     const dict = t();
+    const isActive = state.voicePref !== "none";
+    el.voiceVolBox.classList.toggle("is-hidden", !isActive);
+    el.voiceVolSlider.value = String(clampInt(state.voiceVolume, 2, 30, 8));
+    updateVoiceVolBadge();
+
     const showBox = state.voicePref === "custom_voice";
     el.customVoiceBox.classList.toggle("is-hidden", !showBox);
 
@@ -1736,11 +1776,15 @@
     }
   }
 
-  // ---------- 7. Karşı Taraf Sesi Motoru (300–3400 Hz Ahize Filtresi) ----------
+  // ---------- 7. Karşı Taraf Sesi Motoru (300–3400 Hz Ahize Filtresi + Fısıltı Modu) ----------
   function computeVoiceGain() {
     if (state.isCallHeld) return 0.0;
-    const base = state.voicePref === "ambient" ? 0.18 : 0.48;
-    return state.isCallSpeaker ? Math.min(1.0, base * 2.1) : base;
+    if (state.isCallSpeaker) {
+      return state.voicePref === "ambient" ? 0.42 : 0.88;
+    }
+    const pct = clampInt(state.voiceVolume, 2, 30, 8) / 100;
+    // Hoparlör kapalıyken kulağa yaklaştırınca duyulan fısıltı seviyesi
+    return state.voicePref === "ambient" ? Math.max(0.012, pct * 0.55) : pct;
   }
 
   function updateActiveVoiceGain() {
@@ -1816,7 +1860,7 @@
       lp.frequency.value = 2800;
 
       const gain = ctx.createGain();
-      gain.gain.value = isPreview ? 0.28 : computeVoiceGain();
+      gain.gain.value = computeVoiceGain();
 
       src.connect(hp);
       hp.connect(lp);
@@ -1854,7 +1898,7 @@
         midBoost.gain.value = 3.5;
 
         const gain = ctx.createGain();
-        gain.gain.value = isPreview ? 0.65 : computeVoiceGain();
+        gain.gain.value = computeVoiceGain();
 
         src.connect(hp);
         hp.connect(lp);
@@ -1877,7 +1921,7 @@
       }
       state.voiceFallbackEl.src = state.customVoiceUrl;
       state.voiceFallbackEl.loop = true;
-      state.voiceFallbackEl.volume = isPreview ? 0.65 : computeVoiceGain();
+      state.voiceFallbackEl.volume = computeVoiceGain();
       state.voiceFallbackEl.play().catch(() => {});
     }
   }
@@ -2464,7 +2508,7 @@
     state.isTestingVoice = true;
     el.testVoiceBtn.textContent = t().testVoiceStop;
     startCallVoice(true);
-    state.timers.push(setTimeout(stopTestVoice, 3500));
+    state.timers.push(setTimeout(stopTestVoice, 5000));
   }
 
   // ---------- 13. Pano Kopyalama ----------
@@ -2614,6 +2658,8 @@
     el.sosMsgInput.value = dict.defaultSosMsg;
     el.wpBlurCallToggle.checked = true;
     setOSChoice("auto", false);
+    state.voiceVolume = 8;
+    el.voiceVolSlider.value = "8";
     setVoiceChoice("none", false);
     setMode("call", false);
     updateCustomAudioUI();
@@ -2810,8 +2856,21 @@
       showToast(t().toasts.audioRemoved);
     });
 
-    // Karşı taraf sesi test / yükleme
+    // Karşı taraf sesi test / fısıltı seviyesi / yükleme
     el.testVoiceBtn.addEventListener("click", toggleTestVoice);
+
+    el.voiceVolSlider.addEventListener("input", () => {
+      state.voiceVolume = clampInt(el.voiceVolSlider.value, 2, 30, 8);
+      updateVoiceVolBadge();
+      updateActiveVoiceGain();
+    });
+
+    el.voiceVolSlider.addEventListener("change", () => {
+      state.voiceVolume = clampInt(el.voiceVolSlider.value, 2, 30, 8);
+      updateVoiceVolBadge();
+      updateActiveVoiceGain();
+      savePrefs();
+    });
 
     el.customVoiceInput.addEventListener("change", async (e) => {
       const file = e.target.files && e.target.files[0];
