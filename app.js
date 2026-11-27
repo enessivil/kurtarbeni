@@ -4,29 +4,33 @@
   const $ = (id) => document.getElementById(id);
 
   // ---------- Sabitler & Güvenlik Sınırları ----------
-  const STORAGE_KEY = "kurtarbeni_prefs_v1";
+  const STORAGE_KEY = "kurtarbeni_prefs_v2";
+  const LEGACY_STORAGE_KEY = "kurtarbeni_prefs_v1";
   const DB_NAME = "kurtarbeni_audio_db";
   const DB_STORE = "ringtones";
   const KEY_AUDIO = "user_tone";
   const KEY_WALLPAPER = "user_wallpaper";
+  const KEY_VOICE = "user_voice";
   const MAX_MEDIA_BYTES = 15 * 1024 * 1024; // 15 MB
   const SAMPLE_RATE = 22050;
 
   // ---------- Uygulama Durumu ----------
   const state = {
-    mode: "call", // "call" | "msg"
+    mode: "call", // "call" | "msg" | "chain"
     detectedOS: detectOS(), // "ios" | "android" | "desktop"
     activeOS: "android", // "ios" | "android"
     timers: [],
     audioCtx: null,
     player: new Audio(),
     notiPlayer: new Audio(),
+    voiceFallbackEl: new Audio(),
     silentWavUrl: null,
     synthCache: Object.create(null),
     vibeInterval: null,
     talkInterval: null,
     wakeLock: null,
     isWaiting: false,
+    waitingInDisguise: false,
     targetEndTime: 0,
     customAudioBlob: null,
     customAudioName: "",
@@ -34,13 +38,34 @@
     wallpaperBlob: null,
     wallpaperName: "",
     wallpaperUrl: null,
+    customVoiceBlob: null,
+    customVoiceName: "",
+    customVoiceUrl: null,
+    activeVoiceSource: null,
+    activeVoiceGain: null,
+    isCallMuted: false,
+    isCallHeld: false,
+    isCallSpeaker: false,
     deferredPrompt: null,
     lastTapTime: 0,
-    isTestingSound: false
+    isTestingSound: false,
+    isTestingVoice: false,
+    // Hesap makinesi durumu
+    calc: {
+      current: "0",
+      prev: null,
+      op: null,
+      resetNext: false,
+      lastAcTap: 0,
+      acHoldTimer: null
+    },
+    sosHoldTimer: null,
+    sosTriggered: false
   };
 
   state.player.preload = "auto";
   state.notiPlayer.preload = "auto";
+  state.voiceFallbackEl.preload = "auto";
 
   // ---------- DOM Referansları ----------
   const el = {
@@ -54,6 +79,7 @@
     dismissInstallBtn: $("dismissInstallBtn"),
     tabCall: $("tabCall"),
     tabMsg: $("tabMsg"),
+    tabChain: $("tabChain"),
     presetRow: $("presetRow"),
     whoInput: $("whoInput"),
     subInput: $("subInput"),
@@ -63,6 +89,10 @@
     msgCountInput: $("msgCountInput"),
     msgGapInput: $("msgGapInput"),
     msgTextInput: $("msgTextInput"),
+    chainOptions: $("chainOptions"),
+    chainMsg1Input: $("chainMsg1Input"),
+    chainMsg2Input: $("chainMsg2Input"),
+    chainGapInput: $("chainGapInput"),
     osStyleSelect: $("osStyleSelect"),
     wallpaperInput: $("wallpaperInput"),
     clearWallpaperBtn: $("clearWallpaperBtn"),
@@ -80,13 +110,28 @@
     customAudioInput: $("customAudioInput"),
     clearAudioBtn: $("clearAudioBtn"),
     customAudioStatus: $("customAudioStatus"),
+    voiceSelect: $("voiceSelect"),
+    testVoiceBtn: $("testVoiceBtn"),
+    customVoiceBox: $("customVoiceBox"),
+    customVoiceInput: $("customVoiceInput"),
+    clearVoiceBtn: $("clearVoiceBtn"),
+    customVoiceStatus: $("customVoiceStatus"),
+    sosPhoneInput: $("sosPhoneInput"),
+    sosMsgInput: $("sosMsgInput"),
     startBtn: $("startBtn"),
     screenSetup: $("screenSetup"),
     screenWait: $("screenWait"),
+    screenCalc: $("screenCalc"),
     screenHome: $("screenHome"),
     screenCall: $("screenCall"),
     waitTimer: $("waitTimer"),
     cancelWaitBtn: $("cancelWaitBtn"),
+    openCalcBtn: $("openCalcBtn"),
+    calcArmedDot: $("calcArmedDot"),
+    calcExpr: $("calcExpr"),
+    calcDisplay: $("calcDisplay"),
+    calcGrid: $("calcGrid"),
+    calcClearBtn: $("calcClearBtn"),
     sbTimeHome: $("sbTimeHome"),
     sbTimeCall: $("sbTimeCall"),
     lockDate: $("lockDate"),
@@ -98,6 +143,7 @@
     callName: $("callName"),
     callSub: $("callSub"),
     inCallGrid: $("inCallGrid"),
+    holdToolBtn: $("holdToolBtn"),
     dtmfPad: $("dtmfPad"),
     dtmfDisplay: $("dtmfDisplay"),
     dtmfKeys: $("dtmfKeys"),
@@ -177,17 +223,21 @@
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => {
       el.toast.classList.add("is-hidden");
-    }, 2800);
+    }, 3000);
   }
 
   // ---------- 3. Ekran Yönetimi ----------
   function showScreen(target) {
-    [el.screenSetup, el.screenWait, el.screenHome, el.screenCall].forEach((scr) => {
+    [el.screenSetup, el.screenWait, el.screenCalc, el.screenHome, el.screenCall].forEach((scr) => {
       scr.classList.toggle("is-active", scr === target);
     });
   }
 
   // ---------- 4. Yerel Tercihler (localStorage) ----------
+  function sanitizePhone(raw) {
+    return String(raw || "").replace(/[^0-9+\-\s()]/g, "").slice(0, 20);
+  }
+
   function savePrefs() {
     try {
       const data = {
@@ -198,28 +248,37 @@
         msgCount: clampInt(el.msgCountInput.value, 1, 10, 3),
         msgGap: clampInt(el.msgGapInput.value, 1, 60, 3),
         msgText: el.msgTextInput.value.slice(0, 300),
+        chainMsg1: el.chainMsg1Input.value.slice(0, 100),
+        chainMsg2: el.chainMsg2Input.value.slice(0, 100),
+        chainGap: clampInt(el.chainGapInput.value, 2, 60, 6),
         osStyle: el.osStyleSelect.value,
         tone: el.toneSelect.value,
-        wpBlurCall: Boolean(el.wpBlurCallToggle && el.wpBlurCallToggle.checked)
+        wpBlurCall: Boolean(el.wpBlurCallToggle && el.wpBlurCallToggle.checked),
+        voiceMode: el.voiceSelect.value,
+        sosPhone: sanitizePhone(el.sosPhoneInput.value),
+        sosMsg: el.sosMsgInput.value.slice(0, 160)
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     } catch {
-      // Depolama kısıtlıysa sessizce devam et
+      // yoksay
     }
   }
 
   function loadPrefs() {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_STORAGE_KEY);
       if (!raw) return;
       const data = JSON.parse(raw);
-      if (data.mode === "call" || data.mode === "msg") setMode(data.mode, false);
+      if (["call", "msg", "chain"].includes(data.mode)) setMode(data.mode, false);
       if (typeof data.who === "string") el.whoInput.value = data.who.slice(0, 40);
       if (typeof data.sub === "string") el.subInput.value = data.sub.slice(0, 28);
       if (data.delay) el.delayInput.value = String(clampInt(data.delay, 1, 3600, 5));
       if (data.msgCount) el.msgCountInput.value = String(clampInt(data.msgCount, 1, 10, 3));
       if (data.msgGap) el.msgGapInput.value = String(clampInt(data.msgGap, 1, 60, 3));
       if (typeof data.msgText === "string") el.msgTextInput.value = data.msgText.slice(0, 300);
+      if (typeof data.chainMsg1 === "string") el.chainMsg1Input.value = data.chainMsg1.slice(0, 100);
+      if (typeof data.chainMsg2 === "string") el.chainMsg2Input.value = data.chainMsg2.slice(0, 100);
+      if (data.chainGap) el.chainGapInput.value = String(clampInt(data.chainGap, 2, 60, 6));
       if (["auto", "android", "ios"].includes(data.osStyle)) {
         el.osStyleSelect.value = data.osStyle;
       }
@@ -230,8 +289,17 @@
       ) {
         el.toneSelect.value = data.tone;
       }
-      if (el.wpBlurCallToggle && typeof data.wpBlurCall === "boolean") {
+      if (typeof data.wpBlurCall === "boolean") {
         el.wpBlurCallToggle.checked = data.wpBlurCall;
+      }
+      if (["none", "ambient", "custom_voice"].includes(data.voiceMode)) {
+        el.voiceSelect.value = data.voiceMode;
+      }
+      if (typeof data.sosPhone === "string") {
+        el.sosPhoneInput.value = sanitizePhone(data.sosPhone);
+      }
+      if (typeof data.sosMsg === "string" && data.sosMsg.trim()) {
+        el.sosMsgInput.value = data.sosMsg.slice(0, 160);
       }
     } catch {
       try {
@@ -242,7 +310,7 @@
     }
   }
 
-  // ---------- 5. IndexedDB (Cihaz İçi Özel Ses & Duvar Kağıdı) ----------
+  // ---------- 5. IndexedDB (Cihaz İçi Medya: Zil, Duvar Kağıdı, Konuşma Sesi) ----------
   function openMediaDB() {
     return new Promise((resolve, reject) => {
       if (!("indexedDB" in window)) {
@@ -321,6 +389,18 @@
     applyWallpaperUI();
   }
 
+  async function deleteCustomVoice() {
+    stopCallVoice();
+    if (state.customVoiceUrl) {
+      URL.revokeObjectURL(state.customVoiceUrl);
+      state.customVoiceUrl = null;
+    }
+    state.customVoiceBlob = null;
+    state.customVoiceName = "";
+    await deleteMediaItem(KEY_VOICE);
+    updateCustomVoiceUI();
+  }
+
   function updateCustomAudioUI() {
     const showBox = el.toneSelect.value === "custom";
     el.customAudioBox.classList.toggle("is-hidden", !showBox);
@@ -333,6 +413,21 @@
       el.customAudioStatus.textContent =
         "Kendi telefonunun zil sesini seçersen yalnızca cihazında (çevrimdışı) saklanır.";
       el.clearAudioBtn.classList.add("is-hidden");
+    }
+  }
+
+  function updateCustomVoiceUI() {
+    const showBox = el.voiceSelect.value === "custom_voice";
+    el.customVoiceBox.classList.toggle("is-hidden", !showBox);
+
+    if (state.customVoiceBlob) {
+      el.customVoiceStatus.textContent =
+        "Yüklü kayıt: " + state.customVoiceName + " (300–3400 Hz telefon filtresiyle çalar)";
+      el.clearVoiceBtn.classList.remove("is-hidden");
+    } else {
+      el.customVoiceStatus.textContent =
+        "Seçtiğin kayıt 300–3400 Hz telefon filtresinden geçirilerek gerçek ahize konuşması gibi çalar; yalnızca cihazında kalır.";
+      el.clearVoiceBtn.classList.add("is-hidden");
     }
   }
 
@@ -812,6 +907,155 @@
     }
   }
 
+  // ---------- 7. Karşı Taraf Sesi Motoru (300–3400 Hz Ahize Filtresi + GSM Hat Hışırtısı) ----------
+  function computeVoiceGain() {
+    if (state.isCallHeld) return 0.0;
+    const base = el.voiceSelect.value === "ambient" ? 0.14 : 0.45;
+    return state.isCallSpeaker ? Math.min(1.0, base * 2.1) : base;
+  }
+
+  function updateActiveVoiceGain() {
+    const target = computeVoiceGain();
+    if (state.activeVoiceGain && state.audioCtx) {
+      state.activeVoiceGain.gain.setTargetAtTime(target, state.audioCtx.currentTime, 0.04);
+    }
+    try {
+      state.voiceFallbackEl.volume = target;
+    } catch {
+      // yoksay
+    }
+  }
+
+  function stopCallVoice() {
+    if (state.activeVoiceSource) {
+      try {
+        state.activeVoiceSource.stop();
+        state.activeVoiceSource.disconnect();
+      } catch {
+        // yoksay
+      }
+      state.activeVoiceSource = null;
+    }
+    if (state.activeVoiceGain) {
+      try {
+        state.activeVoiceGain.disconnect();
+      } catch {
+        // yoksay
+      }
+      state.activeVoiceGain = null;
+    }
+    try {
+      state.voiceFallbackEl.pause();
+      state.voiceFallbackEl.currentTime = 0;
+    } catch {
+      // yoksay
+    }
+  }
+
+  async function startCallVoice(isPreview = false) {
+    stopCallVoice();
+    const mode = el.voiceSelect.value;
+    if (mode === "none") return;
+
+    const ctx = ensureAudioContext();
+
+    if (mode === "ambient" || (mode === "custom_voice" && !state.customVoiceBlob)) {
+      if (!ctx) return;
+      // 3 saniyelik yumuşak GSM hat ortam gürültüsü (comfort noise)
+      const len = ctx.sampleRate * 3;
+      const noiseBuf = ctx.createBuffer(1, len, ctx.sampleRate);
+      const data = noiseBuf.getChannelData(0);
+      let b0 = 0;
+      let b1 = 0;
+      for (let i = 0; i < len; i++) {
+        const white = Math.random() * 2 - 1;
+        b0 = 0.97 * b0 + white * 0.05;
+        b1 = 0.85 * b1 + white * 0.08;
+        // Hafif GSM nefes/oda dalgalanması
+        const swell = 0.78 + 0.22 * Math.sin((2 * Math.PI * i) / len);
+        data[i] = (b0 + b1) * 0.55 * swell;
+      }
+
+      const src = ctx.createBufferSource();
+      src.buffer = noiseBuf;
+      src.loop = true;
+
+      const hp = ctx.createBiquadFilter();
+      hp.type = "highpass";
+      hp.frequency.value = 320;
+
+      const lp = ctx.createBiquadFilter();
+      lp.type = "lowpass";
+      lp.frequency.value = 2800;
+
+      const gain = ctx.createGain();
+      gain.gain.value = isPreview ? 0.24 : computeVoiceGain();
+
+      src.connect(hp);
+      hp.connect(lp);
+      lp.connect(gain);
+      gain.connect(ctx.destination);
+      src.start();
+
+      state.activeVoiceSource = src;
+      state.activeVoiceGain = gain;
+      return;
+    }
+
+    // Özel ses kaydı: 300–3400 Hz telefon ahize filtresinden geçir
+    if (ctx && state.customVoiceBlob) {
+      try {
+        const arrBuf = await state.customVoiceBlob.arrayBuffer();
+        const decoded = await ctx.decodeAudioData(arrBuf.slice(0));
+        const src = ctx.createBufferSource();
+        src.buffer = decoded;
+        src.loop = true;
+
+        const hp = ctx.createBiquadFilter();
+        hp.type = "highpass";
+        hp.frequency.value = 340;
+        hp.Q.value = 0.9;
+
+        const lp = ctx.createBiquadFilter();
+        lp.type = "lowpass";
+        lp.frequency.value = 3200;
+        lp.Q.value = 0.9;
+
+        const midBoost = ctx.createBiquadFilter();
+        midBoost.type = "peaking";
+        midBoost.frequency.value = 1350;
+        midBoost.Q.value = 1.1;
+        midBoost.gain.value = 3.5;
+
+        const gain = ctx.createGain();
+        gain.gain.value = isPreview ? 0.65 : computeVoiceGain();
+
+        src.connect(hp);
+        hp.connect(lp);
+        lp.connect(midBoost);
+        midBoost.connect(gain);
+        gain.connect(ctx.destination);
+        src.start();
+
+        state.activeVoiceSource = src;
+        state.activeVoiceGain = gain;
+        return;
+      } catch {
+        // decodeAudioData desteklemiyorsa normal HTMLAudioElement yedeğine düş
+      }
+    }
+
+    if (state.customVoiceBlob) {
+      if (!state.customVoiceUrl) {
+        state.customVoiceUrl = URL.createObjectURL(state.customVoiceBlob);
+      }
+      state.voiceFallbackEl.src = state.customVoiceUrl;
+      state.voiceFallbackEl.loop = true;
+      state.voiceFallbackEl.volume = isPreview ? 0.65 : computeVoiceGain();
+      state.voiceFallbackEl.play().catch(() => {});
+    }
+  }
+
   function playDtmfTone(key) {
     const map = {
       "1": [697, 1209], "2": [697, 1336], "3": [697, 1477],
@@ -838,7 +1082,24 @@
     });
   }
 
-  // ---------- 7. Wake Lock & Tam Ekran ----------
+  // ---------- 8. Sessiz Güvenlik Köprüsü (Acil SMS) ----------
+  function triggerSilentSOS() {
+    const phone = sanitizePhone(el.sosPhoneInput.value).replace(/\s+/g, "");
+    if (!phone) {
+      showToast("Acil SMS için önce Gelişmiş bölümden numara ekle.");
+      return;
+    }
+    const msg =
+      el.sosMsgInput.value.trim().slice(0, 160) ||
+      "Şu an kendimi güvende hissetmiyorum, beni hemen arar mısın?";
+
+    triggerVibrate([60, 40, 60, 40, 120]);
+    const sep = state.detectedOS === "ios" ? "&" : "?";
+    const uri = "sms:" + phone + sep + "body=" + encodeURIComponent(msg);
+    window.location.href = uri;
+  }
+
+  // ---------- 9. Wake Lock & Tam Ekran ----------
   async function requestWakeLock() {
     try {
       if ("wakeLock" in navigator) {
@@ -882,9 +1143,10 @@
     }
   }
 
-  // ---------- 8. Zamanlayıcı & Simülasyon Akışı ----------
+  // ---------- 10. Zamanlayıcı & Simülasyon Akışı ----------
   function clearAllTimers() {
     state.isWaiting = false;
+    state.waitingInDisguise = false;
     state.targetEndTime = 0;
     state.timers.forEach((id) => {
       clearTimeout(id);
@@ -894,8 +1156,10 @@
     clearInterval(state.talkInterval);
     state.talkInterval = null;
     stopRinging();
+    stopCallVoice();
     releaseWakeLock();
     el.screenWait.classList.remove("is-stealth");
+    el.calcArmedDot.classList.add("is-hidden");
   }
 
   function clampInt(val, min, max, fallback) {
@@ -928,10 +1192,24 @@
     el.lockDate.textContent = formatDate(now);
   }
 
+  function prewarmAudioForMode() {
+    const resolved = resolveToneStyle();
+    if (resolved !== "none" && resolved !== "custom") {
+      if (state.mode === "call" || state.mode === "chain") {
+        buildRingtoneUrl(resolved);
+      }
+      if (state.mode === "msg" || state.mode === "chain") {
+        buildNotificationUrl(resolved);
+      }
+    }
+  }
+
   function triggerScheduledEvent() {
     if (!state.isWaiting) return;
     state.isWaiting = false;
+    state.waitingInDisguise = false;
     state.targetEndTime = 0;
+    el.calcArmedDot.classList.add("is-hidden");
 
     state.timers.forEach((id) => {
       clearTimeout(id);
@@ -942,8 +1220,10 @@
 
     if (state.mode === "call") {
       launchIncomingCall();
-    } else {
+    } else if (state.mode === "msg") {
       launchMessages();
+    } else {
+      launchEscalatingChain();
     }
   }
 
@@ -958,43 +1238,48 @@
     }
   }
 
-  function startSimulation() {
+  function startSimulation(overrideDelaySec = null, inDisguise = false) {
     stopTestSound();
+    stopTestVoice();
     clearAllTimers();
     savePrefs();
     applyOSTheme();
     applyWallpaperUI();
-
-    const resolved = resolveToneStyle();
-    if (resolved !== "none" && resolved !== "custom") {
-      if (state.mode === "call") {
-        buildRingtoneUrl(resolved);
-      } else {
-        buildNotificationUrl(resolved);
-      }
-    }
+    prewarmAudioForMode();
 
     startSilentKeepAlive();
     ensureAudioContext();
 
-    const delaySec = clampInt(el.delayInput.value, 1, 3600, 5);
-    el.delayInput.value = String(delaySec);
+    const delaySec =
+      overrideDelaySec !== null
+        ? clampInt(overrideDelaySec, 1, 3600, 5)
+        : clampInt(el.delayInput.value, 1, 3600, 5);
+
+    if (overrideDelaySec === null) {
+      el.delayInput.value = String(delaySec);
+    }
 
     state.isWaiting = true;
+    state.waitingInDisguise = inDisguise;
     state.targetEndTime = Date.now() + delaySec * 1000;
-    el.waitTimer.textContent = String(delaySec);
-    el.screenWait.classList.remove("is-stealth");
-    showScreen(el.screenWait);
 
     requestWakeLock();
-    enterFullscreenIfMobile();
 
-    if (delaySec >= 3) {
-      state.timers.push(
-        setTimeout(() => {
-          if (state.isWaiting) el.screenWait.classList.add("is-stealth");
-        }, 2000)
-      );
+    if (inDisguise) {
+      el.calcArmedDot.classList.remove("is-hidden");
+    } else {
+      el.waitTimer.textContent = String(delaySec);
+      el.screenWait.classList.remove("is-stealth");
+      showScreen(el.screenWait);
+      enterFullscreenIfMobile();
+
+      if (delaySec >= 3) {
+        state.timers.push(
+          setTimeout(() => {
+            if (state.isWaiting) el.screenWait.classList.add("is-stealth");
+          }, 2000)
+        );
+      }
     }
 
     const tick = setInterval(checkCountdownProgress, 250);
@@ -1004,6 +1289,10 @@
   function launchIncomingCall() {
     const caller = el.whoInput.value.trim().slice(0, 40) || "Bilinmeyen";
     const sub = el.subInput.value.trim().slice(0, 28) || "Cep";
+
+    state.isCallMuted = false;
+    state.isCallHeld = false;
+    state.isCallSpeaker = false;
 
     el.callName.textContent = caller;
     el.callInitial.textContent = caller.charAt(0).toUpperCase() || "?";
@@ -1033,13 +1322,15 @@
     el.declineLabel.textContent = "Bitir";
     el.inCallGrid.classList.remove("is-hidden");
 
+    startCallVoice(false);
+
     let elapsed = 0;
     el.callSub.textContent = "00:00";
     state.talkInterval = setInterval(() => {
       elapsed += 1;
       const mins = String(Math.floor(elapsed / 60)).padStart(2, "0");
       const secs = String(elapsed % 60).padStart(2, "0");
-      el.callSub.textContent = mins + ":" + secs;
+      el.callSub.textContent = state.isCallHeld ? "Beklemede · " + mins + ":" + secs : mins + ":" + secs;
     }, 1000);
   }
 
@@ -1111,13 +1402,186 @@
     }
   }
 
+  // Tırmanan Senaryo Zinciri: Mesaj 1 -> Acil Mesaj 2 -> Gelen Arama
+  function launchEscalatingChain() {
+    updateClocks();
+    el.notiStack.replaceChildren();
+    showScreen(el.screenHome);
+
+    const sender = el.whoInput.value.trim().slice(0, 40) || "Annem";
+    const msg1 = el.chainMsg1Input.value.trim().slice(0, 100) || "Müsait misin? Bir şey söyleyeceğim";
+    const msg2 = el.chainMsg2Input.value.trim().slice(0, 100) || "Kapıda kaldım, baksana telefona!!";
+    const gap = clampInt(el.chainGapInput.value, 2, 60, 6);
+
+    // Adım 1: İlk sakin bildirim hemen düşer
+    el.notiStack.prepend(createNotificationNode(sender, msg1, formatClock(new Date())));
+    playNotificationSound();
+
+    // Adım 2: Acil ikinci mesaj
+    state.timers.push(
+      setTimeout(() => {
+        el.notiStack.prepend(createNotificationNode(sender, msg2, formatClock(new Date())));
+        playNotificationSound();
+      }, gap * 1000)
+    );
+
+    // Adım 3: Aynı kişiden gerçek gelen arama
+    state.timers.push(
+      setTimeout(() => {
+        launchIncomingCall();
+      }, gap * 2 * 1000)
+    );
+  }
+
   function returnToSetup() {
     clearAllTimers();
     exitFullscreenSafe();
     showScreen(el.screenSetup);
   }
 
-  // ---------- 9. Ses Testi ----------
+  // ---------- 11. Kamufle Mod: Gerçek Çalışan Hesap Makinesi (eval yok) ----------
+  function formatCalcNumber(num) {
+    if (!Number.isFinite(num)) return "Hata";
+    const str = String(Number(num.toPrecision(10)));
+    return str.replace(".", ",");
+  }
+
+  function updateCalcUI() {
+    const text = state.calc.current.replace(".", ",");
+    el.calcDisplay.textContent = text;
+    el.calcDisplay.classList.toggle("is-small", text.length > 8);
+    if (state.calc.prev !== null && state.calc.op) {
+      const symMap = { "/": "÷", "*": "×", "-": "−", "+": "+" };
+      el.calcExpr.textContent = formatCalcNumber(state.calc.prev) + " " + (symMap[state.calc.op] || "");
+    } else {
+      el.calcExpr.textContent = "";
+    }
+  }
+
+  function computeCalc(a, b, op) {
+    if (op === "+") return a + b;
+    if (op === "-") return a - b;
+    if (op === "*") return a * b;
+    if (op === "/") return b === 0 ? NaN : a / b;
+    return b;
+  }
+
+  function resetCalcState() {
+    state.calc.current = "0";
+    state.calc.prev = null;
+    state.calc.op = null;
+    state.calc.resetNext = false;
+    updateCalcUI();
+  }
+
+  function openCalculatorDisguise() {
+    stopTestSound();
+    stopTestVoice();
+    savePrefs();
+    applyOSTheme();
+    resetCalcState();
+    showScreen(el.screenCalc);
+    enterFullscreenIfMobile();
+    showToast("Kamufle Mod: Sayı + '=' ile gizli başlat, AC basılı tut = çık.");
+  }
+
+  function handleCalcKey(btn) {
+    const num = btn.dataset.num;
+    const op = btn.dataset.op;
+    const act = btn.dataset.act;
+
+    if (num !== undefined) {
+      if (state.calc.resetNext || state.calc.current === "0" || state.calc.current === "Hata") {
+        state.calc.current = num;
+        state.calc.resetNext = false;
+      } else if (state.calc.current.length < 11) {
+        state.calc.current += num;
+      }
+      updateCalcUI();
+      return;
+    }
+
+    if (act === "dot") {
+      if (state.calc.resetNext) {
+        state.calc.current = "0.";
+        state.calc.resetNext = false;
+      } else if (!state.calc.current.includes(".")) {
+        state.calc.current += ".";
+      }
+      updateCalcUI();
+      return;
+    }
+
+    if (act === "clear") {
+      const now = Date.now();
+      if (state.isWaiting && now - state.calc.lastAcTap < 420) {
+        clearAllTimers();
+        showToast("Gizli sayaç iptal edildi.");
+      }
+      state.calc.lastAcTap = now;
+      resetCalcState();
+      return;
+    }
+
+    if (act === "sign") {
+      const val = parseFloat(state.calc.current);
+      if (!Number.isNaN(val) && val !== 0) {
+        state.calc.current = String(-val);
+        updateCalcUI();
+      }
+      return;
+    }
+
+    if (act === "percent") {
+      const val = parseFloat(state.calc.current);
+      if (!Number.isNaN(val)) {
+        state.calc.current = String(val / 100);
+        updateCalcUI();
+      }
+      return;
+    }
+
+    if (op) {
+      const val = parseFloat(state.calc.current);
+      if (Number.isNaN(val)) return;
+      if (state.calc.prev !== null && state.calc.op && !state.calc.resetNext) {
+        const res = computeCalc(state.calc.prev, val, state.calc.op);
+        state.calc.prev = res;
+        state.calc.current = Number.isFinite(res) ? String(Number(res.toPrecision(10))) : "Hata";
+      } else {
+        state.calc.prev = val;
+      }
+      state.calc.op = op;
+      state.calc.resetNext = true;
+      updateCalcUI();
+      return;
+    }
+
+    if (act === "equals") {
+      const val = parseFloat(state.calc.current);
+      if (Number.isNaN(val)) return;
+
+      // Gerçek matematik işlemi varsa normal hesapla
+      if (state.calc.prev !== null && state.calc.op) {
+        const res = computeCalc(state.calc.prev, val, state.calc.op);
+        state.calc.current = Number.isFinite(res) ? String(Number(res.toPrecision(10))) : "Hata";
+        state.calc.prev = null;
+        state.calc.op = null;
+        state.calc.resetNext = true;
+        updateCalcUI();
+        return;
+      }
+
+      // GİZLİ TETİKLEYİCİ: İşlemsiz pozitif sayı + "=" -> o kadar saniye sonra gizlice başlat!
+      if (val >= 1 && val <= 3600) {
+        const secs = Math.round(val);
+        state.calc.resetNext = true;
+        startSimulation(secs, true);
+      }
+    }
+  }
+
+  // ---------- 12. Ses & Konuşma Testleri ----------
   function stopTestSound() {
     if (!state.isTestingSound) return;
     stopRinging();
@@ -1136,21 +1600,43 @@
       stopTestSound();
       return;
     }
+    stopTestVoice();
     state.isTestingSound = true;
     el.testSoundBtn.textContent = "■ Durdur";
 
-    if (state.mode === "call") {
-      startRinging();
-      const autoStop = setTimeout(stopTestSound, 3200);
-      state.timers.push(autoStop);
-    } else {
+    if (state.mode === "msg") {
       playNotificationSound();
-      const autoStop = setTimeout(stopTestSound, 1100);
-      state.timers.push(autoStop);
+      state.timers.push(setTimeout(stopTestSound, 1100));
+    } else {
+      startRinging();
+      state.timers.push(setTimeout(stopTestSound, 3200));
     }
   }
 
-  // ---------- 10. Pano Kopyalama (Güvenli) ----------
+  function stopTestVoice() {
+    if (!state.isTestingVoice) return;
+    stopCallVoice();
+    state.isTestingVoice = false;
+    el.testVoiceBtn.textContent = "▶ Dinle";
+  }
+
+  function toggleTestVoice() {
+    if (state.isTestingVoice) {
+      stopTestVoice();
+      return;
+    }
+    if (el.voiceSelect.value === "none") {
+      showToast("Dinlemek için önce bir karşı taraf sesi seç.");
+      return;
+    }
+    stopTestSound();
+    state.isTestingVoice = true;
+    el.testVoiceBtn.textContent = "■ Durdur";
+    startCallVoice(true);
+    state.timers.push(setTimeout(stopTestVoice, 3500));
+  }
+
+  // ---------- 13. Pano Kopyalama (Güvenli) ----------
   async function copyTextSafe(text) {
     try {
       if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -1176,18 +1662,23 @@
     document.body.removeChild(ta);
   }
 
-  // ---------- 11. Mod, PWA & Modallar ----------
+  // ---------- 14. Mod, PWA & Modallar ----------
   function setMode(mode, persist = true) {
     state.mode = mode;
-    const isCall = mode === "call";
 
-    el.tabCall.classList.toggle("is-selected", isCall);
-    el.tabCall.setAttribute("aria-selected", String(isCall));
-    el.tabMsg.classList.toggle("is-selected", !isCall);
-    el.tabMsg.setAttribute("aria-selected", String(!isCall));
+    [
+      [el.tabCall, "call"],
+      [el.tabMsg, "msg"],
+      [el.tabChain, "chain"]
+    ].forEach(([tab, key]) => {
+      const active = mode === key;
+      tab.classList.toggle("is-selected", active);
+      tab.setAttribute("aria-selected", String(active));
+    });
 
-    el.msgOptions.classList.toggle("is-hidden", isCall);
-    el.toneLabel.textContent = isCall ? "Zil Sesi" : "Bildirim Sesi";
+    el.msgOptions.classList.toggle("is-hidden", mode !== "msg");
+    el.chainOptions.classList.toggle("is-hidden", mode !== "chain");
+    el.toneLabel.textContent = mode === "msg" ? "Bildirim Sesi" : "Zil & Bildirim Sesi";
     stopTestSound();
     if (persist) savePrefs();
   }
@@ -1265,11 +1756,11 @@
   async function wipeAllLocalData() {
     try {
       localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(LEGACY_STORAGE_KEY);
     } catch {
       // yoksay
     }
-    await deleteCustomAudio();
-    await deleteCustomWallpaper();
+    await Promise.all([deleteCustomAudio(), deleteCustomWallpaper(), deleteCustomVoice()]);
     if ("caches" in window) {
       try {
         const keys = await caches.keys();
@@ -1283,18 +1774,26 @@
     el.delayInput.value = "5";
     el.osStyleSelect.value = "auto";
     el.toneSelect.value = "auto";
-    if (el.wpBlurCallToggle) el.wpBlurCallToggle.checked = true;
+    el.voiceSelect.value = "none";
+    el.sosPhoneInput.value = "";
+    el.sosMsgInput.value = "Şu an kendimi güvende hissetmiyorum, beni hemen arar mısın?";
+    el.wpBlurCallToggle.checked = true;
+    setMode("call", false);
     applyOSTheme();
     updateCustomAudioUI();
+    updateCustomVoiceUI();
     applyWallpaperUI();
     closeLegalModal();
     showToast("Tüm yerel veriler cihazından silindi.");
   }
 
-  // ---------- 12. Olay Dinleyicileri ----------
+  // ---------- 15. Olay Dinleyicileri ----------
   function bindEvents() {
     el.tabCall.addEventListener("click", () => setMode("call"));
     el.tabMsg.addEventListener("click", () => setMode("msg"));
+    el.tabChain.addEventListener("click", () => setMode("chain"));
+
+    el.openCalcBtn.addEventListener("click", openCalculatorDisguise);
 
     el.presetRow.addEventListener("click", (e) => {
       const chip = e.target.closest(".chip");
@@ -1306,6 +1805,8 @@
       if (chip.dataset.msg) {
         el.msgTextInput.value = chip.dataset.msg + "\nAcil döner misin?";
       }
+      if (chip.dataset.c1) el.chainMsg1Input.value = chip.dataset.c1;
+      if (chip.dataset.c2) el.chainMsg2Input.value = chip.dataset.c2;
       savePrefs();
     });
 
@@ -1325,7 +1826,18 @@
       savePrefs();
     });
 
-    [el.whoInput, el.subInput, el.msgCountInput, el.msgGapInput, el.msgTextInput].forEach((inp) => {
+    [
+      el.whoInput,
+      el.subInput,
+      el.msgCountInput,
+      el.msgGapInput,
+      el.msgTextInput,
+      el.chainMsg1Input,
+      el.chainMsg2Input,
+      el.chainGapInput,
+      el.sosPhoneInput,
+      el.sosMsgInput
+    ].forEach((inp) => {
       inp.addEventListener("change", savePrefs);
     });
 
@@ -1407,7 +1919,7 @@
 
       try {
         await saveMediaItem(KEY_AUDIO, file);
-        showToast("Özel ses cihazına kaydedildi.");
+        showToast("Özel zil sesi cihazına kaydedildi.");
       } catch {
         showToast("Ses bu oturum için yüklendi.");
       }
@@ -1417,11 +1929,79 @@
     el.clearAudioBtn.addEventListener("click", async () => {
       stopTestSound();
       await deleteCustomAudio();
-      showToast("Özel ses kaldırıldı.");
+      showToast("Özel zil sesi kaldırıldı.");
     });
 
-    // Simülasyon kontrolleri
-    el.startBtn.addEventListener("click", startSimulation);
+    // Karşı taraf sesi seçme / test / yükleme
+    el.voiceSelect.addEventListener("change", () => {
+      stopTestVoice();
+      updateCustomVoiceUI();
+      savePrefs();
+    });
+
+    el.testVoiceBtn.addEventListener("click", toggleTestVoice);
+
+    el.customVoiceInput.addEventListener("change", async (e) => {
+      const file = e.target.files && e.target.files[0];
+      e.target.value = "";
+      if (!file) return;
+
+      if (!file.type || !file.type.startsWith("audio/")) {
+        showToast("Lütfen geçerli bir ses kaydı (.mp3, .wav, .m4a) seç.");
+        return;
+      }
+      if (file.size > MAX_MEDIA_BYTES) {
+        showToast("Ses kaydı en fazla 15 MB olabilir.");
+        return;
+      }
+
+      if (state.customVoiceUrl) {
+        URL.revokeObjectURL(state.customVoiceUrl);
+        state.customVoiceUrl = null;
+      }
+      state.customVoiceBlob = file;
+      state.customVoiceName = file.name.slice(0, 60);
+
+      try {
+        await saveMediaItem(KEY_VOICE, file);
+        showToast("Konuşma kaydı ahize filtresiyle hazırlandı.");
+      } catch {
+        showToast("Konuşma kaydı bu oturum için yüklendi.");
+      }
+      updateCustomVoiceUI();
+    });
+
+    el.clearVoiceBtn.addEventListener("click", async () => {
+      stopTestVoice();
+      await deleteCustomVoice();
+      showToast("Konuşma kaydı kaldırıldı.");
+    });
+
+    // Hesap makinesi tuşları + AC basılı tutarak çıkış
+    el.calcGrid.addEventListener("click", (e) => {
+      const btn = e.target.closest(".calc-key");
+      if (!btn) return;
+      handleCalcKey(btn);
+    });
+
+    const startAcHold = () => {
+      clearTimeout(state.calc.acHoldTimer);
+      state.calc.acHoldTimer = setTimeout(() => {
+        triggerVibrate(40);
+        returnToSetup();
+      }, 1300);
+    };
+    const cancelAcHold = () => {
+      clearTimeout(state.calc.acHoldTimer);
+    };
+
+    el.calcClearBtn.addEventListener("pointerdown", startAcHold);
+    el.calcClearBtn.addEventListener("pointerup", cancelAcHold);
+    el.calcClearBtn.addEventListener("pointerleave", cancelAcHold);
+    el.calcClearBtn.addEventListener("pointercancel", cancelAcHold);
+
+    // Simülasyon başlat / iptal
+    el.startBtn.addEventListener("click", () => startSimulation(null, false));
     el.cancelWaitBtn.addEventListener("click", returnToSetup);
 
     el.screenWait.addEventListener("click", (e) => {
@@ -1437,17 +2017,53 @@
     el.declineBtn.addEventListener("click", returnToSetup);
     el.homeBackBtn.addEventListener("click", returnToSetup);
 
+    // Beklet tuşuna 2.5 sn basılı tutunca Sessiz SOS
+    const startSosHold = () => {
+      state.sosTriggered = false;
+      clearTimeout(state.sosHoldTimer);
+      if (!sanitizePhone(el.sosPhoneInput.value).trim()) return;
+      el.holdToolBtn.classList.add("is-sos-holding");
+      state.sosHoldTimer = setTimeout(() => {
+        state.sosTriggered = true;
+        el.holdToolBtn.classList.remove("is-sos-holding");
+        triggerSilentSOS();
+      }, 2500);
+    };
+    const cancelSosHold = () => {
+      clearTimeout(state.sosHoldTimer);
+      el.holdToolBtn.classList.remove("is-sos-holding");
+    };
+
+    el.holdToolBtn.addEventListener("pointerdown", startSosHold);
+    el.holdToolBtn.addEventListener("pointerup", cancelSosHold);
+    el.holdToolBtn.addEventListener("pointerleave", cancelSosHold);
+    el.holdToolBtn.addEventListener("pointercancel", cancelSosHold);
+
     el.inCallGrid.addEventListener("click", (e) => {
       const btn = e.target.closest(".call-tool-btn");
       if (!btn) return;
       const tool = btn.dataset.tool;
+      if (tool === "hold" && state.sosTriggered) {
+        state.sosTriggered = false;
+        return;
+      }
       if (tool === "keypad") {
         el.inCallGrid.classList.add("is-hidden");
         el.dtmfPad.classList.remove("is-hidden");
         return;
       }
-      const pressed = btn.getAttribute("aria-pressed") === "true";
-      btn.setAttribute("aria-pressed", String(!pressed));
+      const next = btn.getAttribute("aria-pressed") !== "true";
+      btn.setAttribute("aria-pressed", String(next));
+
+      if (tool === "mute") {
+        state.isCallMuted = next;
+      } else if (tool === "hold") {
+        state.isCallHeld = next;
+        updateActiveVoiceGain();
+      } else if (tool === "speaker") {
+        state.isCallSpeaker = next;
+        updateActiveVoiceGain();
+      }
     });
 
     el.dtmfKeys.addEventListener("click", (e) => {
@@ -1472,7 +2088,7 @@
       }
     });
 
-    // Gerçekçilik Tüyoları Modalı
+    // Tüyolar Modalı
     [
       el.openTipsBtn,
       el.openTipsBanner,
@@ -1513,28 +2129,34 @@
     });
   }
 
-  // ---------- 13. Başlatma ----------
+  // ---------- 16. Başlatma ----------
   async function init() {
     loadPrefs();
     applyOSTheme();
     updateClocks();
     setInterval(updateClocks, 1000);
 
-    const [savedAudio, savedWp] = await Promise.all([
+    const [savedAudio, savedWp, savedVoice] = await Promise.all([
       loadMediaItem(KEY_AUDIO),
-      loadMediaItem(KEY_WALLPAPER)
+      loadMediaItem(KEY_WALLPAPER),
+      loadMediaItem(KEY_VOICE)
     ]);
 
     if (savedAudio && savedAudio.blob) {
       state.customAudioBlob = savedAudio.blob;
-      state.customAudioName = savedAudio.name || "Özel Ses";
+      state.customAudioName = savedAudio.name || "Özel Zil";
     }
     if (savedWp && savedWp.blob) {
       state.wallpaperBlob = savedWp.blob;
       state.wallpaperName = savedWp.name || "Duvar Kağıdı";
     }
+    if (savedVoice && savedVoice.blob) {
+      state.customVoiceBlob = savedVoice.blob;
+      state.customVoiceName = savedVoice.name || "Konuşma Kaydı";
+    }
 
     updateCustomAudioUI();
+    updateCustomVoiceUI();
     applyWallpaperUI();
 
     bindEvents();
