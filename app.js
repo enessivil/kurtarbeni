@@ -20,7 +20,7 @@
       pageTitle: "KurtarBeni — Sahte Arama & Mesaj",
       brandPart1: "Kurtar",
       brandPart2: "Beni",
-      desktopBadge: "v2.1 · %100 Çevrimdışı & Açık Kaynak",
+      desktopBadge: "v2.1.1 · %100 Çevrimdışı & Açık Kaynak",
       desktopDesc:
         "Sıradan sahte aramaların ötesinde: tırmanan mesaj→arama senaryo zinciri, çalışan hesap makinesi kılığı, telefon filtreli karşı taraf sesi ve sessiz güvenlik kısayolu.",
       feat1Title: "Tırmanan Senaryo Zinciri",
@@ -229,27 +229,31 @@
         },
         {
           h: "4. Cihazının Varsayılan Zil Sesi İsimleri",
-          p: "Marka zil sesleri telifli olduğu için koda eklenmez. Kendi cihazının zil sesi adını kopyalayıp güvendiğin bir kaynaktan bulduğun .mp3/.wav/.m4a dosyasını Kendi Ses Dosyam alanına ekleyebilirsin:",
+          p: "Marka zil sesleri telif haklarına (FSEK) tabi olduğu için koda eklenmez ve dış indirme sitelerine bağlantı verilmez. Yalnızca kendi cihazındaki mevcut ses dosyalarını veya kullanım hakkına sahip olduğun yasal ses kayıtlarını (.mp3/.wav/.m4a) Kendi Ses Dosyam alanına ekleyebilirsin:",
           guide: true
         }
       ],
       legalSections: [
         {
-          h: "1. 6698 Sayılı KVKK Kapsamında Gizlilik",
-          p1: "KurtarBeni tamamen tarayıcınızda (istemci tarafında) çalışan açık kaynaklı bir statik web uygulamasıdır. Hiçbir sunucu, veritabanı, çerez (cookie), reklam ağı, harici yazı tipi veya analitik aracı içermez.",
-          p2: "Girdiğiniz arayan adı, mesaj metni, acil durum numarası, duvar kağıdı veya özel ses dosyaları hiçbir şekilde internete gönderilmez ve geliştirici dahil üçüncü kişilerle paylaşılmaz. Tüm veriler yalnızca kendi cihazınızın yerel tarayıcı deposunda (localStorage / IndexedDB) tutulur."
+          h: "1. 6698 Sayılı KVKK Kapsamında Gizlilik & Barındırma",
+          p1: "KurtarBeni tamamen tarayıcınızda (istemci tarafında) çalışan açık kaynaklı bir statik web uygulamasıdır. Hiçbir özel sunucu, veritabanı, çerez (cookie), reklam ağı, harici yazı tipi veya analitik aracı içermez.",
+          p2: "Girdiğiniz arayan adı, mesaj metni, acil durum numarası, duvar kağıdı veya ses dosyaları geliştiriciye ya da üçüncü kişilere kesinlikle gönderilmez; yalnızca cihazınızın yerel deposunda (localStorage / IndexedDB) saklanır. Not: Statik dosyaların sunulduğu GitHub Pages altyapısı (GitHub, Inc.), kendi güvenlik politikaları kapsamında ziyaretçi IP adreslerini loglayabilir."
         },
         {
-          h: "2. Yasal Kullanım ve Sorumluluk Reddi",
-          p1: "Bu uygulama yalnızca sosyal ortamlardan nazikçe ayrılmak, kişisel güvenlik hissi sağlamak veya simülasyon amacıyla geliştirilmiştir.",
+          h: "2. Yasal Kullanım, Sessiz SOS Sınırı & Sorumluluk Reddi",
+          p1: "Bu uygulama yalnızca sosyal ortamlardan nazikçe ayrılmak, kişisel konfor sağlamak veya simülasyon amacıyla geliştirilmiştir.",
           ul: [
-            "Gerçek bir acil durumda bu uygulama yerine doğrudan 112 Acil Çağrı Merkezi'ni arayın.",
+            "Sessiz SOS özelliği gerçek bir acil çağrı merkezi veya otomatik yardım sistemi değildir; yalnızca cihazın SMS uygulamasını önceden doldurulmuş taslakla açar. Mesajın gönderilmesi ve ulaşması tamamen kullanıcının kontrolündedir; gerçek acil durumlarda doğrudan 112 Acil Çağrı Merkezi'ni arayın.",
             "Uygulamanın; dolandırıcılık, tehdit, taciz, kişilik haklarına saldırı, sahte delil üretme veya 5237 sayılı Türk Ceza Kanunu'na aykırı herhangi bir amaçla kullanılması kesinlikle yasaktır.",
             "Uygulama 'olduğu gibi' (MIT Lisansı ile) sunulur; kullanımından doğabilecek tüm hukuki sorumluluk kullanıcıya aittir."
           ]
         },
         {
-          h: "3. Cihaz Verilerini Yönet",
+          h: "3. Marka & Telif Feragatnamesi",
+          p1: "iPhone, iOS, Android, Samsung, One UI, Xiaomi, Google Pixel ve Huawei adları yalnızca uyumluluk ve bilgilendirme amacıyla anılmıştır; ilgili hak sahiplerinin tescilli markalarıdır ve bu projenin bu markalarla resmi bağlantısı yoktur."
+        },
+        {
+          h: "4. Cihaz Verilerini Yönet",
           p1: "Cihazınızda kayıtlı tüm tercihleri, duvar kağıdını, ses dosyalarını, acil durum numarasını ve çevrimdışı önbelleği tek dokunuşla kalıcı olarak silebilirsiniz."
         }
       ]
@@ -258,7 +262,7 @@
       pageTitle: "RescueMe — Fake Call & Message Simulator",
       brandPart1: "Rescue",
       brandPart2: "Me",
-      desktopBadge: "v2.1 · 100% Offline & Open Source",
+      desktopBadge: "v2.1.1 · 100% Offline & Open Source",
       desktopDesc:
         "Beyond basic fake calls: an escalating message→call scenario chain, a working calculator disguise, phone-filtered caller audio, and a silent SOS shortcut.",
       feat1Title: "Escalating Scenario Chain",
@@ -467,27 +471,31 @@
         },
         {
           h: "4. Default Ringtone Names by Brand",
-          p: "Brand ringtones are copyrighted and not bundled. Copy your phone's default ringtone query below, download an .mp3/.wav/.m4a from a trusted source, and load it under Custom Audio File:",
+          p: "Brand ringtones are copyrighted and not bundled, and no third-party download sites are linked. Please only load audio files (.mp3/.wav/.m4a) already on your device or that you have the legal right to use under Custom Audio File:",
           guide: true
         }
       ],
       legalSections: [
         {
-          h: "1. Zero-Server Privacy (GDPR / KVKK Compliant)",
-          p1: "RescueMe (KurtarBeni) is an open-source static web application running 100% client-side in your browser. It contains zero servers, databases, cookies, ad networks, external fonts, or analytics.",
-          p2: "Any caller name, message text, emergency contact number, wallpaper, or custom audio file you select never leaves your device and is never shared with anyone. Preferences are stored strictly in your browser's local storage (localStorage / IndexedDB)."
+          h: "1. Zero-Server Privacy & Hosting Transparency (GDPR / KVKK)",
+          p1: "RescueMe (KurtarBeni) is an open-source static web application running 100% client-side in your browser. It contains zero custom servers, databases, cookies, ad networks, external fonts, or analytics.",
+          p2: "Any caller name, message text, emergency contact number, wallpaper, or audio file you select is never transmitted to the developer or third parties; it stays strictly in your browser's local storage (localStorage / IndexedDB). Note: Static files are hosted on GitHub Pages (GitHub, Inc.), which may log visitor IP addresses for security purposes under its own privacy statement."
         },
         {
-          h: "2. Lawful Use & Disclaimer",
+          h: "2. Lawful Use, Silent SOS Limits & Disclaimer",
           p1: "This tool is built solely for politely exiting uncomfortable social situations, personal peace of mind, or harmless simulation.",
           ul: [
-            "In any real emergency, contact your local emergency services (such as 112 or 911) immediately instead of using this app.",
+            "Silent SOS is NOT a real emergency dispatch or automated alert service; it only opens your device's SMS app with a pre-filled draft. Sending and delivery depend entirely on the user and carrier signal. In any real emergency, call 112 or 911 immediately.",
             "Using this application for fraud, harassment, threats, impersonation, or any unlawful purpose is strictly prohibited.",
             "Provided 'as is' under the MIT License; all legal responsibility rests solely with the user."
           ]
         },
         {
-          h: "3. Manage Local Device Data",
+          h: "3. Trademark & Copyright Notice",
+          p1: "iPhone, iOS, Android, Samsung, One UI, Xiaomi, Google Pixel, and Huawei are trademarks of their respective owners, referenced solely for compatibility and informational purposes with no official affiliation."
+        },
+        {
+          h: "4. Manage Local Device Data",
           p1: "You can permanently wipe all saved preferences, wallpapers, audio files, emergency contacts, and offline caches from this device with one tap."
         }
       ]
@@ -1491,12 +1499,21 @@
 
   function startSilentKeepAlive() {
     try {
+      const silentUrl = getSilentWavUrl();
       const player = state.player;
       player.pause();
-      player.src = getSilentWavUrl();
+      player.src = silentUrl;
       player.loop = true;
       player.volume = 0.01;
       player.play().catch(() => {});
+
+      // iOS Safari'de gecikmeli bildirim seslerinin kilitlenmemesi için ikinci ses kanalını da dokunuşta uyandır
+      const np = state.notiPlayer;
+      np.pause();
+      np.src = silentUrl;
+      np.loop = false;
+      np.volume = 0.01;
+      np.play().then(() => np.pause()).catch(() => {});
     } catch {
       // yoksay
     }
@@ -1751,7 +1768,7 @@
   // ---------- 8. Sessiz Güvenlik Köprüsü (Acil SMS) ----------
   function triggerSilentSOS() {
     const dict = t();
-    const phone = sanitizePhone(el.sosPhoneInput.value).replace(/\s+/g, "");
+    const phone = sanitizePhone(el.sosPhoneInput.value).replace(/[\s()-]/g, "");
     if (!phone) {
       showToast(dict.toasts.sosNoPhone);
       return;
@@ -1787,7 +1804,7 @@
   }
 
   function enterFullscreenIfMobile() {
-    if (window.innerWidth > 820) return;
+    if (window.innerWidth > 860) return;
     try {
       const root = document.documentElement;
       if (root.requestFullscreen && !document.fullscreenElement) {

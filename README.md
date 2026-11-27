@@ -1,45 +1,54 @@
-# 📱 KurtarBeni — Sahte Arama & Mesaj Simülatörü
+# 📱 KurtarBeni / RescueMe
 
 <p align="center">
-  <img src="assets/banner.jpg" alt="KurtarBeni Banner" width="100%">
+  <img src="assets/banner.jpg" alt="KurtarBeni / RescueMe Banner" width="100%">
 </p>
 
 <p align="center">
-  <a href="https://github.com/enessivil/kurtarbeni/stargazers"><img src="https://img.shields.io/github/stars/enessivil/kurtarbeni?style=for-the-badge&color=22C55E" alt="Stars"></a>
-  <a href="https://github.com/enessivil/kurtarbeni/blob/main/LICENSE"><img src="https://img.shields.io/github/license/enessivil/kurtarbeni?style=for-the-badge&color=3B82F6" alt="License"></a>
-  <img src="https://img.shields.io/badge/PWA-Uyumlu-purple?style=for-the-badge" alt="PWA">
-  <img src="https://img.shields.io/badge/Gizlilik-%100_Çevrimdışı-050608?style=for-the-badge" alt="Gizlilik">
+  <a href="https://enessivil.github.io/kurtarbeni/"><img src="https://img.shields.io/badge/Canlı_Uygulama_/_Live_Demo-GitHub_Pages-22C55E?style=for-the-badge" alt="Live Demo"></a>
+  <a href="https://github.com/enessivil/kurtarbeni/actions/workflows/deploy.yml"><img src="https://github.com/enessivil/kurtarbeni/actions/workflows/deploy.yml/badge.svg" alt="Deploy Status"></a>
+  <a href="https://github.com/enessivil/kurtarbeni/blob/main/LICENSE"><img src="https://img.shields.io/github/license/enessivil/kurtarbeni?style=for-the-badge&color=3B82F6" alt="MIT License"></a>
+  <img src="https://img.shields.io/badge/PWA-100%25_Offline-7C3AED?style=for-the-badge" alt="Offline PWA">
+  <img src="https://img.shields.io/badge/Dependencies-Zero-050608?style=for-the-badge" alt="Zero Dependencies">
 </p>
 
 <p align="center">
-  <strong>İstemediğin sohbetlerden veya uzayan toplantılardan nazikçe sıyrıl.</strong><br>
-  Telefonunu masaya bırak, ekranı karart, zamanı gelince gerçekçi bir arama veya mesaj akışı başlasın.
-</p>
-
-<p align="center">
-  <a href="https://enessivil.github.io/kurtarbeni/"><strong>🌐 Hemen Canlı Deneyin (PWA) →</strong></a>
+  <a href="#-türkçe"><strong>🇹🇷 Türkçe</strong></a> •
+  <a href="#-english"><strong>🇬🇧 English</strong></a>
 </p>
 
 ---
 
-## 🌟 Öne Çıkan Özellikler
+## 🇹🇷 Türkçe
 
-- **🎭 İki Farklı Mod:** Gelen Arama simülasyonu veya kilit ekranında sırayla gelen SMS/Mesaj bildirim akışı.
-- **🖼️ Kendi Duvar Kağıdınla Birebir Görünüm:** Telefonunun duvar kağıdını veya boş ekran görüntüsünü (SS) ekle; hem kilit ekranı hem de gelen arama arka planı (bulanıklaştırılarak) kendi cihazınla birebir aynı olsun.
-- **🔕 Güç Tuşuna Basmadan Stealth AMOLED Karartma:** Başlat'a bastıktan 2 saniye sonra ekran tamamen simsiyah olur, cihaz kilitlenmeden masada bekler (tarayıcıların kilitliyken titreşimi durdurmasını engeller).
-- **🎶 Stüdyo DSP Ses Sentezleyici & Özel Sesler:** iOS, Android ve akustik zil sesleri tarayıcı içinde gerçek zamanlı sentezlenir. Dilersen cihazından kendi zil sesini `.mp3` / `.wav` olarak yükleyebilirsin.
-- **💡 Gerçekçilik Tüyoları & Zil Sesi Rehberi:** Markalara göre (iPhone, Samsung, Xiaomi vb.) orijinal zil sesi arama metinlerini kopyalayıp ekleme rehberi.
-- **🔒 %100 Çevrimdışı & KVKK Dostu:** Hiçbir sunucu, veritabanı, çerez veya takip kodu içermez. Seçtiğin resim ve sesler sadece kendi cihazının yerel tarayıcı hafızasında (`IndexedDB`) saklanır.
+**KurtarBeni**, istemediğin bir sohbetten ya da uzayan bir toplantıdan nazikçe sıyrılman için geliştirilmiş; **reklamsız, sunucusuz, sıfır dış bağımlılıklı ve %100 çevrimdışı çalışan** açık kaynak bir PWA (Progressive Web App) uygulamasıdır.
 
----
+🌐 **Hemen Kullan:** [https://enessivil.github.io/kurtarbeni/](https://enessivil.github.io/kurtarbeni/)
 
-## 📸 Ekran Görüntüleri
+### Öne Çıkan Özellikler (v2.1.1)
+
+- **⚡ Tırmanan Senaryo Zinciri (`Zincir` Modu):** Önce sakin bir mesaj, ardından acil ikinci mesaj ve hemen üstüne aynı kişiden gerçekçi gelen arama akışı.
+- **🧮 Hesap Makinesi Kılığı (Kamufle Mod):** Tamamen çalışan gerçek bir hesap makinesine bürünür. İşlem girmeden sadece sayı + `=` yazdığında (ör. `15=`) kimse fark etmeden gizli geri sayım başlar. `AC`'ye çift dokunarak iptal edebilir, `AC`'ye 1.5 sn basılı tutarak ayarlara dönebilirsin.
+- **🎙️ Ahize Filtreli Karşı Taraf Sesi:** Aramayı cevapladığında sessiz boşluk yerine gerçekçi telefon hattı ortam sesi veya `300–3400 Hz` telefon filtresinden geçirilmiş kendi ses kaydın çalar; *Hoparlör* ve *Beklet* butonlarına canlı tepki verir.
+- **🆘 Sessiz Güvenlik Köprüsü (Acil SMS):** Gelişmiş bölümde güvendiğin bir kişinin numarasını kaydettiysen, görüşme ekranında **Beklet** tuşuna 2.5 sn basılı tutarak cihazının SMS uygulamasını önceden doldurulmuş yardım mesajıyla açabilirsin.
+- **🖼️ Kendi Duvar Kağıdın & Özel Zil Sesin:** Telefonunun duvar kağıdını (kilit ekranı + bulanık arama arka planı) ve kendi ses dosyanı ekleyebilirsin. Tüm dosyalar yalnızca kendi cihazında (`IndexedDB`) çevrimdışı saklanır.
+- **📱 Android & iOS Otomatik Algılama + TR / EN Dil Desteği:** Cihazına göre kilit ekranı, gelen arama ve hesap makinesi stilini otomatik uyarlar; tek dokunuşla Türkçe / İngilizce geçişi sunar.
+- **🔒 Gizlilik & Güvenlik Sertleştirmesi:** Katı Content Security Policy (`script-src 'self'`, `connect-src 'self'`), sıfır `innerHTML`/`eval`, sıfır harici CDN/font, sıfır çerez/izleyici ve otomatik GitHub Actions güvenlik denetimi.
+
+### Nasıl Kullanılır?
+
+1. **[Canlı Uygulamayı Aç](https://enessivil.github.io/kurtarbeni/)** ve telefonunda **Ana Ekrana Ekle** ile kısayol oluştur (uçak modunda bile çalışır).
+2. Modu (*Arama / Mesaj / Zincir*), arayan adını, süreyi ve istersen duvar kağıdı/zil sesini seç.
+3. **Başlat ve Ekranı Karart** butonuna dokun (ya da sağ üstteki Hesap Makinesi kılığına geçip `15=` yaz).
+4. **Önemli:** Güç tuşuna basıp ekranı kilitleme; 2 saniye içinde açılan AMOLED saf siyah ekran kapalıymış gibi görünür. Başlatmadan önce telefonun *Medya* ses düzeyini aç.
+
+### Ekran Görüntüleri
 
 <table align="center">
   <tr>
     <td align="center" width="50%">
-      <strong>⚙️ Ayar Ekranı & Tüyolar</strong><br>
-      <img src="assets/ayarlar.jpg" alt="KurtarBeni Ayarlar Ekranı" width="100%">
+      <strong>⚙️ Ayarlar &amp; Senaryo Zinciri</strong><br>
+      <img src="assets/ayarlar.jpg" alt="KurtarBeni Ayar Ekranı" width="100%">
     </td>
     <td align="center" width="50%">
       <strong>📞 Gelen Arama Ekranı</strong><br>
@@ -48,38 +57,41 @@
   </tr>
 </table>
 
----
+### Gizlilik, KVKK & Yasal Uyarı
 
-## 🚀 Nasıl Kullanılır?
-
-1. **[Canlı Uygulamayı Aç](https://enessivil.github.io/kurtarbeni/)**
-2. **Ana Ekrana Ekle (Önerilen):** Tarayıcı menüsünden "Ana Ekrana Ekle" (Add to Home Screen) seçeneğiyle PWA olarak yükle. Artık uçak modunda bile çalışır!
-3. **Ayarları Yap:** Arayan kişiyi, gecikme süresini, zil sesini ve kendi duvar kağıdını seç.
-4. **Başlat:** "Başlat ve Ekranı Karart" butonuna dokun, ekran 2 saniye içinde kararacaktır. Telefonu masaya bırak.
-5. **İptal Etme:** Bekleme ekranından çıkmak için ekrana **çift dokunman** yeterlidir.
-
-⚠️ **Önemli İpucu:** Telefonunun medya ses seviyesinin açık olduğundan emin ol ve güç (kilit) tuşuna basma; tarayıcılar arka planda titreşim ve sesi durdurabilir.
+- **Sıfır Veri İletimi:** Uygulama kodu geliştiriciye veya üçüncü taraflara hiçbir veri göndermez. Ayarlar ve seçtiğin medya dosyaları yalnızca kendi tarayıcının yerel deposunda (`localStorage` / `IndexedDB`) tutulur ve uygulama içinden tek tıkla kalıcı olarak silinebilir. Statik barındırma sağlayan **GitHub Pages (GitHub, Inc.)**, kendi güvenlik politikaları kapsamında ziyaretçi IP adreslerini loglayabilir.
+- **Sessiz SOS Sınırı:** Sessiz SOS özelliği gerçek bir acil çağrı merkezi değildir; yalnızca cihazın SMS uygulamasını hazır taslakla açar. Gerçek acil durumlarda doğrudan **112 Acil Çağrı Merkezi**'ni arayın.
+- **Yasal Kullanım:** Uygulama MIT Lisansı ile "olduğu gibi" sunulur; dolandırıcılık, tehdit, taciz veya hukuka aykırı herhangi bir amaçla kullanılamaz.
+- **Marka Feragatnamesi:** iPhone, iOS, Android, Samsung, One UI, Xiaomi, Google Pixel ve Huawei adları yalnızca uyumluluk ve bilgilendirme amacıyla anılmıştır; ilgili hak sahiplerinin tescilli markalarıdır ve bu projenin bu markalarla resmi bağlantısı yoktur.
 
 ---
 
-## 🤝 Katkıda Bulunma (Contributing)
+## 🇬🇧 English
 
-Projeye destek olmak, hata bildirmek veya yeni bir özellik önermek istersen kapımız açık!
+**RescueMe (KurtarBeni)** is an open-source, **ad-free, serverless, zero-dependency, 100% offline PWA** designed to help you politely step out of awkward conversations or endless meetings.
 
-1. Bu depoyu forklayın (`Fork`).
-2. Yeni bir dal (branch) açın: `git checkout -b feature/harika-ozellik`.
-3. Değişikliklerinizi yapın ve test edin:
-   - *Kodun tamamen harici kütüphanesiz (vanilla JS/CSS), %100 çevrimdışı ve sıfır sunuculu kalmasına özen gösterin.*
-   - *Eğer `index.html`, `app.js` veya `styles.css` güncellediyseniz `sw.js` içindeki `CACHE_NAME` sürümünü güncellemeyi unutmayın.*
-4. Değişikliklerinizi commit edin: `git commit -m 'Eklendi: Yeni özellik'`.
-5. Dalınızı push edin: `git push origin feature/harika-ozellik`.
-6. Bir **Pull Request (PR)** oluşturun.
+🌐 **Try Live:** [https://enessivil.github.io/kurtarbeni/](https://enessivil.github.io/kurtarbeni/)
+
+### Key Features (v2.1.1)
+
+- **⚡ Escalating Scenario Chain (`Chain` Mode):** Delivers a calm first notification, followed by an urgent second message, and finishes with a realistic incoming call from the same person.
+- **🧮 Calculator Disguise (Stealth Mode):** Looks and works like a real calculator. Type a plain number + `=` (e.g. `15=`) to silently arm a 15-second countdown. Double-tap `AC` to cancel, or press and hold `AC` for 1.5s to return to setup.
+- **🎙️ Earpiece-Filtered Caller Audio:** Plays subtle phone-line ambience or your own uploaded audio clip filtered through a `300–3400 Hz` telephone bandpass filter when answered, responding live to *Speaker* and *Hold*.
+- **🆘 Silent Safety Bridge (Emergency SMS):** Save an optional trusted contact in *Advanced* settings; holding the **Hold** button for 2.5s during an active call opens your native SMS app pre-filled with your help draft.
+- **🖼️ Custom Wallpaper & Ringtone:** Use your own wallpaper (lock screen + blurred call background) and custom audio files, stored strictly offline on your device (`IndexedDB`).
+- **📱 Auto Android/iOS UI + Bilingual (`TR | EN`):** Automatically adapts UI styling to iOS or Android and switches instantly between Turkish and English.
+- **🔒 Hardened Security & Privacy:** Strict CSP (`default-src 'self'`, `script-src 'self'`), zero `innerHTML`/`eval`, zero external CDNs/fonts/cookies, and automated CI security checks on every push.
+
+### Privacy & Legal Notice
+
+- **Client-Side Only:** The app sends zero user data to any server. Preferences and custom media stay strictly in your device's browser storage (`localStorage` / `IndexedDB`) and can be wiped in one tap. Note that **GitHub Pages (GitHub, Inc.)**, as the static host, may log visitor IP addresses under its own security and privacy policy.
+- **Emergency Disclaimer:** Silent SOS is not an emergency dispatch service — it only opens a pre-filled SMS draft. In any real emergency, call **112 / 911** immediately.
+- **Trademarks:** iPhone, iOS, Android, Samsung, One UI, Xiaomi, Google Pixel, and Huawei are trademarks of their respective owners, mentioned solely for compatibility with no official affiliation.
 
 ---
 
-## 📜 Lisans & Yasal Uyarı
+## 🤝 Katkıda Bulunma / Contributing
 
-Bu proje **[MIT Lisansı](LICENSE)** ile lisanslanmıştır.
+Detaylı kurallar için [`CONTRIBUTING.md`](CONTRIBUTING.md) ve güvenlik bildirimleri için [`SECURITY.md`](SECURITY.md) dosyalarına göz atabilirsin. Her değişiklikte **sıfır dış bağımlılık**, **katı CSP uyumu** ve `sw.js` önbellek sürüm artışı zorunludur.
 
-- **Yasal Uyarı:** Bu uygulama tamamen sosyal ortamlardan nazikçe ayrılmak, simülasyon ve kişisel konfor amacıyla geliştirilmiştir. Suç teşkil edecek, aldatıcı veya dolandırıcılık amaçlı kullanımlar tamamen kullanıcının sorumluluğundadır.
-- **Acil Durumlar:** Gerçek acil durumlarda bu uygulama yerine doğrudan **112 Acil Çağrı Merkezi**'ni arayınız.
+📜 Lisans / License: **[MIT](LICENSE)**
