@@ -2224,3 +2224,10 @@ body {
     font-size: 18px;
   }
 }
+
+/* ---------- v2.1.2: Flex-shrink koruması (Gelişmiş panel ezilme düzeltmesi) ---------- */
+.setup-scroll > *,
+.noti-stack > *,
+.pro-accordion {
+  flex-shrink: 0;
+}
