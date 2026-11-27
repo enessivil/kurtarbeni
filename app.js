@@ -11,7 +11,7 @@
   const KEY_AUDIO = "user_tone";
   const KEY_WALLPAPER = "user_wallpaper";
   const KEY_VOICE = "user_voice";
-  const MAX_MEDIA_BYTES = 15 * 1024 * 1024; // 15 MB
+  const MAX_MEDIA_BYTES = 15 * 1024 * 1024;
   const SAMPLE_RATE = 22050;
 
   // ---------- Çoklu Dil Sözlüğü (TR / EN) ----------
@@ -20,7 +20,7 @@
       pageTitle: "KurtarBeni — Sahte Arama & Mesaj",
       brandPart1: "Kurtar",
       brandPart2: "Beni",
-      desktopBadge: "v2.1.1 · %100 Çevrimdışı & Açık Kaynak",
+      desktopBadge: "v3.0 · %100 Çevrimdışı & Açık Kaynak",
       desktopDesc:
         "Sıradan sahte aramaların ötesinde: tırmanan mesaj→arama senaryo zinciri, çalışan hesap makinesi kılığı, telefon filtreli karşı taraf sesi ve sessiz güvenlik kısayolu.",
       feat1Title: "Tırmanan Senaryo Zinciri",
@@ -41,6 +41,11 @@
         android: "Android algılandı · Android arayüzü aktif",
         desktop: "Masaüstü algılandı · Önizleme modu"
       },
+      navScenario: "Senaryo",
+      navStyle: "Görünüm & Ses",
+      navSafety: "Güvenlik",
+      modeKicker: "Kaçış Modu",
+      msgCardTitle: "Bildirim Akışı",
       installAndroidTitle: "Telefonuna Yükle (Çevrimdışı)",
       installAndroidDesc: "İnternet olmadan tek dokunuşla açmak için ana ekrana ekle.",
       installIosTitle: "iPhone Ana Ekranına Ekle",
@@ -100,18 +105,17 @@
       msgGapLabel: "Aralık (sn)",
       msgTextLabel: "Mesajlar (her satır ayrı bildirim)",
       chainTitle: "Tırmanan Senaryo Akışı",
-      chainSub: "Mesaj → Acil Mesaj → Gelen Arama",
+      chainSub: "Mesaj → Acil → Arama",
       chainStep1: "İlk Mesaj (Normal)",
       chainStep2: "İkinci Mesaj (Acil)",
       chainStep3: "Ardından otomatik gelen arama",
       chainGapLabel: "Adım aralığı",
       secUnit: "sn",
       osStyleLabel: "Ekran Stili (Android / iOS)",
-      osOptAuto: "Otomatik (Cihazıma göre)",
-      osOptAndroid: "Android (Material / One UI)",
-      osOptIos: "iOS (iPhone Stili)",
+      osCardAuto: "Otomatik",
+      osCardAutoSub: "Cihaza göre",
       wpLabel: "Arka Plan / Duvar Kağıdı",
-      wpTipLink: "Nasıl daha gerçekçi olur?",
+      wpTipLink: "İpucu",
       wpChooseBtn: "Duvar Kağıdı / SS Seç",
       removeBtn: "Kaldır",
       wpEmptyStatus: "Kendi duvar kağıdını veya boş ana ekran SS'ini seç; yalnızca bu cihazda saklanır.",
@@ -128,37 +132,59 @@
       toneOptClassic: "Gerçekçi Klasik Zil",
       toneOptCustom: "Kendi Ses Dosyam (Cihazdan)",
       toneOptNone: "Sessiz (Yalnızca Titreşim)",
+      toneShort: {
+        auto: "Otomatik ses",
+        ios_melody: "iOS zil",
+        android_melody: "Android zil",
+        soft: "Arp zil",
+        classic: "Klasik zil",
+        custom: "Özel ses",
+        none: "Sessiz"
+      },
       audioChooseBtn: "Ses Dosyası Seç (.mp3/.wav/.m4a)",
       audioEmptyStatus: "Kendi telefonunun zil sesini seçersen yalnızca cihazında (çevrimdışı) saklanır.",
       audioActiveStatus: "Yüklü ses: {name} (yalnızca bu cihazda saklanır)",
       ringtoneGuideLink: "Cihazına göre zil sesi isimleri & rehber →",
-      proTitle: "Gelişmiş: Karşı Taraf Sesi & Sessiz SOS",
-      proSub: "Cevaplayınca telefon hattı sesi ve gizli acil SMS kısayolu",
-      voiceLabel: "Cevaplayınca Karşı Taraf Sesi",
+      calcCardTitle: "Hesap Makinesi Kılığı",
+      calcOpenBtn: "Kılığa Geç",
+      calcCardDesc:
+        "Yanındakiler sadece hesap makinesi görür. İşlem girmeden sayı + '=' yaz (ör. 15=), seçtiğin mod sessizce başlar. Çıkmak için AC'ye 1.5 sn basılı tut.",
+      voiceLabel: "Karşı Taraf Sesi (Ahize)",
       testVoicePlay: "▶ Dinle",
       testVoiceStop: "■ Durdur",
-      voiceOptNone: "Kapalı (Sessiz)",
-      voiceOptAmbient: "Gerçekçi Telefon Hattı Ortam Sesi",
-      voiceOptCustom: "Kendi Ses Kaydın (Ahize Filtreli)",
+      voiceCardNone: "Kapalı",
+      voiceCardNoneSub: "Sessiz",
+      voiceCardAmbient: "Hat Ortamı",
+      voiceCardAmbientSub: "GSM sesi",
+      voiceCardCustom: "Ses Kaydım",
+      voiceCardCustomSub: "Ahize filtresi",
       voiceChooseBtn: "Konuşma Ses Kaydı Seç",
       voiceEmptyStatus:
         "Seçtiğin kayıt 300–3400 Hz telefon filtresinden geçirilerek gerçek ahize konuşması gibi çalar; yalnızca cihazında kalır.",
       voiceActiveStatus: "Yüklü kayıt: {name} (300–3400 Hz telefon filtresiyle çalar)",
       sosTitle: "Sessiz Güvenlik Köprüsü (Acil SMS)",
-      sosDesc: "Görüşme ekranında Beklet butonuna 2.5 sn basılı tutarsan, seçtiğin kişiye hazır SMS ekranı açılır.",
+      sosDesc:
+        "Görüşme ekranında Beklet butonuna 2.5 sn basılı tutarsan, seçtiğin kişiye hazır SMS ekranı açılır. Acil durumda doğrudan 112'yi ara.",
       sosPhoneLabel: "Güvenilir Kişi Numarası (Opsiyonel)",
       sosMsgLabel: "Hazır Yardım Mesajı",
-      tipsBannerTitle: "Gerçekçilik Tüyoları & Kamufle Rehberi",
-      tipsBannerSub: "Hesap makinesi gizli kodu, SS ipucu ve marka zil sesi isimleri",
-      miniPrivacy: "Verilerin sunucuya gönderilmez.",
-      miniLegalBtn: "KVKK & Koşullar",
-      startBtn: "Başlat ve Ekranı Karart",
+      tileTipsTitle: "Gerçekçilik Tüyoları",
+      tileTipsSub: "SS & zil sesi rehberi",
+      tileLegalTitle: "KVKK & Verilerim",
+      tileLegalSub: "Gizlilik & sıfırla",
+      summaryWpTag: "Duvar Kağıdı",
+      summaryVoiceTag: "Hat Sesi",
+      summarySosTag: "SOS Hazır",
+      ctaStartCall: "Aramayı Başlat ve Karart",
+      ctaStartMsg: "Mesajı Başlat ve Karart",
+      ctaStartChain: "Zinciri Başlat ve Karart",
       waitText: "Güç tuşuna basma — ekran 2 sn içinde tamamen kararacak.",
       waitSub: "Telefonu masaya bırak. İptal için ekrana çift dokun.",
       cancelBtn: "İptal Et",
       backToSetup: "Ayarlara Dön",
       callingSuffix: " · arıyor…",
       onHoldPrefix: "Beklemede · ",
+      callRemind: "Anımsat",
+      callMessage: "Mesaj",
       declineLabel: "Reddet",
       endCallLabel: "Bitir",
       acceptLabel: "Cevapla",
@@ -193,10 +219,10 @@
         voiceSaved: "Konuşma kaydı ahize filtresiyle hazırlandı.",
         voiceSession: "Konuşma kaydı bu oturum için yüklendi.",
         voiceRemoved: "Konuşma kaydı kaldırıldı.",
-        selectVoiceFirst: "Dinlemek için önce bir karşı taraf sesi seç.",
+        selectVoiceFirst: "Dinlemek için önce Hat Ortamı veya Ses Kaydım seç.",
         calcOpened: "Kamufle Mod: Sayı + '=' ile gizli başlat, AC basılı tut = çık.",
         calcCanceled: "Gizli sayaç iptal edildi.",
-        sosNoPhone: "Acil SMS için önce Gelişmiş bölümden numara ekle.",
+        sosNoPhone: "Acil SMS için önce Güvenlik sekmesinden numara ekle.",
         copied: "Arama metni kopyalandı: ",
         copiedShort: "Arama metni kopyalandı.",
         copyFailed: "Kopyalanamadı, metni manuel aratabilirsin."
@@ -204,7 +230,7 @@
       tipsSections: [
         {
           h: "1. Hesap Makinesi Kılığı (Kamufle Mod)",
-          p: "Sağ üstteki Hesap Makinesi ikonuna dokunarak uygulamayı gerçek bir hesap makinesine çevirebilirsin. Yanındaki biri baksa normal işlem yaptığını görür.",
+          p: "Üst bardaki Hesap Makinesi ikonundan veya Güvenlik sekmesinden uygulamayı gerçek bir hesap makinesine çevirebilirsin. Yanındaki biri baksa normal işlem yaptığını görür.",
           ul: [
             "Gizli Başlatma: İşlem girmeden sadece bir sayı yazıp '=' tuşuna bas (ör. 15=). Üst köşede belirsiz yeşil nokta yanar ve seçtiğin mod 15 sn sonra sessizce başlar.",
             "Normal Hesaplama: 24 + 18 = gibi normal işlemler gerçek hesap makinesi gibi çalışır.",
@@ -215,8 +241,8 @@
           h: "2. Tırmanan Senaryo Zinciri & Karşı Taraf Sesi",
           ul: [
             "Zincir Modu: Önce normal bir mesaj, ardından acil ikinci mesaj ve hemen üstüne aynı kişiden gelen arama düşer — inandırıcılığı en yüksek moddur.",
-            "Ahize Filtresi: Gelişmiş bölümden Telefon Hattı Ortam Sesi veya kendi ses kaydını seçersen, aramayı cevapladığında 300–3400 Hz telefon filtresiyle çalar. Hoparlör tuşuna basınca ses artar, Beklet/Sessiz'de susar.",
-            "Sessiz SOS: Gelişmiş bölümde bir numara kaydettiysen, görüşme ekranında Beklet tuşuna 2.5 sn basılı tutarak hazır acil SMS ekranını açabilirsin."
+            "Ahize Filtresi: Güvenlik sekmesinden Hat Ortamı veya kendi ses kaydını seçersen, aramayı cevapladığında 300–3400 Hz telefon filtresiyle çalar. Hoparlör tuşuna basınca ses artar, Beklet'te susar.",
+            "Sessiz SOS: Güvenlik sekmesinde bir numara kaydettiysen, görüşme ekranında Beklet tuşuna 2.5 sn basılı tutarak hazır acil SMS ekranını açabilirsin."
           ]
         },
         {
@@ -262,7 +288,7 @@
       pageTitle: "RescueMe — Fake Call & Message Simulator",
       brandPart1: "Rescue",
       brandPart2: "Me",
-      desktopBadge: "v2.1.1 · 100% Offline & Open Source",
+      desktopBadge: "v3.0 · 100% Offline & Open Source",
       desktopDesc:
         "Beyond basic fake calls: an escalating message→call scenario chain, a working calculator disguise, phone-filtered caller audio, and a silent SOS shortcut.",
       feat1Title: "Escalating Scenario Chain",
@@ -283,6 +309,11 @@
         android: "Android detected · Android UI active",
         desktop: "Desktop detected · Preview mode"
       },
+      navScenario: "Scenario",
+      navStyle: "Look & Sound",
+      navSafety: "Safety",
+      modeKicker: "Escape Mode",
+      msgCardTitle: "Notification Flow",
       installAndroidTitle: "Install on Your Phone (Offline)",
       installAndroidDesc: "Add to your home screen for one-tap offline access.",
       installIosTitle: "Add to iPhone Home Screen",
@@ -342,18 +373,17 @@
       msgGapLabel: "Interval (sec)",
       msgTextLabel: "Messages (one notification per line)",
       chainTitle: "Escalating Scenario Flow",
-      chainSub: "Text → Urgent Text → Incoming Call",
+      chainSub: "Text → Urgent → Call",
       chainStep1: "First Message (Calm)",
       chainStep2: "Second Message (Urgent)",
       chainStep3: "Followed automatically by an incoming call",
       chainGapLabel: "Step interval",
       secUnit: "sec",
       osStyleLabel: "Screen Style (Android / iOS)",
-      osOptAuto: "Automatic (Match device)",
-      osOptAndroid: "Android (Material / One UI)",
-      osOptIos: "iOS (iPhone Style)",
+      osCardAuto: "Auto",
+      osCardAutoSub: "Match device",
       wpLabel: "Wallpaper / Background",
-      wpTipLink: "How to make it look real?",
+      wpTipLink: "Tips",
       wpChooseBtn: "Choose Wallpaper / SS",
       removeBtn: "Remove",
       wpEmptyStatus: "Pick your phone wallpaper or a blank home screenshot; stored only on this device.",
@@ -370,37 +400,59 @@
       toneOptClassic: "Realistic Classic Bell",
       toneOptCustom: "Custom Audio File (From Device)",
       toneOptNone: "Silent (Vibrate Only)",
+      toneShort: {
+        auto: "Auto sound",
+        ios_melody: "iOS ring",
+        android_melody: "Android ring",
+        soft: "Harp ring",
+        classic: "Classic bell",
+        custom: "Custom audio",
+        none: "Silent"
+      },
       audioChooseBtn: "Pick Audio File (.mp3/.wav/.m4a)",
       audioEmptyStatus: "Custom audio stays offline on your device only.",
       audioActiveStatus: "Loaded audio: {name} (stored locally only)",
       ringtoneGuideLink: "Default ringtone names by phone brand →",
-      proTitle: "Advanced: Caller Voice & Silent SOS",
-      proSub: "Line ambience on answer & hidden emergency SMS shortcut",
-      voiceLabel: "Caller Audio When Answered",
+      calcCardTitle: "Calculator Disguise",
+      calcOpenBtn: "Open Disguise",
+      calcCardDesc:
+        "Looks and works like a real calculator. Type a number + '=' (e.g. 15=) to arm silently. Press and hold AC for 1.5s to return.",
+      voiceLabel: "Caller Audio (Earpiece)",
       testVoicePlay: "▶ Preview",
       testVoiceStop: "■ Stop",
-      voiceOptNone: "Off (Silent)",
-      voiceOptAmbient: "Realistic Phone Line Ambience",
-      voiceOptCustom: "Custom Voice Clip (Earpiece Filter)",
+      voiceCardNone: "Off",
+      voiceCardNoneSub: "Silent",
+      voiceCardAmbient: "Line Ambience",
+      voiceCardAmbientSub: "GSM noise",
+      voiceCardCustom: "Voice Clip",
+      voiceCardCustomSub: "Phone filter",
       voiceChooseBtn: "Pick Voice Recording",
       voiceEmptyStatus:
         "Passed through a 300–3400 Hz telephone bandpass filter for realistic earpiece sound; stays on your device.",
       voiceActiveStatus: "Loaded clip: {name} (300–3400 Hz phone filter active)",
       sosTitle: "Silent Safety Bridge (Emergency SMS)",
-      sosDesc: "Hold the 'Hold' button for 2.5s during an active call to open a pre-filled SMS to your trusted contact.",
+      sosDesc:
+        "Hold the 'Hold' button for 2.5s during an active call to open a pre-filled SMS to your trusted contact. Call 112/911 in real emergencies.",
       sosPhoneLabel: "Trusted Contact Number (Optional)",
       sosMsgLabel: "Pre-filled Help Message",
-      tipsBannerTitle: "Realism Tips & Stealth Guide",
-      tipsBannerSub: "Calculator secret trigger, wallpaper tip & brand ringtone names",
-      miniPrivacy: "Your data never leaves your device.",
-      miniLegalBtn: "Privacy & Terms",
-      startBtn: "Start & Blackout Screen",
+      tileTipsTitle: "Realism Tips",
+      tileTipsSub: "Wallpaper & ringtones",
+      tileLegalTitle: "Privacy & Data",
+      tileLegalSub: "Terms & wipe data",
+      summaryWpTag: "Wallpaper",
+      summaryVoiceTag: "Line Audio",
+      summarySosTag: "SOS Ready",
+      ctaStartCall: "Start Call & Blackout",
+      ctaStartMsg: "Start Messages & Blackout",
+      ctaStartChain: "Start Chain & Blackout",
       waitText: "Do not press the power button — screen blacks out in 2s.",
       waitSub: "Place your phone on the table. Double-tap screen to cancel.",
       cancelBtn: "Cancel",
       backToSetup: "Back to Setup",
       callingSuffix: " · calling…",
       onHoldPrefix: "On Hold · ",
+      callRemind: "Remind Me",
+      callMessage: "Message",
       declineLabel: "Decline",
       endCallLabel: "End",
       acceptLabel: "Accept",
@@ -435,10 +487,10 @@
         voiceSaved: "Voice clip ready with earpiece filter.",
         voiceSession: "Voice clip loaded for this session.",
         voiceRemoved: "Voice clip removed.",
-        selectVoiceFirst: "Select a caller audio option first to preview.",
+        selectVoiceFirst: "Select Line Ambience or Voice Clip first to preview.",
         calcOpened: "Stealth Mode: Type number + '=' to arm silently, hold AC to exit.",
         calcCanceled: "Hidden countdown canceled.",
-        sosNoPhone: "Add a trusted number in Advanced settings first.",
+        sosNoPhone: "Add a trusted number in the Safety tab first.",
         copied: "Search query copied: ",
         copiedShort: "Search query copied.",
         copyFailed: "Could not copy automatically; please search manually."
@@ -446,7 +498,7 @@
       tipsSections: [
         {
           h: "1. Calculator Disguise (Stealth Mode)",
-          p: "Tap the Calculator icon in the top bar to switch into a fully functional calculator. Anyone glancing at your screen only sees normal math.",
+          p: "Tap the Calculator icon in the top bar or launch it from the Safety tab to switch into a fully functional calculator. Anyone glancing at your screen only sees normal math.",
           ul: [
             "Secret Trigger: Type a number without an operator and press '=' (e.g. 15=). A subtle green dot pulses in the corner and your chosen mode starts silently after 15s.",
             "Normal Math: Standard expressions like 24 + 18 = work just like a real calculator.",
@@ -457,8 +509,8 @@
           h: "2. Escalating Scenario Chain & Caller Audio",
           ul: [
             "Chain Mode: Delivers a calm first message, an urgent second message, and then an incoming call from the same person — maximum realism.",
-            "Earpiece Filter: Choose Phone Line Ambience or upload your own voice clip in Advanced settings; it plays through a 300–3400 Hz phone filter when answered.",
-            "Silent SOS: If you save a trusted number in Advanced settings, holding the 'Hold' button for 2.5s during a call opens a ready-to-send emergency SMS."
+            "Earpiece Filter: Choose Line Ambience or upload your own voice clip in the Safety tab; it plays through a 300–3400 Hz phone filter when answered.",
+            "Silent SOS: If you save a trusted number in the Safety tab, holding the 'Hold' button for 2.5s during a call opens a ready-to-send emergency SMS."
           ]
         },
         {
@@ -513,10 +565,13 @@
 
   // ---------- Uygulama Durumu ----------
   const state = {
-    lang: detectInitialLang(), // "tr" | "en"
+    lang: detectInitialLang(),
+    setupTab: "scenario", // "scenario" | "style" | "safety"
     mode: "call", // "call" | "msg" | "chain"
-    detectedOS: detectOS(), // "ios" | "android" | "desktop"
-    activeOS: "android", // "ios" | "android"
+    osPref: "auto", // "auto" | "android" | "ios"
+    voicePref: "none", // "none" | "ambient" | "custom_voice"
+    detectedOS: detectOS(),
+    activeOS: "android",
     timers: [],
     audioCtx: null,
     player: new Audio(),
@@ -571,6 +626,18 @@
     offlineStatusDesktop: $("offlineStatusDesktop"),
     langTrBtn: $("langTrBtn"),
     langEnBtn: $("langEnBtn"),
+    summaryAvatar: $("summaryAvatar"),
+    summaryWho: $("summaryWho"),
+    summaryModePill: $("summaryModePill"),
+    summaryMeta: $("summaryMeta"),
+    navTabScenario: $("navTabScenario"),
+    navTabStyle: $("navTabStyle"),
+    navTabSafety: $("navTabSafety"),
+    safetyActiveDot: $("safetyActiveDot"),
+    paneScenario: $("paneScenario"),
+    paneStyle: $("paneStyle"),
+    paneSafety: $("paneSafety"),
+    setupScroll: $("setupScroll"),
     installCard: $("installCard"),
     installTitle: $("installTitle"),
     installDesc: $("installDesc"),
@@ -587,6 +654,8 @@
     whoInput: $("whoInput"),
     subInput: $("subInput"),
     delayInput: $("delayInput"),
+    delayMinusBtn: $("delayMinusBtn"),
+    delayPlusBtn: $("delayPlusBtn"),
     quickDelays: $("quickDelays"),
     msgOptions: $("msgOptions"),
     msgCountInput: $("msgCountInput"),
@@ -596,10 +665,11 @@
     chainMsg1Input: $("chainMsg1Input"),
     chainMsg2Input: $("chainMsg2Input"),
     chainGapInput: $("chainGapInput"),
-    osStyleSelect: $("osStyleSelect"),
+    osChoiceGrid: $("osChoiceGrid"),
     wallpaperInput: $("wallpaperInput"),
     clearWallpaperBtn: $("clearWallpaperBtn"),
     wpThumb: $("wpThumb"),
+    wpPlaceholderIcon: $("wpPlaceholderIcon"),
     wallpaperStatus: $("wallpaperStatus"),
     wpBlurCallToggle: $("wpBlurCallToggle"),
     homeBgImg: $("homeBgImg"),
@@ -613,7 +683,9 @@
     customAudioInput: $("customAudioInput"),
     clearAudioBtn: $("clearAudioBtn"),
     customAudioStatus: $("customAudioStatus"),
-    voiceSelect: $("voiceSelect"),
+    openCalcBtn: $("openCalcBtn"),
+    openCalcCardBtn: $("openCalcCardBtn"),
+    voiceChoiceGrid: $("voiceChoiceGrid"),
     testVoiceBtn: $("testVoiceBtn"),
     customVoiceBox: $("customVoiceBox"),
     customVoiceInput: $("customVoiceInput"),
@@ -622,6 +694,7 @@
     sosPhoneInput: $("sosPhoneInput"),
     sosMsgInput: $("sosMsgInput"),
     startBtn: $("startBtn"),
+    startBtnText: $("startBtnText"),
     screenSetup: $("screenSetup"),
     screenWait: $("screenWait"),
     screenCalc: $("screenCalc"),
@@ -629,7 +702,6 @@
     screenCall: $("screenCall"),
     waitTimer: $("waitTimer"),
     cancelWaitBtn: $("cancelWaitBtn"),
-    openCalcBtn: $("openCalcBtn"),
     calcArmedDot: $("calcArmedDot"),
     calcExpr: $("calcExpr"),
     calcDisplay: $("calcDisplay"),
@@ -643,6 +715,7 @@
     notiStack: $("notiStack"),
     homeBackBtn: $("homeBackBtn"),
     callRipple: $("callRipple"),
+    callRipple2: $("callRipple2"),
     callInitial: $("callInitial"),
     callName: $("callName"),
     callSub: $("callSub"),
@@ -652,6 +725,7 @@
     dtmfDisplay: $("dtmfDisplay"),
     dtmfKeys: $("dtmfKeys"),
     hideDtmfBtn: $("hideDtmfBtn"),
+    callPreActions: $("callPreActions"),
     callActions: $("callActions"),
     declineBtn: $("declineBtn"),
     declineLabel: $("declineLabel"),
@@ -659,7 +733,6 @@
     acceptBtn: $("acceptBtn"),
     tipsModal: $("tipsModal"),
     tipsModalBody: $("tipsModalBody"),
-    openTipsBtn: $("openTipsBtn"),
     openTipsBanner: $("openTipsBanner"),
     openTipsDesktop: $("openTipsDesktop"),
     openWallpaperTipBtn: $("openWallpaperTipBtn"),
@@ -681,7 +754,7 @@
     return I18N[state.lang] || I18N.tr;
   }
 
-  // ---------- 1. Dil & Cihaz Algılama ----------
+  // ---------- 1. Dil, Sekme & Canlı Özet ----------
   function detectInitialLang() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -717,10 +790,79 @@
     );
   }
 
+  function setSetupTab(tabName) {
+    state.setupTab = tabName;
+    const map = [
+      [el.navTabScenario, el.paneScenario, "scenario"],
+      [el.navTabStyle, el.paneStyle, "style"],
+      [el.navTabSafety, el.paneSafety, "safety"]
+    ];
+    map.forEach(([tab, pane, key]) => {
+      const active = key === tabName;
+      tab.classList.toggle("is-active", active);
+      tab.setAttribute("aria-selected", String(active));
+      pane.classList.toggle("is-active", active);
+    });
+    el.setupScroll.scrollTop = 0;
+  }
+
+  function updateSummaryCard() {
+    const dict = t();
+    const who = el.whoInput.value.trim() || dict.unknownCaller;
+    const sub = el.subInput.value.trim() || dict.presets.mom.sub;
+    const sec = clampInt(el.delayInput.value, 1, 3600, 5);
+
+    el.summaryAvatar.textContent = who.charAt(0).toUpperCase() || "?";
+    el.summaryWho.textContent = who;
+
+    const modeName =
+      state.mode === "call" ? dict.tabCall : state.mode === "msg" ? dict.tabMsg : dict.tabChain;
+    el.summaryModePill.textContent = modeName + " · " + sec + " " + dict.secUnit;
+
+    const tags = [sub, dict.toneShort[el.toneSelect.value] || dict.toneShort.auto];
+    if (state.wallpaperBlob) tags.push(dict.summaryWpTag);
+    if (state.voicePref !== "none") tags.push(dict.summaryVoiceTag);
+    const hasSos = Boolean(sanitizePhone(el.sosPhoneInput.value).trim());
+    if (hasSos) tags.push(dict.summarySosTag);
+
+    el.summaryMeta.textContent = tags.join(" · ");
+    el.safetyActiveDot.classList.toggle("is-hidden", state.voicePref === "none" && !hasSos);
+
+    el.startBtnText.textContent =
+      state.mode === "call"
+        ? dict.ctaStartCall
+        : state.mode === "msg"
+          ? dict.ctaStartMsg
+          : dict.ctaStartChain;
+  }
+
+  function setOSChoice(val, persist = true) {
+    state.osPref = ["auto", "android", "ios"].includes(val) ? val : "auto";
+    el.osChoiceGrid.querySelectorAll(".choice-card").forEach((card) => {
+      const active = card.dataset.os === state.osPref;
+      card.classList.toggle("is-selected", active);
+      card.setAttribute("aria-checked", String(active));
+    });
+    applyOSTheme();
+    if (persist) savePrefs();
+  }
+
+  function setVoiceChoice(val, persist = true) {
+    state.voicePref = ["none", "ambient", "custom_voice"].includes(val) ? val : "none";
+    el.voiceChoiceGrid.querySelectorAll(".choice-card").forEach((card) => {
+      const active = card.dataset.voice === state.voicePref;
+      card.classList.toggle("is-selected", active);
+      card.setAttribute("aria-checked", String(active));
+    });
+    stopTestVoice();
+    updateCustomVoiceUI();
+    updateSummaryCard();
+    if (persist) savePrefs();
+  }
+
   function renderModalsContent() {
     const dict = t();
 
-    // Tüyolar Modal İçeriği (XSS-güvenli DOM üretimi)
     el.tipsModalBody.replaceChildren();
     dict.tipsSections.forEach((sec) => {
       const h4 = document.createElement("h4");
@@ -771,7 +913,6 @@
       }
     });
 
-    // Yasal Modal İçeriği
     el.legalModalBody.replaceChildren();
     dict.legalSections.forEach((sec) => {
       const h4 = document.createElement("h4");
@@ -818,13 +959,11 @@
       }
     });
 
-    // Hazır senaryo çiplerini güncelle
     el.presetMom.textContent = dict.presets.mom.chip;
     el.presetWork.textContent = dict.presets.work.chip;
     el.presetCourier.textContent = dict.presets.courier.chip;
     el.presetHome.textContent = dict.presets.home.chip;
 
-    // Kullanıcı kendi özel metnini yazmadıysa varsayılan alanları yeni dile çevir
     if (swapDefaultInputs) {
       const prevMom = prevDict.presets.mom;
       if (el.whoInput.value === prevMom.who) el.whoInput.value = dict.presets.mom.who;
@@ -862,15 +1001,15 @@
     renderModalsContent();
     updateClocks();
     updateCalcUI();
+    updateSummaryCard();
 
     if (persist) savePrefs();
   }
 
   function applyOSTheme() {
-    const selected = el.osStyleSelect.value;
-    if (selected === "ios") {
+    if (state.osPref === "ios") {
       state.activeOS = "ios";
-    } else if (selected === "android") {
+    } else if (state.osPref === "android") {
       state.activeOS = "android";
     } else {
       state.activeOS = state.detectedOS === "ios" ? "ios" : "android";
@@ -918,10 +1057,10 @@
         chainMsg1: el.chainMsg1Input.value.slice(0, 100),
         chainMsg2: el.chainMsg2Input.value.slice(0, 100),
         chainGap: clampInt(el.chainGapInput.value, 2, 60, 6),
-        osStyle: el.osStyleSelect.value,
+        osStyle: state.osPref,
         tone: el.toneSelect.value,
         wpBlurCall: Boolean(el.wpBlurCallToggle && el.wpBlurCallToggle.checked),
-        voiceMode: el.voiceSelect.value,
+        voiceMode: state.voicePref,
         sosPhone: sanitizePhone(el.sosPhoneInput.value),
         sosMsg: el.sosMsgInput.value.slice(0, 160)
       };
@@ -935,7 +1074,6 @@
     try {
       const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_STORAGE_KEY);
       if (!raw) {
-        // İlk kez İngilizce sistemle açılıyorsa varsayılan girdileri İngilizce yap
         if (state.lang === "en") {
           const d = I18N.en;
           el.whoInput.value = d.presets.mom.who;
@@ -952,7 +1090,10 @@
       if (["call", "msg", "chain"].includes(data.mode)) setMode(data.mode, false);
       if (typeof data.who === "string") el.whoInput.value = data.who.slice(0, 40);
       if (typeof data.sub === "string") el.subInput.value = data.sub.slice(0, 28);
-      if (data.delay) el.delayInput.value = String(clampInt(data.delay, 1, 3600, 5));
+      if (data.delay) {
+        el.delayInput.value = String(clampInt(data.delay, 1, 3600, 5));
+        syncDelayPills();
+      }
       if (data.msgCount) el.msgCountInput.value = String(clampInt(data.msgCount, 1, 10, 3));
       if (data.msgGap) el.msgGapInput.value = String(clampInt(data.msgGap, 1, 60, 3));
       if (typeof data.msgText === "string") el.msgTextInput.value = data.msgText.slice(0, 300);
@@ -960,7 +1101,7 @@
       if (typeof data.chainMsg2 === "string") el.chainMsg2Input.value = data.chainMsg2.slice(0, 100);
       if (data.chainGap) el.chainGapInput.value = String(clampInt(data.chainGap, 2, 60, 6));
       if (["auto", "android", "ios"].includes(data.osStyle)) {
-        el.osStyleSelect.value = data.osStyle;
+        setOSChoice(data.osStyle, false);
       }
       if (
         ["auto", "ios_melody", "android_melody", "classic", "soft", "custom", "none"].includes(
@@ -973,7 +1114,7 @@
         el.wpBlurCallToggle.checked = data.wpBlurCall;
       }
       if (["none", "ambient", "custom_voice"].includes(data.voiceMode)) {
-        el.voiceSelect.value = data.voiceMode;
+        setVoiceChoice(data.voiceMode, false);
       }
       if (typeof data.sosPhone === "string") {
         el.sosPhoneInput.value = sanitizePhone(data.sosPhone);
@@ -1067,6 +1208,7 @@
     state.wallpaperName = "";
     await deleteMediaItem(KEY_WALLPAPER);
     applyWallpaperUI();
+    updateSummaryCard();
   }
 
   async function deleteCustomVoice() {
@@ -1097,7 +1239,7 @@
 
   function updateCustomVoiceUI() {
     const dict = t();
-    const showBox = el.voiceSelect.value === "custom_voice";
+    const showBox = state.voicePref === "custom_voice";
     el.customVoiceBox.classList.toggle("is-hidden", !showBox);
 
     if (state.customVoiceBlob) {
@@ -1120,6 +1262,7 @@
       }
       el.wpThumb.src = state.wallpaperUrl;
       el.wpThumb.classList.remove("is-hidden");
+      el.wpPlaceholderIcon.classList.add("is-hidden");
       el.clearWallpaperBtn.classList.remove("is-hidden");
       el.wallpaperStatus.textContent = dict.wpActiveStatus.replace("{name}", state.wallpaperName);
 
@@ -1139,6 +1282,7 @@
     } else {
       el.wpThumb.removeAttribute("src");
       el.wpThumb.classList.add("is-hidden");
+      el.wpPlaceholderIcon.classList.remove("is-hidden");
       el.clearWallpaperBtn.classList.add("is-hidden");
       el.wallpaperStatus.textContent = dict.wpEmptyStatus;
 
@@ -1507,7 +1651,6 @@
       player.volume = 0.01;
       player.play().catch(() => {});
 
-      // iOS Safari'de gecikmeli bildirim seslerinin kilitlenmemesi için ikinci ses kanalını da dokunuşta uyandır
       const np = state.notiPlayer;
       np.pause();
       np.src = silentUrl;
@@ -1596,7 +1739,7 @@
   // ---------- 7. Karşı Taraf Sesi Motoru (300–3400 Hz Ahize Filtresi) ----------
   function computeVoiceGain() {
     if (state.isCallHeld) return 0.0;
-    const base = el.voiceSelect.value === "ambient" ? 0.14 : 0.45;
+    const base = state.voicePref === "ambient" ? 0.18 : 0.48;
     return state.isCallSpeaker ? Math.min(1.0, base * 2.1) : base;
   }
 
@@ -1640,7 +1783,7 @@
 
   async function startCallVoice(isPreview = false) {
     stopCallVoice();
-    const mode = el.voiceSelect.value;
+    const mode = state.voicePref;
     if (mode === "none") return;
 
     const ctx = ensureAudioContext();
@@ -1673,7 +1816,7 @@
       lp.frequency.value = 2800;
 
       const gain = ctx.createGain();
-      gain.gain.value = isPreview ? 0.24 : computeVoiceGain();
+      gain.gain.value = isPreview ? 0.28 : computeVoiceGain();
 
       src.connect(hp);
       hp.connect(lp);
@@ -1724,7 +1867,7 @@
         state.activeVoiceGain = gain;
         return;
       } catch {
-        // yedekHTMLAudioElement'e düş
+        // fallback
       }
     }
 
@@ -1749,19 +1892,19 @@
     const pair = map[key];
     const ctx = ensureAudioContext();
     if (!pair || !ctx) return;
-    const t = ctx.currentTime;
+    const t0 = ctx.currentTime;
     pair.forEach((freq) => {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.type = "sine";
-      osc.frequency.setValueAtTime(freq, t);
-      gain.gain.setValueAtTime(0.0001, t);
-      gain.gain.linearRampToValueAtTime(0.11, t + 0.01);
-      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.14);
+      osc.frequency.setValueAtTime(freq, t0);
+      gain.gain.setValueAtTime(0.0001, t0);
+      gain.gain.linearRampToValueAtTime(0.11, t0 + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.14);
       osc.connect(gain);
       gain.connect(ctx.destination);
-      osc.start(t);
-      osc.stop(t + 0.16);
+      osc.start(t0);
+      osc.stop(t0 + 0.16);
     });
   }
 
@@ -1848,6 +1991,13 @@
     const n = parseInt(String(val), 10);
     if (Number.isNaN(n)) return fallback;
     return Math.min(max, Math.max(min, n));
+  }
+
+  function syncDelayPills() {
+    const val = el.delayInput.value;
+    el.quickDelays.querySelectorAll(".mini-pill").forEach((b) => {
+      b.classList.toggle("is-active", b.dataset.sec === val);
+    });
   }
 
   function formatClock(date) {
@@ -1940,6 +2090,7 @@
 
     if (overrideDelaySec === null) {
       el.delayInput.value = String(delaySec);
+      syncDelayPills();
     }
 
     state.isWaiting = true;
@@ -1983,6 +2134,8 @@
     el.callSub.textContent = sub + dict.callingSuffix;
 
     el.callRipple.classList.remove("is-paused");
+    el.callRipple2.classList.remove("is-paused");
+    el.callPreActions.classList.remove("is-hidden");
     el.inCallGrid.classList.add("is-hidden");
     el.dtmfPad.classList.add("is-hidden");
     el.dtmfDisplay.textContent = "";
@@ -2001,6 +2154,8 @@
   function answerCall() {
     stopRinging();
     el.callRipple.classList.add("is-paused");
+    el.callRipple2.classList.add("is-paused");
+    el.callPreActions.classList.add("is-hidden");
     el.acceptWrap.classList.add("is-hidden");
     el.callActions.classList.add("is-single");
     el.declineLabel.textContent = t().endCallLabel;
@@ -2301,7 +2456,7 @@
       stopTestVoice();
       return;
     }
-    if (el.voiceSelect.value === "none") {
+    if (state.voicePref === "none") {
       showToast(t().toasts.selectVoiceFirst);
       return;
     }
@@ -2312,7 +2467,7 @@
     state.timers.push(setTimeout(stopTestVoice, 3500));
   }
 
-  // ---------- 13. Pano Kopyalama (Güvenli) ----------
+  // ---------- 13. Pano Kopyalama ----------
   async function copyTextSafe(text) {
     const dict = t();
     try {
@@ -2322,7 +2477,7 @@
         return;
       }
     } catch {
-      // yedek yönteme geç
+      // fallback
     }
     const ta = document.createElement("textarea");
     ta.value = text;
@@ -2357,6 +2512,7 @@
     el.chainOptions.classList.toggle("is-hidden", mode !== "chain");
     el.toneLabel.textContent = mode === "msg" ? t().toneLabelMsg : t().toneLabelCall;
     stopTestSound();
+    updateSummaryCard();
     if (persist) savePrefs();
   }
 
@@ -2449,20 +2605,20 @@
     el.whoInput.value = dict.presets.mom.who;
     el.subInput.value = dict.presets.mom.sub;
     el.delayInput.value = "5";
+    syncDelayPills();
     el.msgTextInput.value = dict.defaultMsgLines;
     el.chainMsg1Input.value = dict.presets.mom.c1;
     el.chainMsg2Input.value = dict.presets.mom.c2;
-    el.osStyleSelect.value = "auto";
     el.toneSelect.value = "auto";
-    el.voiceSelect.value = "none";
     el.sosPhoneInput.value = "";
     el.sosMsgInput.value = dict.defaultSosMsg;
     el.wpBlurCallToggle.checked = true;
+    setOSChoice("auto", false);
+    setVoiceChoice("none", false);
     setMode("call", false);
-    applyOSTheme();
     updateCustomAudioUI();
-    updateCustomVoiceUI();
     applyWallpaperUI();
+    updateSummaryCard();
     closeLegalModal();
     showToast(dict.toasts.wiped);
   }
@@ -2472,11 +2628,16 @@
     el.langTrBtn.addEventListener("click", () => applyLanguage("tr", true, true));
     el.langEnBtn.addEventListener("click", () => applyLanguage("en", true, true));
 
+    el.navTabScenario.addEventListener("click", () => setSetupTab("scenario"));
+    el.navTabStyle.addEventListener("click", () => setSetupTab("style"));
+    el.navTabSafety.addEventListener("click", () => setSetupTab("safety"));
+
     el.tabCall.addEventListener("click", () => setMode("call"));
     el.tabMsg.addEventListener("click", () => setMode("msg"));
     el.tabChain.addEventListener("click", () => setMode("chain"));
 
     el.openCalcBtn.addEventListener("click", openCalculatorDisguise);
+    el.openCalcCardBtn.addEventListener("click", openCalculatorDisguise);
 
     el.presetRow.addEventListener("click", (e) => {
       const chip = e.target.closest(".chip");
@@ -2492,43 +2653,73 @@
       el.msgTextInput.value = preset.msg + "\n" + t().fallbackMsgs[2];
       el.chainMsg1Input.value = preset.c1;
       el.chainMsg2Input.value = preset.c2;
+      updateSummaryCard();
+      savePrefs();
+    });
+
+    // Stepper -/+ ve hızlı süre hapları
+    el.delayMinusBtn.addEventListener("click", () => {
+      const cur = clampInt(el.delayInput.value, 1, 3600, 5);
+      const next = cur <= 5 ? Math.max(1, cur - 1) : Math.max(1, cur - 5);
+      el.delayInput.value = String(next);
+      syncDelayPills();
+      updateSummaryCard();
+      savePrefs();
+    });
+
+    el.delayPlusBtn.addEventListener("click", () => {
+      const cur = clampInt(el.delayInput.value, 1, 3600, 5);
+      const next = cur < 5 ? cur + 1 : Math.min(3600, cur + 5);
+      el.delayInput.value = String(next);
+      syncDelayPills();
+      updateSummaryCard();
       savePrefs();
     });
 
     el.quickDelays.addEventListener("click", (e) => {
       const btn = e.target.closest(".mini-pill");
       if (!btn) return;
-      el.quickDelays.querySelectorAll(".mini-pill").forEach((b) => b.classList.remove("is-active"));
-      btn.classList.add("is-active");
       el.delayInput.value = btn.dataset.sec || "5";
+      syncDelayPills();
+      updateSummaryCard();
       savePrefs();
     });
 
     el.delayInput.addEventListener("input", () => {
-      el.quickDelays.querySelectorAll(".mini-pill").forEach((b) => {
-        b.classList.toggle("is-active", b.dataset.sec === el.delayInput.value);
-      });
+      syncDelayPills();
+      updateSummaryCard();
       savePrefs();
     });
 
+    [el.whoInput, el.subInput, el.sosPhoneInput].forEach((inp) => {
+      inp.addEventListener("input", updateSummaryCard);
+      inp.addEventListener("change", savePrefs);
+    });
+
     [
-      el.whoInput,
-      el.subInput,
       el.msgCountInput,
       el.msgGapInput,
       el.msgTextInput,
       el.chainMsg1Input,
       el.chainMsg2Input,
       el.chainGapInput,
-      el.sosPhoneInput,
       el.sosMsgInput
     ].forEach((inp) => {
       inp.addEventListener("change", savePrefs);
     });
 
-    el.osStyleSelect.addEventListener("change", () => {
-      applyOSTheme();
-      savePrefs();
+    // Görsel OS Stili kart seçici
+    el.osChoiceGrid.addEventListener("click", (e) => {
+      const card = e.target.closest(".choice-card");
+      if (!card || !card.dataset.os) return;
+      setOSChoice(card.dataset.os, true);
+    });
+
+    // Görsel Karşı Taraf Sesi kart seçici
+    el.voiceChoiceGrid.addEventListener("click", (e) => {
+      const card = e.target.closest(".choice-card");
+      if (!card || !card.dataset.voice) return;
+      setVoiceChoice(card.dataset.voice, true);
     });
 
     // Duvar kağıdı seçme / silme
@@ -2560,6 +2751,7 @@
         showToast(t().toasts.wpSession);
       }
       applyWallpaperUI();
+      updateSummaryCard();
     });
 
     el.clearWallpaperBtn.addEventListener("click", async () => {
@@ -2576,6 +2768,7 @@
     el.toneSelect.addEventListener("change", () => {
       stopTestSound();
       updateCustomAudioUI();
+      updateSummaryCard();
       savePrefs();
     });
 
@@ -2617,13 +2810,7 @@
       showToast(t().toasts.audioRemoved);
     });
 
-    // Karşı taraf sesi seçme / test / yükleme
-    el.voiceSelect.addEventListener("change", () => {
-      stopTestVoice();
-      updateCustomVoiceUI();
-      savePrefs();
-    });
-
+    // Karşı taraf sesi test / yükleme
     el.testVoiceBtn.addEventListener("click", toggleTestVoice);
 
     el.customVoiceInput.addEventListener("change", async (e) => {
@@ -2773,9 +2960,8 @@
       }
     });
 
-    // Tüyolar Modalı + içindeki dinamik kopyalama butonları
+    // Tüyolar Modalı
     [
-      el.openTipsBtn,
       el.openTipsBanner,
       el.openTipsDesktop,
       el.openWallpaperTipBtn,
@@ -2842,6 +3028,7 @@
     updateCustomAudioUI();
     updateCustomVoiceUI();
     applyWallpaperUI();
+    updateSummaryCard();
 
     bindEvents();
     setupPWAInstall();

@@ -1,4 +1,4 @@
-const CACHE_NAME = "kurtarbeni-v2.1.2";
+const CACHE_NAME = "kurtarbeni-v3.0.0";
 const ASSETS = [
   "./",
   "./index.html",
