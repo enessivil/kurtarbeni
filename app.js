@@ -20,7 +20,7 @@
       pageTitle: "KurtarBeni — Sahte Arama & Mesaj",
       brandPart1: "Kurtar",
       brandPart2: "Beni",
-      desktopBadge: "v3.0.1 · %100 Çevrimdışı & Açık Kaynak",
+      desktopBadge: "KB-04 // %100 ÇEVRİMDIŞI · AÇIK KAYNAK",
       desktopDesc:
         "Sıradan sahte aramaların ötesinde: tırmanan mesaj→arama senaryo zinciri, çalışan hesap makinesi kılığı, telefon filtreli karşı taraf sesi ve sessiz güvenlik kısayolu.",
       feat1Title: "Tırmanan Senaryo Zinciri",
@@ -297,7 +297,7 @@
       pageTitle: "RescueMe — Fake Call & Message Simulator",
       brandPart1: "Rescue",
       brandPart2: "Me",
-      desktopBadge: "v3.0.1 · 100% Offline & Open Source",
+      desktopBadge: "KB-04 // 100% OFFLINE · OPEN SOURCE",
       desktopDesc:
         "Beyond basic fake calls: an escalating message→call scenario chain, a working calculator disguise, phone-filtered caller audio, and a silent SOS shortcut.",
       feat1Title: "Escalating Scenario Chain",
