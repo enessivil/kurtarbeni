@@ -14,8 +14,498 @@
   const MAX_MEDIA_BYTES = 15 * 1024 * 1024; // 15 MB
   const SAMPLE_RATE = 22050;
 
+  // ---------- Çoklu Dil Sözlüğü (TR / EN) ----------
+  const I18N = {
+    tr: {
+      pageTitle: "KurtarBeni — Sahte Arama & Mesaj",
+      brandPart1: "Kurtar",
+      brandPart2: "Beni",
+      desktopBadge: "v2.1 · %100 Çevrimdışı & Açık Kaynak",
+      desktopDesc:
+        "Sıradan sahte aramaların ötesinde: tırmanan mesaj→arama senaryo zinciri, çalışan hesap makinesi kılığı, telefon filtreli karşı taraf sesi ve sessiz güvenlik kısayolu.",
+      feat1Title: "Tırmanan Senaryo Zinciri",
+      feat1Desc:
+        "Önce sakin bir mesaj, ardından acil ikinci mesaj ve son olarak aynı kişiden gerçekçi gelen arama.",
+      feat2Title: "Hesap Makinesi Kılığı (Kamufle Mod)",
+      feat2Desc:
+        "Gerçek çalışan hesap makinesinde örneğin 15= yazdığında kimse fark etmeden 15 sn geri sayım başlar.",
+      feat3Title: "Ahize Filtreli Ses & Sessiz SOS",
+      feat3Desc:
+        "Aramayı açınca telefon hattı sesi çalar; Beklet'e basılı tutarak güvendiğin kişiye hazır acil SMS açabilirsin.",
+      footerTips: "Tüyolar & Rehber",
+      footerLegal: "KVKK & Yasal Uyarı",
+      offlineReady: "Çevrimdışı Hazır",
+      offlineActive: "Çevrimdışı Önbellek Aktif",
+      osDetected: {
+        ios: "iOS algılandı · iPhone arayüzü aktif",
+        android: "Android algılandı · Android arayüzü aktif",
+        desktop: "Masaüstü algılandı · Önizleme modu"
+      },
+      installAndroidTitle: "Telefonuna Yükle (Çevrimdışı)",
+      installAndroidDesc: "İnternet olmadan tek dokunuşla açmak için ana ekrana ekle.",
+      installIosTitle: "iPhone Ana Ekranına Ekle",
+      installIosDesc: "Safari alt menüden Paylaş simgesine dokun ve 'Ana Ekrana Ekle'yi seç.",
+      installBtn: "Yükle",
+      tabCall: "Arama",
+      tabMsg: "Mesaj",
+      tabChain: "Zincir",
+      presetLabel: "Hızlı Senaryo",
+      presets: {
+        mom: {
+          chip: "Annem",
+          who: "Annem",
+          sub: "Cep",
+          msg: "Neredesin? Acil eve gelmen lazım!",
+          c1: "Müsait misin? Bir şey söyleyeceğim",
+          c2: "Kapıda kaldım, baksana telefona!!"
+        },
+        work: {
+          chip: "İş",
+          who: "Müdür / İş",
+          sub: "İş",
+          msg: "Toplantı öne çekildi, hemen döner misin?",
+          c1: "Sunum dosyasında acil bir eksik çıktı",
+          c2: "Müşteri bekliyor, hemen arıyorum"
+        },
+        courier: {
+          chip: "Kurye",
+          who: "Kurye",
+          sub: "+90 532 ••• •• 41",
+          msg: "Kapıdayım, paketi teslim edeceğim.",
+          c1: "Siparişinizle 2 dakikaya kapıdayım",
+          c2: "Zile bastım açan yok, arıyorum"
+        },
+        home: {
+          chip: "Ev",
+          who: "Ev Arkadaşım",
+          sub: "Cep",
+          msg: "Anahtarı içeride unuttum, acil ara!",
+          c1: "Evde misin? Anahtarı bulamıyorum",
+          c2: "Dışarıda kaldım acil aç telefonu!"
+        }
+      },
+      defaultMsgLines: "Neredesin? Hemen eve gelmen lazım!\nMesajımı görmedin mi?\nAcil beni ara!",
+      defaultSosMsg: "Şu an kendimi güvende hissetmiyorum, beni hemen arar mısın?",
+      fallbackMsgs: [
+        "Neredesin? Hemen döner misin?",
+        "Mesajımı görmedin mi?",
+        "Acil beni ara!",
+        "Bekliyorum, önemli."
+      ],
+      unknownCaller: "Bilinmeyen",
+      whoLabel: "Kimden?",
+      subLabel: "Etiket / Numara",
+      delayLabel: "Başlangıç Gecikmesi (sn)",
+      msgCountLabel: "Mesaj Sayısı",
+      msgGapLabel: "Aralık (sn)",
+      msgTextLabel: "Mesajlar (her satır ayrı bildirim)",
+      chainTitle: "Tırmanan Senaryo Akışı",
+      chainSub: "Mesaj → Acil Mesaj → Gelen Arama",
+      chainStep1: "İlk Mesaj (Normal)",
+      chainStep2: "İkinci Mesaj (Acil)",
+      chainStep3: "Ardından otomatik gelen arama",
+      chainGapLabel: "Adım aralığı",
+      secUnit: "sn",
+      osStyleLabel: "Ekran Stili (Android / iOS)",
+      osOptAuto: "Otomatik (Cihazıma göre)",
+      osOptAndroid: "Android (Material / One UI)",
+      osOptIos: "iOS (iPhone Stili)",
+      wpLabel: "Arka Plan / Duvar Kağıdı",
+      wpTipLink: "Nasıl daha gerçekçi olur?",
+      wpChooseBtn: "Duvar Kağıdı / SS Seç",
+      removeBtn: "Kaldır",
+      wpEmptyStatus: "Kendi duvar kağıdını veya boş ana ekran SS'ini seç; yalnızca bu cihazda saklanır.",
+      wpActiveStatus: "Aktif duvar kağıdı: {name} (yalnızca bu cihazda)",
+      wpBlurCheck: "Arama ekranında da bulanık arka plan olarak kullan",
+      toneLabelCall: "Zil & Bildirim Sesi",
+      toneLabelMsg: "Bildirim Sesi",
+      testSoundPlay: "▶ Sesi Test Et",
+      testSoundStop: "■ Durdur",
+      toneOptAuto: "Cihaz Stiline Uygun (Otomatik)",
+      toneOptIos: "iOS Tarzı Marimba / Modern",
+      toneOptAndroid: "Android Tarzı Melodik",
+      toneOptSoft: "Akustik Arp / Yumuşak",
+      toneOptClassic: "Gerçekçi Klasik Zil",
+      toneOptCustom: "Kendi Ses Dosyam (Cihazdan)",
+      toneOptNone: "Sessiz (Yalnızca Titreşim)",
+      audioChooseBtn: "Ses Dosyası Seç (.mp3/.wav/.m4a)",
+      audioEmptyStatus: "Kendi telefonunun zil sesini seçersen yalnızca cihazında (çevrimdışı) saklanır.",
+      audioActiveStatus: "Yüklü ses: {name} (yalnızca bu cihazda saklanır)",
+      ringtoneGuideLink: "Cihazına göre zil sesi isimleri & rehber →",
+      proTitle: "Gelişmiş: Karşı Taraf Sesi & Sessiz SOS",
+      proSub: "Cevaplayınca telefon hattı sesi ve gizli acil SMS kısayolu",
+      voiceLabel: "Cevaplayınca Karşı Taraf Sesi",
+      testVoicePlay: "▶ Dinle",
+      testVoiceStop: "■ Durdur",
+      voiceOptNone: "Kapalı (Sessiz)",
+      voiceOptAmbient: "Gerçekçi Telefon Hattı Ortam Sesi",
+      voiceOptCustom: "Kendi Ses Kaydın (Ahize Filtreli)",
+      voiceChooseBtn: "Konuşma Ses Kaydı Seç",
+      voiceEmptyStatus:
+        "Seçtiğin kayıt 300–3400 Hz telefon filtresinden geçirilerek gerçek ahize konuşması gibi çalar; yalnızca cihazında kalır.",
+      voiceActiveStatus: "Yüklü kayıt: {name} (300–3400 Hz telefon filtresiyle çalar)",
+      sosTitle: "Sessiz Güvenlik Köprüsü (Acil SMS)",
+      sosDesc: "Görüşme ekranında Beklet butonuna 2.5 sn basılı tutarsan, seçtiğin kişiye hazır SMS ekranı açılır.",
+      sosPhoneLabel: "Güvenilir Kişi Numarası (Opsiyonel)",
+      sosMsgLabel: "Hazır Yardım Mesajı",
+      tipsBannerTitle: "Gerçekçilik Tüyoları & Kamufle Rehberi",
+      tipsBannerSub: "Hesap makinesi gizli kodu, SS ipucu ve marka zil sesi isimleri",
+      miniPrivacy: "Verilerin sunucuya gönderilmez.",
+      miniLegalBtn: "KVKK & Koşullar",
+      startBtn: "Başlat ve Ekranı Karart",
+      waitText: "Güç tuşuna basma — ekran 2 sn içinde tamamen kararacak.",
+      waitSub: "Telefonu masaya bırak. İptal için ekrana çift dokun.",
+      cancelBtn: "İptal Et",
+      backToSetup: "Ayarlara Dön",
+      callingSuffix: " · arıyor…",
+      onHoldPrefix: "Beklemede · ",
+      declineLabel: "Reddet",
+      endCallLabel: "Bitir",
+      acceptLabel: "Cevapla",
+      toolMute: "Sessiz",
+      toolKeypad: "Klavye",
+      toolSpeaker: "Hoparlör",
+      toolHold: "Beklet",
+      toolAdd: "Arama Ekle",
+      toolContacts: "Kişiler",
+      hideKeypad: "Gizle",
+      calcError: "Hata",
+      calcDot: ",",
+      tipsModalTitle: "Gerçekçilik Tüyoları & Kamufle Rehberi",
+      okBtn: "Tamam",
+      legalModalTitle: "KVKK Aydınlatma & Yasal Uyarı",
+      wipeBtn: "Tüm Yerel Verileri Sil",
+      understoodBtn: "Anladım",
+      copyBtn: "Kopyala",
+      locale: "tr-TR",
+      toasts: {
+        installed: "Uygulama ana ekranına eklendi!",
+        wiped: "Tüm yerel veriler cihazından silindi.",
+        invalidImg: "Lütfen geçerli bir görsel dosyası (.jpg, .png, .webp) seç.",
+        fileTooBig: "Dosya boyutu en fazla 15 MB olabilir.",
+        wpSaved: "Arka plan yalnızca bu cihaza kaydedildi.",
+        wpSession: "Arka plan bu oturum için yüklendi.",
+        wpRemoved: "Arka plan varsayılana döndürüldü.",
+        invalidAudio: "Lütfen geçerli bir ses dosyası (.mp3, .wav, .m4a) seç.",
+        audioSaved: "Özel zil sesi cihazına kaydedildi.",
+        audioSession: "Ses bu oturum için yüklendi.",
+        audioRemoved: "Özel zil sesi kaldırıldı.",
+        voiceSaved: "Konuşma kaydı ahize filtresiyle hazırlandı.",
+        voiceSession: "Konuşma kaydı bu oturum için yüklendi.",
+        voiceRemoved: "Konuşma kaydı kaldırıldı.",
+        selectVoiceFirst: "Dinlemek için önce bir karşı taraf sesi seç.",
+        calcOpened: "Kamufle Mod: Sayı + '=' ile gizli başlat, AC basılı tut = çık.",
+        calcCanceled: "Gizli sayaç iptal edildi.",
+        sosNoPhone: "Acil SMS için önce Gelişmiş bölümden numara ekle.",
+        copied: "Arama metni kopyalandı: ",
+        copiedShort: "Arama metni kopyalandı.",
+        copyFailed: "Kopyalanamadı, metni manuel aratabilirsin."
+      },
+      tipsSections: [
+        {
+          h: "1. Hesap Makinesi Kılığı (Kamufle Mod)",
+          p: "Sağ üstteki Hesap Makinesi ikonuna dokunarak uygulamayı gerçek bir hesap makinesine çevirebilirsin. Yanındaki biri baksa normal işlem yaptığını görür.",
+          ul: [
+            "Gizli Başlatma: İşlem girmeden sadece bir sayı yazıp '=' tuşuna bas (ör. 15=). Üst köşede belirsiz yeşil nokta yanar ve seçtiğin mod 15 sn sonra sessizce başlar.",
+            "Normal Hesaplama: 24 + 18 = gibi normal işlemler gerçek hesap makinesi gibi çalışır.",
+            "İptal / Ayarlara Dön: Geri sayımı iptal etmek için AC tuşuna iki kez bas; ayarlara dönmek için AC tuşuna 1.5 sn basılı tut."
+          ]
+        },
+        {
+          h: "2. Tırmanan Senaryo Zinciri & Karşı Taraf Sesi",
+          ul: [
+            "Zincir Modu: Önce normal bir mesaj, ardından acil ikinci mesaj ve hemen üstüne aynı kişiden gelen arama düşer — inandırıcılığı en yüksek moddur.",
+            "Ahize Filtresi: Gelişmiş bölümden Telefon Hattı Ortam Sesi veya kendi ses kaydını seçersen, aramayı cevapladığında 300–3400 Hz telefon filtresiyle çalar. Hoparlör tuşuna basınca ses artar, Beklet/Sessiz'de susar.",
+            "Sessiz SOS: Gelişmiş bölümde bir numara kaydettiysen, görüşme ekranında Beklet tuşuna 2.5 sn basılı tutarak hazır acil SMS ekranını açabilirsin."
+          ]
+        },
+        {
+          h: "3. Duvar Kağıdı, Güç Tuşu & Medya Sesi",
+          ul: [
+            "Duvar Kağıdı: Kilit ekranı SS'i yerine ham duvar kağıdı seçersen saat her zaman gerçek zamanlı kalır.",
+            "Güç tuşuna basma: Ekranı kilitlemek yerine 2 saniyede açılan AMOLED siyah modda masaya bırak.",
+            "Medya sesi: Başlatmadan önce telefonun Medya ses düzeyini aç."
+          ]
+        },
+        {
+          h: "4. Cihazının Varsayılan Zil Sesi İsimleri",
+          p: "Marka zil sesleri telifli olduğu için koda eklenmez. Kendi cihazının zil sesi adını kopyalayıp güvendiğin bir kaynaktan bulduğun .mp3/.wav/.m4a dosyasını Kendi Ses Dosyam alanına ekleyebilirsin:",
+          guide: true
+        }
+      ],
+      legalSections: [
+        {
+          h: "1. 6698 Sayılı KVKK Kapsamında Gizlilik",
+          p1: "KurtarBeni tamamen tarayıcınızda (istemci tarafında) çalışan açık kaynaklı bir statik web uygulamasıdır. Hiçbir sunucu, veritabanı, çerez (cookie), reklam ağı, harici yazı tipi veya analitik aracı içermez.",
+          p2: "Girdiğiniz arayan adı, mesaj metni, acil durum numarası, duvar kağıdı veya özel ses dosyaları hiçbir şekilde internete gönderilmez ve geliştirici dahil üçüncü kişilerle paylaşılmaz. Tüm veriler yalnızca kendi cihazınızın yerel tarayıcı deposunda (localStorage / IndexedDB) tutulur."
+        },
+        {
+          h: "2. Yasal Kullanım ve Sorumluluk Reddi",
+          p1: "Bu uygulama yalnızca sosyal ortamlardan nazikçe ayrılmak, kişisel güvenlik hissi sağlamak veya simülasyon amacıyla geliştirilmiştir.",
+          ul: [
+            "Gerçek bir acil durumda bu uygulama yerine doğrudan 112 Acil Çağrı Merkezi'ni arayın.",
+            "Uygulamanın; dolandırıcılık, tehdit, taciz, kişilik haklarına saldırı, sahte delil üretme veya 5237 sayılı Türk Ceza Kanunu'na aykırı herhangi bir amaçla kullanılması kesinlikle yasaktır.",
+            "Uygulama 'olduğu gibi' (MIT Lisansı ile) sunulur; kullanımından doğabilecek tüm hukuki sorumluluk kullanıcıya aittir."
+          ]
+        },
+        {
+          h: "3. Cihaz Verilerini Yönet",
+          p1: "Cihazınızda kayıtlı tüm tercihleri, duvar kağıdını, ses dosyalarını, acil durum numarasını ve çevrimdışı önbelleği tek dokunuşla kalıcı olarak silebilirsiniz."
+        }
+      ]
+    },
+    en: {
+      pageTitle: "RescueMe — Fake Call & Message Simulator",
+      brandPart1: "Rescue",
+      brandPart2: "Me",
+      desktopBadge: "v2.1 · 100% Offline & Open Source",
+      desktopDesc:
+        "Beyond basic fake calls: an escalating message→call scenario chain, a working calculator disguise, phone-filtered caller audio, and a silent SOS shortcut.",
+      feat1Title: "Escalating Scenario Chain",
+      feat1Desc:
+        "Starts with a calm text, follows up with an urgent second text, and finishes with a realistic incoming call.",
+      feat2Title: "Calculator Disguise (Stealth Mode)",
+      feat2Desc:
+        "Type a number and '=' (e.g. 15=) on a working calculator to silently arm a 15-second countdown.",
+      feat3Title: "Earpiece-Filtered Audio & Silent SOS",
+      feat3Desc:
+        "Plays realistic line ambience when answered; hold 'Hold' for 2.5s to open a pre-filled emergency SMS.",
+      footerTips: "Tips & Guide",
+      footerLegal: "Privacy & Legal",
+      offlineReady: "Offline Ready",
+      offlineActive: "Offline Cache Active",
+      osDetected: {
+        ios: "iOS detected · iPhone UI active",
+        android: "Android detected · Android UI active",
+        desktop: "Desktop detected · Preview mode"
+      },
+      installAndroidTitle: "Install on Your Phone (Offline)",
+      installAndroidDesc: "Add to your home screen for one-tap offline access.",
+      installIosTitle: "Add to iPhone Home Screen",
+      installIosDesc: "Tap Share in Safari's bottom bar and choose 'Add to Home Screen'.",
+      installBtn: "Install",
+      tabCall: "Call",
+      tabMsg: "Message",
+      tabChain: "Chain",
+      presetLabel: "Quick Scenario",
+      presets: {
+        mom: {
+          chip: "Mom",
+          who: "Mom",
+          sub: "Mobile",
+          msg: "Where are you? You need to come home right now!",
+          c1: "Are you free? Need to tell you something",
+          c2: "Locked out of the house, check your phone!!"
+        },
+        work: {
+          chip: "Work",
+          who: "Manager / Work",
+          sub: "Work",
+          msg: "Meeting got moved up, can you step out now?",
+          c1: "Urgent issue came up in the deck",
+          c2: "Client is waiting on the line, calling you"
+        },
+        courier: {
+          chip: "Courier",
+          who: "Delivery",
+          sub: "+1 (555) •••-4192",
+          msg: "I'm outside with your package.",
+          c1: "Arriving at your door in 2 minutes",
+          c2: "Rang the bell, no answer — calling now"
+        },
+        home: {
+          chip: "Roommate",
+          who: "Roommate",
+          sub: "Mobile",
+          msg: "Left my keys inside, call me ASAP!",
+          c1: "Are you home? Can't find my keys",
+          c2: "Stuck outside, please pick up!"
+        }
+      },
+      defaultMsgLines: "Where are you? Need you home right now!\nDid you see my text?\nCall me ASAP!",
+      defaultSosMsg: "I don't feel safe right now, can you please call me immediately?",
+      fallbackMsgs: [
+        "Where are you? Can you call back?",
+        "Did you see my message?",
+        "Call me ASAP!",
+        "Waiting on you, it's urgent."
+      ],
+      unknownCaller: "Unknown",
+      whoLabel: "Caller / Sender",
+      subLabel: "Label / Number",
+      delayLabel: "Start Delay (sec)",
+      msgCountLabel: "Message Count",
+      msgGapLabel: "Interval (sec)",
+      msgTextLabel: "Messages (one notification per line)",
+      chainTitle: "Escalating Scenario Flow",
+      chainSub: "Text → Urgent Text → Incoming Call",
+      chainStep1: "First Message (Calm)",
+      chainStep2: "Second Message (Urgent)",
+      chainStep3: "Followed automatically by an incoming call",
+      chainGapLabel: "Step interval",
+      secUnit: "sec",
+      osStyleLabel: "Screen Style (Android / iOS)",
+      osOptAuto: "Automatic (Match device)",
+      osOptAndroid: "Android (Material / One UI)",
+      osOptIos: "iOS (iPhone Style)",
+      wpLabel: "Wallpaper / Background",
+      wpTipLink: "How to make it look real?",
+      wpChooseBtn: "Choose Wallpaper / SS",
+      removeBtn: "Remove",
+      wpEmptyStatus: "Pick your phone wallpaper or a blank home screenshot; stored only on this device.",
+      wpActiveStatus: "Active wallpaper: {name} (stored locally only)",
+      wpBlurCheck: "Also use as blurred background on incoming call screen",
+      toneLabelCall: "Ringtone & Alert Sound",
+      toneLabelMsg: "Notification Sound",
+      testSoundPlay: "▶ Test Sound",
+      testSoundStop: "■ Stop",
+      toneOptAuto: "Match Screen Style (Auto)",
+      toneOptIos: "iOS-Style Marimba / Modern",
+      toneOptAndroid: "Android-Style Melodic",
+      toneOptSoft: "Acoustic Harp / Gentle",
+      toneOptClassic: "Realistic Classic Bell",
+      toneOptCustom: "Custom Audio File (From Device)",
+      toneOptNone: "Silent (Vibrate Only)",
+      audioChooseBtn: "Pick Audio File (.mp3/.wav/.m4a)",
+      audioEmptyStatus: "Custom audio stays offline on your device only.",
+      audioActiveStatus: "Loaded audio: {name} (stored locally only)",
+      ringtoneGuideLink: "Default ringtone names by phone brand →",
+      proTitle: "Advanced: Caller Voice & Silent SOS",
+      proSub: "Line ambience on answer & hidden emergency SMS shortcut",
+      voiceLabel: "Caller Audio When Answered",
+      testVoicePlay: "▶ Preview",
+      testVoiceStop: "■ Stop",
+      voiceOptNone: "Off (Silent)",
+      voiceOptAmbient: "Realistic Phone Line Ambience",
+      voiceOptCustom: "Custom Voice Clip (Earpiece Filter)",
+      voiceChooseBtn: "Pick Voice Recording",
+      voiceEmptyStatus:
+        "Passed through a 300–3400 Hz telephone bandpass filter for realistic earpiece sound; stays on your device.",
+      voiceActiveStatus: "Loaded clip: {name} (300–3400 Hz phone filter active)",
+      sosTitle: "Silent Safety Bridge (Emergency SMS)",
+      sosDesc: "Hold the 'Hold' button for 2.5s during an active call to open a pre-filled SMS to your trusted contact.",
+      sosPhoneLabel: "Trusted Contact Number (Optional)",
+      sosMsgLabel: "Pre-filled Help Message",
+      tipsBannerTitle: "Realism Tips & Stealth Guide",
+      tipsBannerSub: "Calculator secret trigger, wallpaper tip & brand ringtone names",
+      miniPrivacy: "Your data never leaves your device.",
+      miniLegalBtn: "Privacy & Terms",
+      startBtn: "Start & Blackout Screen",
+      waitText: "Do not press the power button — screen blacks out in 2s.",
+      waitSub: "Place your phone on the table. Double-tap screen to cancel.",
+      cancelBtn: "Cancel",
+      backToSetup: "Back to Setup",
+      callingSuffix: " · calling…",
+      onHoldPrefix: "On Hold · ",
+      declineLabel: "Decline",
+      endCallLabel: "End",
+      acceptLabel: "Accept",
+      toolMute: "Mute",
+      toolKeypad: "Keypad",
+      toolSpeaker: "Speaker",
+      toolHold: "Hold",
+      toolAdd: "Add Call",
+      toolContacts: "Contacts",
+      hideKeypad: "Hide",
+      calcError: "Error",
+      calcDot: ".",
+      tipsModalTitle: "Realism Tips & Stealth Guide",
+      okBtn: "Got it",
+      legalModalTitle: "Privacy Notice & Legal Disclaimer",
+      wipeBtn: "Wipe All Local Data",
+      understoodBtn: "Understood",
+      copyBtn: "Copy",
+      locale: "en-US",
+      toasts: {
+        installed: "App added to your home screen!",
+        wiped: "All local data has been wiped from this device.",
+        invalidImg: "Please select a valid image file (.jpg, .png, .webp).",
+        fileTooBig: "File size must be 15 MB or less.",
+        wpSaved: "Wallpaper saved locally on this device.",
+        wpSession: "Wallpaper loaded for this session.",
+        wpRemoved: "Wallpaper reset to default.",
+        invalidAudio: "Please select a valid audio file (.mp3, .wav, .m4a).",
+        audioSaved: "Custom ringtone saved locally.",
+        audioSession: "Audio loaded for this session.",
+        audioRemoved: "Custom ringtone removed.",
+        voiceSaved: "Voice clip ready with earpiece filter.",
+        voiceSession: "Voice clip loaded for this session.",
+        voiceRemoved: "Voice clip removed.",
+        selectVoiceFirst: "Select a caller audio option first to preview.",
+        calcOpened: "Stealth Mode: Type number + '=' to arm silently, hold AC to exit.",
+        calcCanceled: "Hidden countdown canceled.",
+        sosNoPhone: "Add a trusted number in Advanced settings first.",
+        copied: "Search query copied: ",
+        copiedShort: "Search query copied.",
+        copyFailed: "Could not copy automatically; please search manually."
+      },
+      tipsSections: [
+        {
+          h: "1. Calculator Disguise (Stealth Mode)",
+          p: "Tap the Calculator icon in the top bar to switch into a fully functional calculator. Anyone glancing at your screen only sees normal math.",
+          ul: [
+            "Secret Trigger: Type a number without an operator and press '=' (e.g. 15=). A subtle green dot pulses in the corner and your chosen mode starts silently after 15s.",
+            "Normal Math: Standard expressions like 24 + 18 = work just like a real calculator.",
+            "Cancel / Exit: Double-tap AC to cancel an armed countdown; press and hold AC for 1.5s to return to setup."
+          ]
+        },
+        {
+          h: "2. Escalating Scenario Chain & Caller Audio",
+          ul: [
+            "Chain Mode: Delivers a calm first message, an urgent second message, and then an incoming call from the same person — maximum realism.",
+            "Earpiece Filter: Choose Phone Line Ambience or upload your own voice clip in Advanced settings; it plays through a 300–3400 Hz phone filter when answered.",
+            "Silent SOS: If you save a trusted number in Advanced settings, holding the 'Hold' button for 2.5s during a call opens a ready-to-send emergency SMS."
+          ]
+        },
+        {
+          h: "3. Wallpaper, Power Button & Media Volume",
+          ul: [
+            "Wallpaper: Use your raw wallpaper instead of a lock-screen screenshot so the live clock stays accurate.",
+            "Don't lock the screen: Browsers suspend vibration when locked. Leave the phone face-up in the 2-second AMOLED blackout screen instead.",
+            "Media volume: Turn up your phone's Media volume before starting."
+          ]
+        },
+        {
+          h: "4. Default Ringtone Names by Brand",
+          p: "Brand ringtones are copyrighted and not bundled. Copy your phone's default ringtone query below, download an .mp3/.wav/.m4a from a trusted source, and load it under Custom Audio File:",
+          guide: true
+        }
+      ],
+      legalSections: [
+        {
+          h: "1. Zero-Server Privacy (GDPR / KVKK Compliant)",
+          p1: "RescueMe (KurtarBeni) is an open-source static web application running 100% client-side in your browser. It contains zero servers, databases, cookies, ad networks, external fonts, or analytics.",
+          p2: "Any caller name, message text, emergency contact number, wallpaper, or custom audio file you select never leaves your device and is never shared with anyone. Preferences are stored strictly in your browser's local storage (localStorage / IndexedDB)."
+        },
+        {
+          h: "2. Lawful Use & Disclaimer",
+          p1: "This tool is built solely for politely exiting uncomfortable social situations, personal peace of mind, or harmless simulation.",
+          ul: [
+            "In any real emergency, contact your local emergency services (such as 112 or 911) immediately instead of using this app.",
+            "Using this application for fraud, harassment, threats, impersonation, or any unlawful purpose is strictly prohibited.",
+            "Provided 'as is' under the MIT License; all legal responsibility rests solely with the user."
+          ]
+        },
+        {
+          h: "3. Manage Local Device Data",
+          p1: "You can permanently wipe all saved preferences, wallpapers, audio files, emergency contacts, and offline caches from this device with one tap."
+        }
+      ]
+    }
+  };
+
+  const RINGTONE_GUIDES = [
+    { brand: "iPhone (iOS 17+)", name: "Reflection / Radial", query: "iPhone Reflection default ringtone" },
+    { brand: "iPhone (Classic)", name: "Opening / Marimba", query: "iPhone Opening default ringtone" },
+    { brand: "Samsung (One UI)", name: "Over the Horizon / Galaxy Bells", query: "Samsung Over the Horizon default ringtone" },
+    { brand: "Xiaomi (HyperOS / MIUI)", name: "Mi Remix / Mi Jazz", query: "Xiaomi Mi Remix default ringtone" },
+    { brand: "Google Pixel", name: "Your New Adventure", query: "Google Pixel Your New Adventure ringtone" },
+    { brand: "Huawei / Honor", name: "Huawei Tune Living", query: "Huawei Tune Living default ringtone" }
+  ];
+
   // ---------- Uygulama Durumu ----------
   const state = {
+    lang: detectInitialLang(), // "tr" | "en"
     mode: "call", // "call" | "msg" | "chain"
     detectedOS: detectOS(), // "ios" | "android" | "desktop"
     activeOS: "android", // "ios" | "android"
@@ -50,7 +540,6 @@
     lastTapTime: 0,
     isTestingSound: false,
     isTestingVoice: false,
-    // Hesap makinesi durumu
     calc: {
       current: "0",
       prev: null,
@@ -72,6 +561,8 @@
     appShell: $("appShell"),
     detectedOsLabel: $("detectedOsLabel"),
     offlineStatusDesktop: $("offlineStatusDesktop"),
+    langTrBtn: $("langTrBtn"),
+    langEnBtn: $("langEnBtn"),
     installCard: $("installCard"),
     installTitle: $("installTitle"),
     installDesc: $("installDesc"),
@@ -81,6 +572,10 @@
     tabMsg: $("tabMsg"),
     tabChain: $("tabChain"),
     presetRow: $("presetRow"),
+    presetMom: $("presetMom"),
+    presetWork: $("presetWork"),
+    presetCourier: $("presetCourier"),
+    presetHome: $("presetHome"),
     whoInput: $("whoInput"),
     subInput: $("subInput"),
     delayInput: $("delayInput"),
@@ -132,6 +627,7 @@
     calcDisplay: $("calcDisplay"),
     calcGrid: $("calcGrid"),
     calcClearBtn: $("calcClearBtn"),
+    calcDotBtn: $("calcDotBtn"),
     sbTimeHome: $("sbTimeHome"),
     sbTimeCall: $("sbTimeCall"),
     lockDate: $("lockDate"),
@@ -154,6 +650,7 @@
     acceptWrap: $("acceptWrap"),
     acceptBtn: $("acceptBtn"),
     tipsModal: $("tipsModal"),
+    tipsModalBody: $("tipsModalBody"),
     openTipsBtn: $("openTipsBtn"),
     openTipsBanner: $("openTipsBanner"),
     openTipsDesktop: $("openTipsDesktop"),
@@ -161,8 +658,8 @@
     openRingtoneGuideBtn: $("openRingtoneGuideBtn"),
     closeTipsBtn: $("closeTipsBtn"),
     acceptTipsBtn: $("acceptTipsBtn"),
-    ringtoneGuideList: $("ringtoneGuideList"),
     legalModal: $("legalModal"),
+    legalModalBody: $("legalModalBody"),
     openLegalBtn: $("openLegalBtn"),
     openLegalInline: $("openLegalInline"),
     openLegalDesktop: $("openLegalDesktop"),
@@ -172,7 +669,25 @@
     toast: $("toast")
   };
 
-  // ---------- 1. Cihaz / İşletim Sistemi Algılama ----------
+  function t() {
+    return I18N[state.lang] || I18N.tr;
+  }
+
+  // ---------- 1. Dil & Cihaz Algılama ----------
+  function detectInitialLang() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed.lang === "tr" || parsed.lang === "en") return parsed.lang;
+      }
+    } catch {
+      // yoksay
+    }
+    const navLang = (navigator.language || "tr").toLowerCase();
+    return navLang.startsWith("tr") ? "tr" : "en";
+  }
+
   function detectOS() {
     const ua = navigator.userAgent || "";
     const platform =
@@ -194,6 +709,155 @@
     );
   }
 
+  function renderModalsContent() {
+    const dict = t();
+
+    // Tüyolar Modal İçeriği (XSS-güvenli DOM üretimi)
+    el.tipsModalBody.replaceChildren();
+    dict.tipsSections.forEach((sec) => {
+      const h4 = document.createElement("h4");
+      h4.textContent = sec.h;
+      el.tipsModalBody.appendChild(h4);
+
+      if (sec.p) {
+        const p = document.createElement("p");
+        p.textContent = sec.p;
+        el.tipsModalBody.appendChild(p);
+      }
+      if (sec.ul) {
+        const ul = document.createElement("ul");
+        sec.ul.forEach((item) => {
+          const li = document.createElement("li");
+          li.textContent = item;
+          ul.appendChild(li);
+        });
+        el.tipsModalBody.appendChild(ul);
+      }
+      if (sec.guide) {
+        const list = document.createElement("div");
+        list.className = "ringtone-guide-list";
+        RINGTONE_GUIDES.forEach((g) => {
+          const row = document.createElement("div");
+          row.className = "rg-item";
+
+          const info = document.createElement("div");
+          info.className = "rg-info";
+          const st = document.createElement("strong");
+          st.textContent = g.brand;
+          const sp = document.createElement("span");
+          sp.textContent = g.name;
+          info.appendChild(st);
+          info.appendChild(sp);
+
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "copy-pill";
+          btn.dataset.copy = g.query;
+          btn.textContent = dict.copyBtn;
+
+          row.appendChild(info);
+          row.appendChild(btn);
+          list.appendChild(row);
+        });
+        el.tipsModalBody.appendChild(list);
+      }
+    });
+
+    // Yasal Modal İçeriği
+    el.legalModalBody.replaceChildren();
+    dict.legalSections.forEach((sec) => {
+      const h4 = document.createElement("h4");
+      h4.textContent = sec.h;
+      el.legalModalBody.appendChild(h4);
+
+      if (sec.p1) {
+        const p1 = document.createElement("p");
+        p1.textContent = sec.p1;
+        el.legalModalBody.appendChild(p1);
+      }
+      if (sec.p2) {
+        const p2 = document.createElement("p");
+        p2.textContent = sec.p2;
+        el.legalModalBody.appendChild(p2);
+      }
+      if (sec.ul) {
+        const ul = document.createElement("ul");
+        sec.ul.forEach((item) => {
+          const li = document.createElement("li");
+          li.textContent = item;
+          ul.appendChild(li);
+        });
+        el.legalModalBody.appendChild(ul);
+      }
+    });
+  }
+
+  function applyLanguage(newLang, swapDefaultInputs = false, persist = true) {
+    const prevDict = t();
+    state.lang = newLang === "en" ? "en" : "tr";
+    const dict = t();
+
+    document.documentElement.lang = state.lang;
+    document.title = dict.pageTitle;
+
+    el.langTrBtn.classList.toggle("is-active", state.lang === "tr");
+    el.langEnBtn.classList.toggle("is-active", state.lang === "en");
+
+    document.querySelectorAll("[data-i18n]").forEach((node) => {
+      const key = node.getAttribute("data-i18n");
+      if (key && typeof dict[key] === "string") {
+        node.textContent = dict[key];
+      }
+    });
+
+    // Hazır senaryo çiplerini güncelle
+    el.presetMom.textContent = dict.presets.mom.chip;
+    el.presetWork.textContent = dict.presets.work.chip;
+    el.presetCourier.textContent = dict.presets.courier.chip;
+    el.presetHome.textContent = dict.presets.home.chip;
+
+    // Kullanıcı kendi özel metnini yazmadıysa varsayılan alanları yeni dile çevir
+    if (swapDefaultInputs) {
+      const prevMom = prevDict.presets.mom;
+      if (el.whoInput.value === prevMom.who) el.whoInput.value = dict.presets.mom.who;
+      if (el.subInput.value === prevMom.sub) el.subInput.value = dict.presets.mom.sub;
+      if (el.msgTextInput.value.trim() === prevDict.defaultMsgLines.trim()) {
+        el.msgTextInput.value = dict.defaultMsgLines;
+      }
+      if (el.chainMsg1Input.value === prevMom.c1) el.chainMsg1Input.value = dict.presets.mom.c1;
+      if (el.chainMsg2Input.value === prevMom.c2) el.chainMsg2Input.value = dict.presets.mom.c2;
+      if (el.sosMsgInput.value === prevDict.defaultSosMsg) {
+        el.sosMsgInput.value = dict.defaultSosMsg;
+      }
+    }
+
+    el.toneLabel.textContent = state.mode === "msg" ? dict.toneLabelMsg : dict.toneLabelCall;
+    el.testSoundBtn.textContent = state.isTestingSound ? dict.testSoundStop : dict.testSoundPlay;
+    el.testVoiceBtn.textContent = state.isTestingVoice ? dict.testVoiceStop : dict.testVoicePlay;
+    el.declineLabel.textContent = state.talkInterval ? dict.endCallLabel : dict.declineLabel;
+    el.calcDotBtn.textContent = dict.calcDot;
+
+    if (!isStandalone() && !el.installCard.classList.contains("is-hidden")) {
+      if (state.detectedOS === "ios") {
+        el.installTitle.textContent = dict.installIosTitle;
+        el.installDesc.textContent = dict.installIosDesc;
+      } else {
+        el.installTitle.textContent = dict.installAndroidTitle;
+        el.installDesc.textContent = dict.installAndroidDesc;
+      }
+    }
+
+    applyOSTheme();
+    updateCustomAudioUI();
+    updateCustomVoiceUI();
+    applyWallpaperUI();
+    renderModalsContent();
+    updateClocks();
+    updateCalcUI();
+
+    if (persist) savePrefs();
+  }
+
   function applyOSTheme() {
     const selected = el.osStyleSelect.value;
     if (selected === "ios") {
@@ -206,13 +870,7 @@
 
     el.appShell.classList.toggle("os-ios", state.activeOS === "ios");
     el.appShell.classList.toggle("os-android", state.activeOS === "android");
-
-    const osNames = {
-      ios: "iOS algılandı · iPhone arayüzü aktif",
-      android: "Android algılandı · Android arayüzü aktif",
-      desktop: "Masaüstü algılandı · Önizleme modu"
-    };
-    el.detectedOsLabel.textContent = osNames[state.detectedOS];
+    el.detectedOsLabel.textContent = t().osDetected[state.detectedOS];
   }
 
   // ---------- 2. Bildirim Toast ----------
@@ -241,6 +899,7 @@
   function savePrefs() {
     try {
       const data = {
+        lang: state.lang,
         mode: state.mode,
         who: el.whoInput.value.slice(0, 40),
         sub: el.subInput.value.slice(0, 28),
@@ -267,8 +926,21 @@
   function loadPrefs() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_STORAGE_KEY);
-      if (!raw) return;
+      if (!raw) {
+        // İlk kez İngilizce sistemle açılıyorsa varsayılan girdileri İngilizce yap
+        if (state.lang === "en") {
+          const d = I18N.en;
+          el.whoInput.value = d.presets.mom.who;
+          el.subInput.value = d.presets.mom.sub;
+          el.msgTextInput.value = d.defaultMsgLines;
+          el.chainMsg1Input.value = d.presets.mom.c1;
+          el.chainMsg2Input.value = d.presets.mom.c2;
+          el.sosMsgInput.value = d.defaultSosMsg;
+        }
+        return;
+      }
       const data = JSON.parse(raw);
+      if (data.lang === "tr" || data.lang === "en") state.lang = data.lang;
       if (["call", "msg", "chain"].includes(data.mode)) setMode(data.mode, false);
       if (typeof data.who === "string") el.whoInput.value = data.who.slice(0, 40);
       if (typeof data.sub === "string") el.subInput.value = data.sub.slice(0, 28);
@@ -310,11 +982,11 @@
     }
   }
 
-  // ---------- 5. IndexedDB (Cihaz İçi Medya: Zil, Duvar Kağıdı, Konuşma Sesi) ----------
+  // ---------- 5. IndexedDB (Cihaz İçi Medya) ----------
   function openMediaDB() {
     return new Promise((resolve, reject) => {
       if (!("indexedDB" in window)) {
-        reject(new Error("IndexedDB desteklenmiyor"));
+        reject(new Error("IndexedDB not supported"));
         return;
       }
       const req = indexedDB.open(DB_NAME, 1);
@@ -402,36 +1074,35 @@
   }
 
   function updateCustomAudioUI() {
+    const dict = t();
     const showBox = el.toneSelect.value === "custom";
     el.customAudioBox.classList.toggle("is-hidden", !showBox);
 
     if (state.customAudioBlob) {
-      el.customAudioStatus.textContent =
-        "Yüklü ses: " + state.customAudioName + " (yalnızca bu cihazda saklanır)";
+      el.customAudioStatus.textContent = dict.audioActiveStatus.replace("{name}", state.customAudioName);
       el.clearAudioBtn.classList.remove("is-hidden");
     } else {
-      el.customAudioStatus.textContent =
-        "Kendi telefonunun zil sesini seçersen yalnızca cihazında (çevrimdışı) saklanır.";
+      el.customAudioStatus.textContent = dict.audioEmptyStatus;
       el.clearAudioBtn.classList.add("is-hidden");
     }
   }
 
   function updateCustomVoiceUI() {
+    const dict = t();
     const showBox = el.voiceSelect.value === "custom_voice";
     el.customVoiceBox.classList.toggle("is-hidden", !showBox);
 
     if (state.customVoiceBlob) {
-      el.customVoiceStatus.textContent =
-        "Yüklü kayıt: " + state.customVoiceName + " (300–3400 Hz telefon filtresiyle çalar)";
+      el.customVoiceStatus.textContent = dict.voiceActiveStatus.replace("{name}", state.customVoiceName);
       el.clearVoiceBtn.classList.remove("is-hidden");
     } else {
-      el.customVoiceStatus.textContent =
-        "Seçtiğin kayıt 300–3400 Hz telefon filtresinden geçirilerek gerçek ahize konuşması gibi çalar; yalnızca cihazında kalır.";
+      el.customVoiceStatus.textContent = dict.voiceEmptyStatus;
       el.clearVoiceBtn.classList.add("is-hidden");
     }
   }
 
   function applyWallpaperUI() {
+    const dict = t();
     const hasWp = Boolean(state.wallpaperBlob);
     const useOnCall = Boolean(el.wpBlurCallToggle && el.wpBlurCallToggle.checked);
 
@@ -442,8 +1113,7 @@
       el.wpThumb.src = state.wallpaperUrl;
       el.wpThumb.classList.remove("is-hidden");
       el.clearWallpaperBtn.classList.remove("is-hidden");
-      el.wallpaperStatus.textContent =
-        "Aktif duvar kağıdı: " + state.wallpaperName + " (yalnızca bu cihazda)";
+      el.wallpaperStatus.textContent = dict.wpActiveStatus.replace("{name}", state.wallpaperName);
 
       el.homeBgImg.src = state.wallpaperUrl;
       el.homeBgImg.classList.remove("is-hidden");
@@ -462,8 +1132,7 @@
       el.wpThumb.removeAttribute("src");
       el.wpThumb.classList.add("is-hidden");
       el.clearWallpaperBtn.classList.add("is-hidden");
-      el.wallpaperStatus.textContent =
-        "Kendi duvar kağıdını veya boş ana ekran SS'ini seç; yalnızca bu cihazda saklanır.";
+      el.wallpaperStatus.textContent = dict.wpEmptyStatus;
 
       el.homeBgImg.removeAttribute("src");
       el.homeBgImg.classList.add("is-hidden");
@@ -816,7 +1485,7 @@
     try {
       if (navigator.vibrate) navigator.vibrate(pattern);
     } catch {
-      // iOS Safari desteklemez, yoksay
+      // yoksay
     }
   }
 
@@ -907,7 +1576,7 @@
     }
   }
 
-  // ---------- 7. Karşı Taraf Sesi Motoru (300–3400 Hz Ahize Filtresi + GSM Hat Hışırtısı) ----------
+  // ---------- 7. Karşı Taraf Sesi Motoru (300–3400 Hz Ahize Filtresi) ----------
   function computeVoiceGain() {
     if (state.isCallHeld) return 0.0;
     const base = el.voiceSelect.value === "ambient" ? 0.14 : 0.45;
@@ -961,7 +1630,6 @@
 
     if (mode === "ambient" || (mode === "custom_voice" && !state.customVoiceBlob)) {
       if (!ctx) return;
-      // 3 saniyelik yumuşak GSM hat ortam gürültüsü (comfort noise)
       const len = ctx.sampleRate * 3;
       const noiseBuf = ctx.createBuffer(1, len, ctx.sampleRate);
       const data = noiseBuf.getChannelData(0);
@@ -971,7 +1639,6 @@
         const white = Math.random() * 2 - 1;
         b0 = 0.97 * b0 + white * 0.05;
         b1 = 0.85 * b1 + white * 0.08;
-        // Hafif GSM nefes/oda dalgalanması
         const swell = 0.78 + 0.22 * Math.sin((2 * Math.PI * i) / len);
         data[i] = (b0 + b1) * 0.55 * swell;
       }
@@ -1002,7 +1669,6 @@
       return;
     }
 
-    // Özel ses kaydı: 300–3400 Hz telefon ahize filtresinden geçir
     if (ctx && state.customVoiceBlob) {
       try {
         const arrBuf = await state.customVoiceBlob.arrayBuffer();
@@ -1041,7 +1707,7 @@
         state.activeVoiceGain = gain;
         return;
       } catch {
-        // decodeAudioData desteklemiyorsa normal HTMLAudioElement yedeğine düş
+        // yedekHTMLAudioElement'e düş
       }
     }
 
@@ -1084,14 +1750,13 @@
 
   // ---------- 8. Sessiz Güvenlik Köprüsü (Acil SMS) ----------
   function triggerSilentSOS() {
+    const dict = t();
     const phone = sanitizePhone(el.sosPhoneInput.value).replace(/\s+/g, "");
     if (!phone) {
-      showToast("Acil SMS için önce Gelişmiş bölümden numara ekle.");
+      showToast(dict.toasts.sosNoPhone);
       return;
     }
-    const msg =
-      el.sosMsgInput.value.trim().slice(0, 160) ||
-      "Şu an kendimi güvende hissetmiyorum, beni hemen arar mısın?";
+    const msg = el.sosMsgInput.value.trim().slice(0, 160) || dict.defaultSosMsg;
 
     triggerVibrate([60, 40, 60, 40, 120]);
     const sep = state.detectedOS === "ios" ? "&" : "?";
@@ -1169,14 +1834,15 @@
   }
 
   function formatClock(date) {
-    return date.toLocaleTimeString("tr-TR", {
+    return date.toLocaleTimeString(t().locale, {
       hour: "2-digit",
-      minute: "2-digit"
+      minute: "2-digit",
+      hour12: false
     });
   }
 
   function formatDate(date) {
-    return date.toLocaleDateString("tr-TR", {
+    return date.toLocaleDateString(t().locale, {
       weekday: "long",
       day: "numeric",
       month: "long"
@@ -1287,8 +1953,9 @@
   }
 
   function launchIncomingCall() {
-    const caller = el.whoInput.value.trim().slice(0, 40) || "Bilinmeyen";
-    const sub = el.subInput.value.trim().slice(0, 28) || "Cep";
+    const dict = t();
+    const caller = el.whoInput.value.trim().slice(0, 40) || dict.unknownCaller;
+    const sub = el.subInput.value.trim().slice(0, 28) || dict.presets.mom.sub;
 
     state.isCallMuted = false;
     state.isCallHeld = false;
@@ -1296,7 +1963,7 @@
 
     el.callName.textContent = caller;
     el.callInitial.textContent = caller.charAt(0).toUpperCase() || "?";
-    el.callSub.textContent = sub + " · arıyor…";
+    el.callSub.textContent = sub + dict.callingSuffix;
 
     el.callRipple.classList.remove("is-paused");
     el.inCallGrid.classList.add("is-hidden");
@@ -1304,7 +1971,7 @@
     el.dtmfDisplay.textContent = "";
     el.acceptWrap.classList.remove("is-hidden");
     el.callActions.classList.remove("is-single");
-    el.declineLabel.textContent = "Reddet";
+    el.declineLabel.textContent = dict.declineLabel;
 
     el.inCallGrid.querySelectorAll(".call-tool-btn").forEach((btn) => {
       btn.setAttribute("aria-pressed", "false");
@@ -1319,7 +1986,7 @@
     el.callRipple.classList.add("is-paused");
     el.acceptWrap.classList.add("is-hidden");
     el.callActions.classList.add("is-single");
-    el.declineLabel.textContent = "Bitir";
+    el.declineLabel.textContent = t().endCallLabel;
     el.inCallGrid.classList.remove("is-hidden");
 
     startCallVoice(false);
@@ -1330,7 +1997,7 @@
       elapsed += 1;
       const mins = String(Math.floor(elapsed / 60)).padStart(2, "0");
       const secs = String(elapsed % 60).padStart(2, "0");
-      el.callSub.textContent = state.isCallHeld ? "Beklemede · " + mins + ":" + secs : mins + ":" + secs;
+      el.callSub.textContent = state.isCallHeld ? t().onHoldPrefix + mins + ":" + secs : mins + ":" + secs;
     }, 1000);
   }
 
@@ -1370,6 +2037,7 @@
   }
 
   function launchMessages() {
+    const dict = t();
     state.player.pause();
     updateClocks();
     el.notiStack.replaceChildren();
@@ -1377,21 +2045,15 @@
 
     const count = clampInt(el.msgCountInput.value, 1, 10, 3);
     const gap = clampInt(el.msgGapInput.value, 1, 60, 3);
-    const sender = el.whoInput.value.trim().slice(0, 40) || "Bilinmeyen";
+    const sender = el.whoInput.value.trim().slice(0, 40) || dict.unknownCaller;
 
-    const fallbackMsgs = [
-      "Neredesin? Hemen döner misin?",
-      "Mesajımı görmedin mi?",
-      "Acil beni ara!",
-      "Bekliyorum, önemli."
-    ];
     const customLines = el.msgTextInput.value
       .split("\n")
       .map((s) => s.trim())
       .filter(Boolean);
 
     for (let i = 0; i < count; i++) {
-      const text = customLines[i] || fallbackMsgs[i % fallbackMsgs.length];
+      const text = customLines[i] || dict.fallbackMsgs[i % dict.fallbackMsgs.length];
 
       const tId = setTimeout(() => {
         const node = createNotificationNode(sender, text, formatClock(new Date()));
@@ -1402,22 +2064,20 @@
     }
   }
 
-  // Tırmanan Senaryo Zinciri: Mesaj 1 -> Acil Mesaj 2 -> Gelen Arama
   function launchEscalatingChain() {
+    const dict = t();
     updateClocks();
     el.notiStack.replaceChildren();
     showScreen(el.screenHome);
 
-    const sender = el.whoInput.value.trim().slice(0, 40) || "Annem";
-    const msg1 = el.chainMsg1Input.value.trim().slice(0, 100) || "Müsait misin? Bir şey söyleyeceğim";
-    const msg2 = el.chainMsg2Input.value.trim().slice(0, 100) || "Kapıda kaldım, baksana telefona!!";
+    const sender = el.whoInput.value.trim().slice(0, 40) || dict.presets.mom.who;
+    const msg1 = el.chainMsg1Input.value.trim().slice(0, 100) || dict.presets.mom.c1;
+    const msg2 = el.chainMsg2Input.value.trim().slice(0, 100) || dict.presets.mom.c2;
     const gap = clampInt(el.chainGapInput.value, 2, 60, 6);
 
-    // Adım 1: İlk sakin bildirim hemen düşer
     el.notiStack.prepend(createNotificationNode(sender, msg1, formatClock(new Date())));
     playNotificationSound();
 
-    // Adım 2: Acil ikinci mesaj
     state.timers.push(
       setTimeout(() => {
         el.notiStack.prepend(createNotificationNode(sender, msg2, formatClock(new Date())));
@@ -1425,7 +2085,6 @@
       }, gap * 1000)
     );
 
-    // Adım 3: Aynı kişiden gerçek gelen arama
     state.timers.push(
       setTimeout(() => {
         launchIncomingCall();
@@ -1436,18 +2095,20 @@
   function returnToSetup() {
     clearAllTimers();
     exitFullscreenSafe();
+    el.declineLabel.textContent = t().declineLabel;
     showScreen(el.screenSetup);
   }
 
   // ---------- 11. Kamufle Mod: Gerçek Çalışan Hesap Makinesi (eval yok) ----------
   function formatCalcNumber(num) {
-    if (!Number.isFinite(num)) return "Hata";
+    if (!Number.isFinite(num)) return t().calcError;
     const str = String(Number(num.toPrecision(10)));
-    return str.replace(".", ",");
+    return str.replace(".", t().calcDot);
   }
 
   function updateCalcUI() {
-    const text = state.calc.current.replace(".", ",");
+    const dot = t().calcDot;
+    const text = state.calc.current === "Error" ? t().calcError : state.calc.current.replace(".", dot);
     el.calcDisplay.textContent = text;
     el.calcDisplay.classList.toggle("is-small", text.length > 8);
     if (state.calc.prev !== null && state.calc.op) {
@@ -1482,7 +2143,7 @@
     resetCalcState();
     showScreen(el.screenCalc);
     enterFullscreenIfMobile();
-    showToast("Kamufle Mod: Sayı + '=' ile gizli başlat, AC basılı tut = çık.");
+    showToast(t().toasts.calcOpened);
   }
 
   function handleCalcKey(btn) {
@@ -1491,7 +2152,7 @@
     const act = btn.dataset.act;
 
     if (num !== undefined) {
-      if (state.calc.resetNext || state.calc.current === "0" || state.calc.current === "Hata") {
+      if (state.calc.resetNext || state.calc.current === "0" || state.calc.current === "Error") {
         state.calc.current = num;
         state.calc.resetNext = false;
       } else if (state.calc.current.length < 11) {
@@ -1502,7 +2163,7 @@
     }
 
     if (act === "dot") {
-      if (state.calc.resetNext) {
+      if (state.calc.resetNext || state.calc.current === "Error") {
         state.calc.current = "0.";
         state.calc.resetNext = false;
       } else if (!state.calc.current.includes(".")) {
@@ -1516,7 +2177,7 @@
       const now = Date.now();
       if (state.isWaiting && now - state.calc.lastAcTap < 420) {
         clearAllTimers();
-        showToast("Gizli sayaç iptal edildi.");
+        showToast(t().toasts.calcCanceled);
       }
       state.calc.lastAcTap = now;
       resetCalcState();
@@ -1547,7 +2208,7 @@
       if (state.calc.prev !== null && state.calc.op && !state.calc.resetNext) {
         const res = computeCalc(state.calc.prev, val, state.calc.op);
         state.calc.prev = res;
-        state.calc.current = Number.isFinite(res) ? String(Number(res.toPrecision(10))) : "Hata";
+        state.calc.current = Number.isFinite(res) ? String(Number(res.toPrecision(10))) : "Error";
       } else {
         state.calc.prev = val;
       }
@@ -1561,10 +2222,9 @@
       const val = parseFloat(state.calc.current);
       if (Number.isNaN(val)) return;
 
-      // Gerçek matematik işlemi varsa normal hesapla
       if (state.calc.prev !== null && state.calc.op) {
         const res = computeCalc(state.calc.prev, val, state.calc.op);
-        state.calc.current = Number.isFinite(res) ? String(Number(res.toPrecision(10))) : "Hata";
+        state.calc.current = Number.isFinite(res) ? String(Number(res.toPrecision(10))) : "Error";
         state.calc.prev = null;
         state.calc.op = null;
         state.calc.resetNext = true;
@@ -1572,7 +2232,6 @@
         return;
       }
 
-      // GİZLİ TETİKLEYİCİ: İşlemsiz pozitif sayı + "=" -> o kadar saniye sonra gizlice başlat!
       if (val >= 1 && val <= 3600) {
         const secs = Math.round(val);
         state.calc.resetNext = true;
@@ -1592,7 +2251,7 @@
       // yoksay
     }
     state.isTestingSound = false;
-    el.testSoundBtn.textContent = "▶ Sesi Test Et";
+    el.testSoundBtn.textContent = t().testSoundPlay;
   }
 
   function toggleTestSound() {
@@ -1602,7 +2261,7 @@
     }
     stopTestVoice();
     state.isTestingSound = true;
-    el.testSoundBtn.textContent = "■ Durdur";
+    el.testSoundBtn.textContent = t().testSoundStop;
 
     if (state.mode === "msg") {
       playNotificationSound();
@@ -1617,7 +2276,7 @@
     if (!state.isTestingVoice) return;
     stopCallVoice();
     state.isTestingVoice = false;
-    el.testVoiceBtn.textContent = "▶ Dinle";
+    el.testVoiceBtn.textContent = t().testVoicePlay;
   }
 
   function toggleTestVoice() {
@@ -1626,22 +2285,23 @@
       return;
     }
     if (el.voiceSelect.value === "none") {
-      showToast("Dinlemek için önce bir karşı taraf sesi seç.");
+      showToast(t().toasts.selectVoiceFirst);
       return;
     }
     stopTestSound();
     state.isTestingVoice = true;
-    el.testVoiceBtn.textContent = "■ Durdur";
+    el.testVoiceBtn.textContent = t().testVoiceStop;
     startCallVoice(true);
     state.timers.push(setTimeout(stopTestVoice, 3500));
   }
 
   // ---------- 13. Pano Kopyalama (Güvenli) ----------
   async function copyTextSafe(text) {
+    const dict = t();
     try {
       if (navigator.clipboard && navigator.clipboard.writeText) {
         await navigator.clipboard.writeText(text);
-        showToast("Arama metni kopyalandı: " + text);
+        showToast(dict.toasts.copied + text);
         return;
       }
     } catch {
@@ -1655,9 +2315,9 @@
     ta.select();
     try {
       document.execCommand("copy");
-      showToast("Arama metni kopyalandı.");
+      showToast(dict.toasts.copiedShort);
     } catch {
-      showToast("Kopyalanamadı, metni manuel aratabilirsin.");
+      showToast(dict.toasts.copyFailed);
     }
     document.body.removeChild(ta);
   }
@@ -1678,7 +2338,7 @@
 
     el.msgOptions.classList.toggle("is-hidden", mode !== "msg");
     el.chainOptions.classList.toggle("is-hidden", mode !== "chain");
-    el.toneLabel.textContent = mode === "msg" ? "Bildirim Sesi" : "Zil & Bildirim Sesi";
+    el.toneLabel.textContent = mode === "msg" ? t().toneLabelMsg : t().toneLabelCall;
     stopTestSound();
     if (persist) savePrefs();
   }
@@ -1689,8 +2349,8 @@
     window.addEventListener("beforeinstallprompt", (e) => {
       e.preventDefault();
       state.deferredPrompt = e;
-      el.installTitle.textContent = "Telefonuna Yükle (Çevrimdışı)";
-      el.installDesc.textContent = "İnternet olmadan tek dokunuşla açmak için ana ekrana ekle.";
+      el.installTitle.textContent = t().installAndroidTitle;
+      el.installDesc.textContent = t().installAndroidDesc;
       el.installActionBtn.classList.remove("is-hidden");
       el.installCard.classList.remove("is-hidden");
     });
@@ -1698,13 +2358,12 @@
     window.addEventListener("appinstalled", () => {
       state.deferredPrompt = null;
       el.installCard.classList.add("is-hidden");
-      showToast("Uygulama ana ekranına eklendi!");
+      showToast(t().toasts.installed);
     });
 
     if (state.detectedOS === "ios") {
-      el.installTitle.textContent = "iPhone Ana Ekranına Ekle";
-      el.installDesc.textContent =
-        "Safari alt menüden Paylaş simgesine dokun ve 'Ana Ekrana Ekle'yi seç.";
+      el.installTitle.textContent = t().installIosTitle;
+      el.installDesc.textContent = t().installIosDesc;
       el.installActionBtn.classList.add("is-hidden");
       el.installCard.classList.remove("is-hidden");
     }
@@ -1729,7 +2388,7 @@
           .register("./sw.js")
           .then(() => {
             if (el.offlineStatusDesktop) {
-              el.offlineStatusDesktop.textContent = "Çevrimdışı Önbellek Aktif";
+              el.offlineStatusDesktop.textContent = t().offlineActive;
             }
           })
           .catch(() => {});
@@ -1754,6 +2413,7 @@
   }
 
   async function wipeAllLocalData() {
+    const dict = t();
     try {
       localStorage.removeItem(STORAGE_KEY);
       localStorage.removeItem(LEGACY_STORAGE_KEY);
@@ -1769,14 +2429,17 @@
         // yoksay
       }
     }
-    el.whoInput.value = "Annem";
-    el.subInput.value = "Cep";
+    el.whoInput.value = dict.presets.mom.who;
+    el.subInput.value = dict.presets.mom.sub;
     el.delayInput.value = "5";
+    el.msgTextInput.value = dict.defaultMsgLines;
+    el.chainMsg1Input.value = dict.presets.mom.c1;
+    el.chainMsg2Input.value = dict.presets.mom.c2;
     el.osStyleSelect.value = "auto";
     el.toneSelect.value = "auto";
     el.voiceSelect.value = "none";
     el.sosPhoneInput.value = "";
-    el.sosMsgInput.value = "Şu an kendimi güvende hissetmiyorum, beni hemen arar mısın?";
+    el.sosMsgInput.value = dict.defaultSosMsg;
     el.wpBlurCallToggle.checked = true;
     setMode("call", false);
     applyOSTheme();
@@ -1784,11 +2447,14 @@
     updateCustomVoiceUI();
     applyWallpaperUI();
     closeLegalModal();
-    showToast("Tüm yerel veriler cihazından silindi.");
+    showToast(dict.toasts.wiped);
   }
 
   // ---------- 15. Olay Dinleyicileri ----------
   function bindEvents() {
+    el.langTrBtn.addEventListener("click", () => applyLanguage("tr", true, true));
+    el.langEnBtn.addEventListener("click", () => applyLanguage("en", true, true));
+
     el.tabCall.addEventListener("click", () => setMode("call"));
     el.tabMsg.addEventListener("click", () => setMode("msg"));
     el.tabChain.addEventListener("click", () => setMode("chain"));
@@ -1798,15 +2464,17 @@
     el.presetRow.addEventListener("click", (e) => {
       const chip = e.target.closest(".chip");
       if (!chip) return;
+      const key = chip.dataset.preset;
+      const preset = t().presets[key];
+      if (!preset) return;
+
       el.presetRow.querySelectorAll(".chip").forEach((c) => c.classList.remove("is-active"));
       chip.classList.add("is-active");
-      el.whoInput.value = chip.dataset.who || "Annem";
-      el.subInput.value = chip.dataset.sub || "Cep";
-      if (chip.dataset.msg) {
-        el.msgTextInput.value = chip.dataset.msg + "\nAcil döner misin?";
-      }
-      if (chip.dataset.c1) el.chainMsg1Input.value = chip.dataset.c1;
-      if (chip.dataset.c2) el.chainMsg2Input.value = chip.dataset.c2;
+      el.whoInput.value = preset.who;
+      el.subInput.value = preset.sub;
+      el.msgTextInput.value = preset.msg + "\n" + t().fallbackMsgs[2];
+      el.chainMsg1Input.value = preset.c1;
+      el.chainMsg2Input.value = preset.c2;
       savePrefs();
     });
 
@@ -1853,11 +2521,11 @@
       if (!file) return;
 
       if (!file.type || !file.type.startsWith("image/")) {
-        showToast("Lütfen geçerli bir görsel dosyası (.jpg, .png, .webp) seç.");
+        showToast(t().toasts.invalidImg);
         return;
       }
       if (file.size > MAX_MEDIA_BYTES) {
-        showToast("Görsel dosyası en fazla 15 MB olabilir.");
+        showToast(t().toasts.fileTooBig);
         return;
       }
 
@@ -1870,16 +2538,16 @@
 
       try {
         await saveMediaItem(KEY_WALLPAPER, file);
-        showToast("Arka plan yalnızca bu cihaza kaydedildi.");
+        showToast(t().toasts.wpSaved);
       } catch {
-        showToast("Arka plan bu oturum için yüklendi.");
+        showToast(t().toasts.wpSession);
       }
       applyWallpaperUI();
     });
 
     el.clearWallpaperBtn.addEventListener("click", async () => {
       await deleteCustomWallpaper();
-      showToast("Arka plan varsayılana döndürüldü.");
+      showToast(t().toasts.wpRemoved);
     });
 
     el.wpBlurCallToggle.addEventListener("change", () => {
@@ -1902,11 +2570,11 @@
       if (!file) return;
 
       if (!file.type || !file.type.startsWith("audio/")) {
-        showToast("Lütfen geçerli bir ses dosyası (.mp3, .wav, .m4a) seç.");
+        showToast(t().toasts.invalidAudio);
         return;
       }
       if (file.size > MAX_MEDIA_BYTES) {
-        showToast("Ses dosyası en fazla 15 MB olabilir.");
+        showToast(t().toasts.fileTooBig);
         return;
       }
 
@@ -1919,9 +2587,9 @@
 
       try {
         await saveMediaItem(KEY_AUDIO, file);
-        showToast("Özel zil sesi cihazına kaydedildi.");
+        showToast(t().toasts.audioSaved);
       } catch {
-        showToast("Ses bu oturum için yüklendi.");
+        showToast(t().toasts.audioSession);
       }
       updateCustomAudioUI();
     });
@@ -1929,7 +2597,7 @@
     el.clearAudioBtn.addEventListener("click", async () => {
       stopTestSound();
       await deleteCustomAudio();
-      showToast("Özel zil sesi kaldırıldı.");
+      showToast(t().toasts.audioRemoved);
     });
 
     // Karşı taraf sesi seçme / test / yükleme
@@ -1947,11 +2615,11 @@
       if (!file) return;
 
       if (!file.type || !file.type.startsWith("audio/")) {
-        showToast("Lütfen geçerli bir ses kaydı (.mp3, .wav, .m4a) seç.");
+        showToast(t().toasts.invalidAudio);
         return;
       }
       if (file.size > MAX_MEDIA_BYTES) {
-        showToast("Ses kaydı en fazla 15 MB olabilir.");
+        showToast(t().toasts.fileTooBig);
         return;
       }
 
@@ -1964,9 +2632,9 @@
 
       try {
         await saveMediaItem(KEY_VOICE, file);
-        showToast("Konuşma kaydı ahize filtresiyle hazırlandı.");
+        showToast(t().toasts.voiceSaved);
       } catch {
-        showToast("Konuşma kaydı bu oturum için yüklendi.");
+        showToast(t().toasts.voiceSession);
       }
       updateCustomVoiceUI();
     });
@@ -1974,7 +2642,7 @@
     el.clearVoiceBtn.addEventListener("click", async () => {
       stopTestVoice();
       await deleteCustomVoice();
-      showToast("Konuşma kaydı kaldırıldı.");
+      showToast(t().toasts.voiceRemoved);
     });
 
     // Hesap makinesi tuşları + AC basılı tutarak çıkış
@@ -2088,7 +2756,7 @@
       }
     });
 
-    // Tüyolar Modalı
+    // Tüyolar Modalı + içindeki dinamik kopyalama butonları
     [
       el.openTipsBtn,
       el.openTipsBanner,
@@ -2104,13 +2772,13 @@
       if (e.target === el.tipsModal) closeTipsModal();
     });
 
-    el.ringtoneGuideList.addEventListener("click", (e) => {
+    el.tipsModalBody.addEventListener("click", (e) => {
       const btn = e.target.closest(".copy-pill");
       if (!btn || !btn.dataset.copy) return;
       copyTextSafe(btn.dataset.copy);
     });
 
-    // KVKK Modalı
+    // KVKK / Privacy Modalı
     [el.openLegalBtn, el.openLegalInline, el.openLegalDesktop].forEach((btn) => {
       if (btn) btn.addEventListener("click", openLegalModal);
     });
@@ -2132,8 +2800,7 @@
   // ---------- 16. Başlatma ----------
   async function init() {
     loadPrefs();
-    applyOSTheme();
-    updateClocks();
+    applyLanguage(state.lang, false, false);
     setInterval(updateClocks, 1000);
 
     const [savedAudio, savedWp, savedVoice] = await Promise.all([
@@ -2144,15 +2811,15 @@
 
     if (savedAudio && savedAudio.blob) {
       state.customAudioBlob = savedAudio.blob;
-      state.customAudioName = savedAudio.name || "Özel Zil";
+      state.customAudioName = savedAudio.name || "Custom Audio";
     }
     if (savedWp && savedWp.blob) {
       state.wallpaperBlob = savedWp.blob;
-      state.wallpaperName = savedWp.name || "Duvar Kağıdı";
+      state.wallpaperName = savedWp.name || "Wallpaper";
     }
     if (savedVoice && savedVoice.blob) {
       state.customVoiceBlob = savedVoice.blob;
-      state.customVoiceName = savedVoice.name || "Konuşma Kaydı";
+      state.customVoiceName = savedVoice.name || "Voice Clip";
     }
 
     updateCustomAudioUI();

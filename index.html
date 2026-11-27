@@ -22,50 +22,55 @@
     <aside class="desktop-info" aria-label="Uygulama hakkında">
       <div class="brand-badge">
         <span class="dot" aria-hidden="true"></span>
-        <span>v2.0 · %100 Çevrimdışı &amp; Açık Kaynak</span>
+        <span data-i18n="desktopBadge">v2.1 · %100 Çevrimdışı &amp; Açık Kaynak</span>
       </div>
-      <h1 class="brand-title">Kurtar<span>Beni</span></h1>
-      <p class="brand-desc">
+      <h1 class="brand-title"><span data-i18n="brandPart1">Kurtar</span><span class="brand-accent" data-i18n="brandPart2">Beni</span></h1>
+      <p class="brand-desc" data-i18n="desktopDesc">
         Sıradan sahte aramaların ötesinde: tırmanan mesaj→arama senaryo zinciri, çalışan hesap makinesi kılığı, telefon filtreli karşı taraf sesi ve sessiz güvenlik kısayolu.
       </p>
 
       <div class="feature-list">
         <div class="feature-item">
-          <strong>Tırmanan Senaryo Zinciri</strong>
-          <span>Önce sakin bir mesaj, ardından acil ikinci mesaj ve son olarak aynı kişiden gerçekçi gelen arama.</span>
+          <strong data-i18n="feat1Title">Tırmanan Senaryo Zinciri</strong>
+          <span data-i18n="feat1Desc">Önce sakin bir mesaj, ardından acil ikinci mesaj ve son olarak aynı kişiden gerçekçi gelen arama.</span>
         </div>
         <div class="feature-item">
-          <strong>Hesap Makinesi Kılığı (Kamufle Mod)</strong>
-          <span>Gerçek çalışan hesap makinesinde örneğin <code>15=</code> yazdığında kimse fark etmeden 15 sn geri sayım başlar.</span>
+          <strong data-i18n="feat2Title">Hesap Makinesi Kılığı (Kamufle Mod)</strong>
+          <span data-i18n="feat2Desc">Gerçek çalışan hesap makinesinde örneğin 15= yazdığında kimse fark etmeden 15 sn geri sayım başlar.</span>
         </div>
         <div class="feature-item">
-          <strong>Ahize Filtreli Ses &amp; Sessiz SOS</strong>
-          <span>Aramayı açınca telefon hattı sesi çalar; Beklet'e basılı tutarak güvendiğin kişiye hazır acil SMS açabilirsin.</span>
+          <strong data-i18n="feat3Title">Ahize Filtreli Ses &amp; Sessiz SOS</strong>
+          <span data-i18n="feat3Desc">Aramayı açınca telefon hattı sesi çalar; Beklet'e basılı tutarak güvendiğin kişiye hazır acil SMS açabilirsin.</span>
         </div>
       </div>
 
       <div class="desktop-footer">
-        <button type="button" class="link-btn" id="openTipsDesktop">Tüyolar &amp; Rehber</button>
+        <button type="button" class="link-btn" id="openTipsDesktop" data-i18n="footerTips">Tüyolar &amp; Rehber</button>
         <span class="sep" aria-hidden="true">•</span>
-        <button type="button" class="link-btn" id="openLegalDesktop">KVKK &amp; Yasal Uyarı</button>
+        <button type="button" class="link-btn" id="openLegalDesktop" data-i18n="footerLegal">KVKK &amp; Yasal Uyarı</button>
         <span class="sep" aria-hidden="true">•</span>
-        <span id="offlineStatusDesktop" class="status-pill">Çevrimdışı Hazır</span>
+        <span id="offlineStatusDesktop" class="status-pill" data-i18n="offlineReady">Çevrimdışı Hazır</span>
       </div>
     </aside>
 
     <!-- Uygulama Gövdesi -->
-    <section class="phone-shell" id="appShell" aria-label="KurtarBeni Uygulaması">
+    <section class="phone-shell" id="appShell" aria-label="KurtarBeni">
       <div class="phone-notch" aria-hidden="true"></div>
 
       <!-- 1. AYAR EKRANI -->
       <div class="screen is-active" id="screenSetup">
         <header class="app-header">
           <div>
-            <h2 class="app-name">Kurtar<span>Beni</span></h2>
+            <h2 class="app-name"><span data-i18n="brandPart1">Kurtar</span><span class="brand-accent" data-i18n="brandPart2">Beni</span></h2>
             <p class="os-caption" id="detectedOsLabel">Cihaz algılanıyor…</p>
           </div>
           <div class="header-actions">
-            <button type="button" class="icon-chip icon-chip-stealth" id="openCalcBtn" aria-label="Hesap Makinesi Kılığı (Kamufle Mod)" title="Hesap Makinesi Kılığı">
+            <!-- TR / EN Dil Değiştirici -->
+            <div class="lang-switch" role="group" aria-label="Dil / Language">
+              <button type="button" class="lang-btn is-active" data-lang="tr" id="langTrBtn">TR</button>
+              <button type="button" class="lang-btn" data-lang="en" id="langEnBtn">EN</button>
+            </div>
+            <button type="button" class="icon-chip icon-chip-stealth" id="openCalcBtn" aria-label="Hesap Makinesi Kılığı" title="Hesap Makinesi Kılığı">
               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <rect x="4" y="2" width="16" height="20" rx="2"/>
                 <line x1="8" y1="6" x2="16" y2="6"/>
@@ -79,7 +84,7 @@
                 <line x1="16" y1="19" x2="16" y2="19.01"/>
               </svg>
             </button>
-            <button type="button" class="icon-chip icon-chip-accent" id="openTipsBtn" aria-label="Gerçekçilik Tüyoları ve Zil Sesi Rehberi" title="Gerçekçilik Tüyoları">
+            <button type="button" class="icon-chip icon-chip-accent" id="openTipsBtn" aria-label="Gerçekçilik Tüyoları" title="Gerçekçilik Tüyoları">
               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M9 18h6"/>
                 <path d="M10 22h4"/>
@@ -100,52 +105,52 @@
             <strong id="installTitle">Ana Ekrana Ekle</strong>
             <span id="installDesc">İnternetsiz tek dokunuşla açmak için kısayol oluştur.</span>
           </div>
-          <button type="button" class="btn-small" id="installActionBtn">Yükle</button>
+          <button type="button" class="btn-small" id="installActionBtn" data-i18n="installBtn">Yükle</button>
           <button type="button" class="btn-close-mini" id="dismissInstallBtn" aria-label="Kapat">×</button>
         </div>
 
         <div class="setup-scroll">
-          <!-- Mod Seçici (Hick Yasası: 3 Net Mod) -->
+          <!-- Mod Seçici -->
           <div class="segmented segmented-3" role="tablist" aria-label="Simülasyon türü">
             <button type="button" class="seg-btn is-selected" role="tab" aria-selected="true" data-mode="call" id="tabCall">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.58 2.81.7A2 2 0 0 1 22 16.92z"/>
               </svg>
-              <span>Arama</span>
+              <span data-i18n="tabCall">Arama</span>
             </button>
             <button type="button" class="seg-btn" role="tab" aria-selected="false" data-mode="msg" id="tabMsg">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
               </svg>
-              <span>Mesaj</span>
+              <span data-i18n="tabMsg">Mesaj</span>
             </button>
             <button type="button" class="seg-btn" role="tab" aria-selected="false" data-mode="chain" id="tabChain">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
               </svg>
-              <span>Zincir</span>
+              <span data-i18n="tabChain">Zincir</span>
             </button>
           </div>
 
           <!-- Hızlı Şablonlar -->
           <div class="field-group">
-            <span class="field-label">Hızlı Senaryo</span>
+            <span class="field-label" data-i18n="presetLabel">Hızlı Senaryo</span>
             <div class="preset-row" id="presetRow">
-              <button type="button" class="chip" data-who="Annem" data-sub="Cep" data-msg="Neredesin? Acil eve gelmen lazım!" data-c1="Müsait misin? Bir şey söyleyeceğim" data-c2="Kapıda kaldım, baksana telefona!!">Annem</button>
-              <button type="button" class="chip" data-who="Müdür / İş" data-sub="İş" data-msg="Toplantı öne çekildi, hemen döner misin?" data-c1="Sunum dosyasında acil bir eksik çıktı" data-c2="Müşteri bekliyor, hemen arıyorum">İş</button>
-              <button type="button" class="chip" data-who="Kurye" data-sub="+90 532 ••• •• 41" data-msg="Kapıdayım, paketi teslim edeceğim." data-c1="Siparişinizle 2 dakikaya kapıdayım" data-c2="Zile bastım açan yok, arıyorum">Kurye</button>
-              <button type="button" class="chip" data-who="Ev Arkadaşım" data-sub="Cep" data-msg="Anahtarı içeride unuttum, acil ara!" data-c1="Evde misin? Anahtarı bulamıyorum" data-c2="Dışarıda kaldım acil aç telefonu!">Ev</button>
+              <button type="button" class="chip" data-preset="mom" id="presetMom">Annem</button>
+              <button type="button" class="chip" data-preset="work" id="presetWork">İş</button>
+              <button type="button" class="chip" data-preset="courier" id="presetCourier">Kurye</button>
+              <button type="button" class="chip" data-preset="home" id="presetHome">Ev</button>
             </div>
           </div>
 
           <!-- Kimden & Alt Etiket -->
           <div class="field-grid">
             <div class="field-group">
-              <label class="field-label" for="whoInput">Kimden?</label>
+              <label class="field-label" for="whoInput" data-i18n="whoLabel">Kimden?</label>
               <input class="input" id="whoInput" type="text" maxlength="40" value="Annem" autocomplete="off" spellcheck="false">
             </div>
             <div class="field-group">
-              <label class="field-label" for="subInput">Etiket / Numara</label>
+              <label class="field-label" for="subInput" data-i18n="subLabel">Etiket / Numara</label>
               <input class="input" id="subInput" type="text" maxlength="28" value="Cep" autocomplete="off" spellcheck="false">
             </div>
           </div>
@@ -153,12 +158,12 @@
           <!-- Süre -->
           <div class="field-group">
             <div class="label-row">
-              <label class="field-label" for="delayInput">Başlangıç Gecikmesi (sn)</label>
+              <label class="field-label" for="delayInput" data-i18n="delayLabel">Başlangıç Gecikmesi (sn)</label>
               <div class="quick-delays" id="quickDelays">
-                <button type="button" class="mini-pill is-active" data-sec="5">5 sn</button>
-                <button type="button" class="mini-pill" data-sec="15">15 sn</button>
-                <button type="button" class="mini-pill" data-sec="30">30 sn</button>
-                <button type="button" class="mini-pill" data-sec="60">1 dk</button>
+                <button type="button" class="mini-pill is-active" data-sec="5">5s</button>
+                <button type="button" class="mini-pill" data-sec="15">15s</button>
+                <button type="button" class="mini-pill" data-sec="30">30s</button>
+                <button type="button" class="mini-pill" data-sec="60">1m</button>
               </div>
             </div>
             <input class="input" id="delayInput" type="number" min="1" max="3600" inputmode="numeric" value="5">
@@ -168,16 +173,16 @@
           <div class="msg-panel is-hidden" id="msgOptions">
             <div class="field-grid">
               <div class="field-group">
-                <label class="field-label" for="msgCountInput">Mesaj Sayısı</label>
+                <label class="field-label" for="msgCountInput" data-i18n="msgCountLabel">Mesaj Sayısı</label>
                 <input class="input" id="msgCountInput" type="number" min="1" max="10" inputmode="numeric" value="3">
               </div>
               <div class="field-group">
-                <label class="field-label" for="msgGapInput">Aralık (sn)</label>
+                <label class="field-label" for="msgGapInput" data-i18n="msgGapLabel">Aralık (sn)</label>
                 <input class="input" id="msgGapInput" type="number" min="1" max="60" inputmode="numeric" value="3">
               </div>
             </div>
             <div class="field-group">
-              <label class="field-label" for="msgTextInput">Mesajlar (her satır ayrı bildirim)</label>
+              <label class="field-label" for="msgTextInput" data-i18n="msgTextLabel">Mesajlar (her satır ayrı bildirim)</label>
               <textarea class="input textarea" id="msgTextInput" rows="3" maxlength="300">Neredesin? Hemen eve gelmen lazım!
 Mesajımı görmedin mi?
 Acil beni ara!</textarea>
@@ -187,32 +192,32 @@ Acil beni ara!</textarea>
           <!-- Tırmanan Senaryo Zinciri Paneli -->
           <div class="chain-panel is-hidden" id="chainOptions">
             <div class="chain-head">
-              <strong>Tırmanan Senaryo Akışı</strong>
-              <span>Mesaj → Acil Mesaj → Gelen Arama</span>
+              <strong data-i18n="chainTitle">Tırmanan Senaryo Akışı</strong>
+              <span data-i18n="chainSub">Mesaj → Acil Mesaj → Gelen Arama</span>
             </div>
             <div class="chain-steps">
               <div class="chain-step">
                 <span class="step-badge">1</span>
                 <div class="step-body">
-                  <label class="field-label" for="chainMsg1Input">İlk Mesaj (Normal)</label>
+                  <label class="field-label" for="chainMsg1Input" data-i18n="chainStep1">İlk Mesaj (Normal)</label>
                   <input class="input input-compact" id="chainMsg1Input" type="text" maxlength="100" value="Müsait misin? Bir şey söyleyeceğim">
                 </div>
               </div>
               <div class="chain-step">
                 <span class="step-badge step-badge-warn">2</span>
                 <div class="step-body">
-                  <label class="field-label" for="chainMsg2Input">İkinci Mesaj (Acil)</label>
+                  <label class="field-label" for="chainMsg2Input" data-i18n="chainStep2">İkinci Mesaj (Acil)</label>
                   <input class="input input-compact" id="chainMsg2Input" type="text" maxlength="100" value="Kapıda kaldım, baksana telefona!!">
                 </div>
               </div>
               <div class="chain-step">
                 <span class="step-badge step-badge-call">3</span>
                 <div class="step-body step-row-inline">
-                  <span class="step-static-label">Ardından otomatik gelen arama</span>
+                  <span class="step-static-label" data-i18n="chainStep3">Ardından otomatik gelen arama</span>
                   <div class="step-gap-wrap">
-                    <label class="field-label" for="chainGapInput">Adım aralığı</label>
+                    <label class="field-label" for="chainGapInput" data-i18n="chainGapLabel">Adım aralığı</label>
                     <input class="input input-tiny" id="chainGapInput" type="number" min="2" max="60" inputmode="numeric" value="6">
-                    <span class="unit-txt">sn</span>
+                    <span class="unit-txt" data-i18n="secUnit">sn</span>
                   </div>
                 </div>
               </div>
@@ -221,35 +226,35 @@ Acil beni ara!</textarea>
 
           <!-- Cihaz Arayüz Stili -->
           <div class="field-group">
-            <label class="field-label" for="osStyleSelect">Ekran Stili (Android / iOS)</label>
+            <label class="field-label" for="osStyleSelect" data-i18n="osStyleLabel">Ekran Stili (Android / iOS)</label>
             <select class="input" id="osStyleSelect">
-              <option value="auto">Otomatik (Cihazıma göre)</option>
-              <option value="android">Android (Material / One UI)</option>
-              <option value="ios">iOS (iPhone Stili)</option>
+              <option value="auto" data-i18n="osOptAuto">Otomatik (Cihazıma göre)</option>
+              <option value="android" data-i18n="osOptAndroid">Android (Material / One UI)</option>
+              <option value="ios" data-i18n="osOptIos">iOS (iPhone Stili)</option>
             </select>
           </div>
 
           <!-- Arka Plan / Duvar Kağıdı Seçici -->
           <div class="field-group">
             <div class="label-row">
-              <span class="field-label">Arka Plan / Duvar Kağıdı</span>
-              <button type="button" class="test-sound-btn" id="openWallpaperTipBtn">Nasıl daha gerçekçi olur?</button>
+              <span class="field-label" data-i18n="wpLabel">Arka Plan / Duvar Kağıdı</span>
+              <button type="button" class="test-sound-btn" id="openWallpaperTipBtn" data-i18n="wpTipLink">Nasıl daha gerçekçi olur?</button>
             </div>
             <div class="wallpaper-box">
               <div class="wallpaper-row">
-                <img class="wp-thumb is-hidden" id="wpThumb" alt="Seçili arka plan önizlemesi">
+                <img class="wp-thumb is-hidden" id="wpThumb" alt="">
                 <div class="wp-controls">
                   <div class="custom-audio-row">
-                    <label class="file-btn" for="wallpaperInput">Duvar Kağıdı / SS Seç</label>
+                    <label class="file-btn" for="wallpaperInput" data-i18n="wpChooseBtn">Duvar Kağıdı / SS Seç</label>
                     <input class="sr-only" id="wallpaperInput" type="file" accept="image/*">
-                    <button type="button" class="btn-ghost-danger is-hidden" id="clearWallpaperBtn">Kaldır</button>
+                    <button type="button" class="btn-ghost-danger is-hidden" id="clearWallpaperBtn" data-i18n="removeBtn">Kaldır</button>
                   </div>
                   <p class="helper-note" id="wallpaperStatus">Kendi duvar kağıdını veya boş ana ekran SS'ini seç; yalnızca bu cihazda saklanır.</p>
                 </div>
               </div>
               <label class="wp-check-row" for="wpBlurCallToggle">
                 <input type="checkbox" id="wpBlurCallToggle" checked>
-                <span>Arama ekranında da bulanık arka plan olarak kullan</span>
+                <span data-i18n="wpBlurCheck">Arama ekranında da bulanık arka plan olarak kullan</span>
               </label>
             </div>
           </div>
@@ -261,71 +266,69 @@ Acil beni ara!</textarea>
               <button type="button" class="test-sound-btn" id="testSoundBtn">▶ Sesi Test Et</button>
             </div>
             <select class="input" id="toneSelect">
-              <option value="auto">Cihaz Stiline Uygun (Otomatik)</option>
-              <option value="ios_melody">iOS Tarzı Marimba / Modern</option>
-              <option value="android_melody">Android Tarzı Melodik</option>
-              <option value="soft">Akustik Arp / Yumuşak</option>
-              <option value="classic">Gerçekçi Klasik Zil</option>
-              <option value="custom">Kendi Ses Dosyam (Cihazdan)</option>
-              <option value="none">Sessiz (Yalnızca Titreşim)</option>
+              <option value="auto" data-i18n="toneOptAuto">Cihaz Stiline Uygun (Otomatik)</option>
+              <option value="ios_melody" data-i18n="toneOptIos">iOS Tarzı Marimba / Modern</option>
+              <option value="android_melody" data-i18n="toneOptAndroid">Android Tarzı Melodik</option>
+              <option value="soft" data-i18n="toneOptSoft">Akustik Arp / Yumuşak</option>
+              <option value="classic" data-i18n="toneOptClassic">Gerçekçi Klasik Zil</option>
+              <option value="custom" data-i18n="toneOptCustom">Kendi Ses Dosyam (Cihazdan)</option>
+              <option value="none" data-i18n="toneOptNone">Sessiz (Yalnızca Titreşim)</option>
             </select>
 
             <!-- Özel Ses Dosyası Seçici -->
             <div class="custom-audio-box is-hidden" id="customAudioBox">
               <div class="custom-audio-row">
-                <label class="file-btn" for="customAudioInput">Ses Dosyası Seç (.mp3/.wav/.m4a)</label>
+                <label class="file-btn" for="customAudioInput" data-i18n="audioChooseBtn">Ses Dosyası Seç (.mp3/.wav/.m4a)</label>
                 <input class="sr-only" id="customAudioInput" type="file" accept="audio/*">
-                <button type="button" class="btn-ghost-danger is-hidden" id="clearAudioBtn">Kaldır</button>
+                <button type="button" class="btn-ghost-danger is-hidden" id="clearAudioBtn" data-i18n="removeBtn">Kaldır</button>
               </div>
               <p class="helper-note" id="customAudioStatus">Kendi telefonunun zil sesini seçersen yalnızca cihazında (çevrimdışı) saklanır.</p>
-              <button type="button" class="inline-tip-btn" id="openRingtoneGuideBtn">Cihazına göre zil sesi isimleri &amp; rehber →</button>
+              <button type="button" class="inline-tip-btn" id="openRingtoneGuideBtn" data-i18n="ringtoneGuideLink">Cihazına göre zil sesi isimleri &amp; rehber →</button>
             </div>
           </div>
 
-          <!-- GELİŞMİŞ: Karşı Taraf Sesi & Sessiz Güvenlik Köprüsü (Katlanabilir) -->
+          <!-- GELİŞMİŞ: Karşı Taraf Sesi & Sessiz Güvenlik Köprüsü -->
           <details class="pro-accordion" id="proAccordion">
             <summary class="pro-summary">
               <div class="pro-summary-text">
-                <strong>Gelişmiş: Karşı Taraf Sesi &amp; Sessiz SOS</strong>
-                <span>Cevaplayınca telefon hattı sesi ve gizli acil SMS kısayolu</span>
+                <strong data-i18n="proTitle">Gelişmiş: Karşı Taraf Sesi &amp; Sessiz SOS</strong>
+                <span data-i18n="proSub">Cevaplayınca telefon hattı sesi ve gizli acil SMS kısayolu</span>
               </div>
               <span class="pro-chevron" aria-hidden="true">▾</span>
             </summary>
 
             <div class="pro-body">
-              <!-- Karşı Taraf Sesi -->
               <div class="field-group">
                 <div class="label-row">
-                  <label class="field-label" for="voiceSelect">Cevaplayınca Karşı Taraf Sesi</label>
+                  <label class="field-label" for="voiceSelect" data-i18n="voiceLabel">Cevaplayınca Karşı Taraf Sesi</label>
                   <button type="button" class="test-sound-btn" id="testVoiceBtn">▶ Dinle</button>
                 </div>
                 <select class="input" id="voiceSelect">
-                  <option value="none">Kapalı (Sessiz)</option>
-                  <option value="ambient">Gerçekçi Telefon Hattı Ortam Sesi</option>
-                  <option value="custom_voice">Kendi Ses Kaydın (Ahize Filtreli)</option>
+                  <option value="none" data-i18n="voiceOptNone">Kapalı (Sessiz)</option>
+                  <option value="ambient" data-i18n="voiceOptAmbient">Gerçekçi Telefon Hattı Ortam Sesi</option>
+                  <option value="custom_voice" data-i18n="voiceOptCustom">Kendi Ses Kaydın (Ahize Filtreli)</option>
                 </select>
                 <div class="custom-audio-box is-hidden" id="customVoiceBox">
                   <div class="custom-audio-row">
-                    <label class="file-btn" for="customVoiceInput">Konuşma Ses Kaydı Seç</label>
+                    <label class="file-btn" for="customVoiceInput" data-i18n="voiceChooseBtn">Konuşma Ses Kaydı Seç</label>
                     <input class="sr-only" id="customVoiceInput" type="file" accept="audio/*">
-                    <button type="button" class="btn-ghost-danger is-hidden" id="clearVoiceBtn">Kaldır</button>
+                    <button type="button" class="btn-ghost-danger is-hidden" id="clearVoiceBtn" data-i18n="removeBtn">Kaldır</button>
                   </div>
                   <p class="helper-note" id="customVoiceStatus">Seçtiğin kayıt 300–3400 Hz telefon filtresinden geçirilerek gerçek ahize konuşması gibi çalar; yalnızca cihazında kalır.</p>
                 </div>
               </div>
 
-              <!-- Sessiz Güvenlik Köprüsü -->
               <div class="sos-box">
                 <div class="sos-head">
-                  <strong>Sessiz Güvenlik Köprüsü (Acil SMS)</strong>
-                  <span>Görüşme ekranında <b>Beklet</b> butonuna 2.5 sn basılı tutarsan, seçtiğin kişiye hazır SMS ekranı açılır.</span>
+                  <strong data-i18n="sosTitle">Sessiz Güvenlik Köprüsü (Acil SMS)</strong>
+                  <span data-i18n="sosDesc">Görüşme ekranında Beklet butonuna 2.5 sn basılı tutarsan, seçtiğin kişiye hazır SMS ekranı açılır.</span>
                 </div>
                 <div class="field-group">
-                  <label class="field-label" for="sosPhoneInput">Güvenilir Kişi Numarası (Opsiyonel)</label>
+                  <label class="field-label" for="sosPhoneInput" data-i18n="sosPhoneLabel">Güvenilir Kişi Numarası (Opsiyonel)</label>
                   <input class="input input-compact" id="sosPhoneInput" type="tel" maxlength="20" placeholder="+90 5XX XXX XX XX" autocomplete="off">
                 </div>
                 <div class="field-group">
-                  <label class="field-label" for="sosMsgInput">Hazır Yardım Mesajı</label>
+                  <label class="field-label" for="sosMsgInput" data-i18n="sosMsgLabel">Hazır Yardım Mesajı</label>
                   <input class="input input-compact" id="sosMsgInput" type="text" maxlength="160" value="Şu an kendimi güvende hissetmiyorum, beni hemen arar mısın?">
                 </div>
               </div>
@@ -335,22 +338,22 @@ Acil beni ara!</textarea>
           <!-- Gerçekçilik Rehberi Kartı -->
           <button type="button" class="tips-banner" id="openTipsBanner">
             <div class="tips-banner-text">
-              <strong>Gerçekçilik Tüyoları &amp; Kamufle Rehberi</strong>
-              <span>Hesap makinesi gizli kodu, SS ipucu ve marka zil sesi isimleri</span>
+              <strong data-i18n="tipsBannerTitle">Gerçekçilik Tüyoları &amp; Kamufle Rehberi</strong>
+              <span data-i18n="tipsBannerSub">Hesap makinesi gizli kodu, SS ipucu ve marka zil sesi isimleri</span>
             </div>
             <span class="tips-arrow" aria-hidden="true">›</span>
           </button>
 
           <!-- Alt Yasal Özet -->
           <div class="mini-legal-bar">
-            <span>Verilerin sunucuya gönderilmez.</span>
-            <button type="button" class="link-btn" id="openLegalInline">KVKK &amp; Koşullar</button>
+            <span data-i18n="miniPrivacy">Verilerin sunucuya gönderilmez.</span>
+            <button type="button" class="link-btn" id="openLegalInline" data-i18n="miniLegalBtn">KVKK &amp; Koşullar</button>
           </div>
         </div>
 
-        <!-- Fitts Yasası: Başparmak Bölgesi Tek İzole Birincil CTA -->
+        <!-- Birincil CTA -->
         <div class="cta-dock">
-          <button type="button" class="btn-primary" id="startBtn">Başlat ve Ekranı Karart</button>
+          <button type="button" class="btn-primary" id="startBtn" data-i18n="startBtn">Başlat ve Ekranı Karart</button>
         </div>
       </div>
 
@@ -358,10 +361,10 @@ Acil beni ara!</textarea>
       <div class="screen screen-wait" id="screenWait" tabindex="0" aria-label="Bekleme ekranı">
         <div class="wait-content" id="waitHint">
           <div class="wait-timer" id="waitTimer">5</div>
-          <p class="wait-text">Güç tuşuna basma — ekran 2 sn içinde tamamen kararacak.</p>
-          <p class="wait-sub">Telefonu masaya bırak. İptal için ekrana <strong>çift dokun</strong>.</p>
+          <p class="wait-text" data-i18n="waitText">Güç tuşuna basma — ekran 2 sn içinde tamamen kararacak.</p>
+          <p class="wait-sub" data-i18n="waitSub">Telefonu masaya bırak. İptal için ekrana çift dokun.</p>
         </div>
-        <button type="button" class="wait-cancel-btn" id="cancelWaitBtn">İptal Et</button>
+        <button type="button" class="wait-cancel-btn" id="cancelWaitBtn" data-i18n="cancelBtn">İptal Et</button>
       </div>
 
       <!-- 3. KAMUFLE MOD: ÇALIŞAN HESAP MAKİNESİ -->
@@ -393,7 +396,7 @@ Acil beni ara!</textarea>
           <button type="button" class="calc-key key-op" data-op="+">+</button>
 
           <button type="button" class="calc-key key-zero" data-num="0">0</button>
-          <button type="button" class="calc-key" data-act="dot">,</button>
+          <button type="button" class="calc-key" data-act="dot" id="calcDotBtn">,</button>
           <button type="button" class="calc-key key-eq" data-act="equals">=</button>
         </div>
       </div>
@@ -424,7 +427,7 @@ Acil beni ara!</textarea>
         <div class="noti-stack screen-fg" id="notiStack" aria-live="polite"></div>
 
         <div class="lock-bottom screen-fg">
-          <button type="button" class="back-pill" id="homeBackBtn">Ayarlara Dön</button>
+          <button type="button" class="back-pill" id="homeBackBtn" data-i18n="backToSetup">Ayarlara Dön</button>
         </div>
       </div>
 
@@ -450,7 +453,7 @@ Acil beni ara!</textarea>
           <div class="call-sub" id="callSub">Cep · arıyor…</div>
         </div>
 
-        <!-- Arama Cevaplandığında Görünecek Gerçekçi Kontrol Izgarası -->
+        <!-- Arama İçi Kontroller -->
         <div class="incall-grid screen-fg is-hidden" id="inCallGrid">
           <button type="button" class="call-tool-btn" data-tool="mute" aria-pressed="false">
             <span class="tool-circle">
@@ -462,7 +465,7 @@ Acil beni ara!</textarea>
                 <line x1="8" y1="23" x2="16" y2="23"/>
               </svg>
             </span>
-            <span class="tool-label">Sessiz</span>
+            <span class="tool-label" data-i18n="toolMute">Sessiz</span>
           </button>
           <button type="button" class="call-tool-btn" data-tool="keypad" aria-pressed="false">
             <span class="tool-circle">
@@ -472,7 +475,7 @@ Acil beni ara!</textarea>
                 <circle cx="6" cy="19" r="2"/><circle cx="12" cy="19" r="2"/><circle cx="18" cy="19" r="2"/>
               </svg>
             </span>
-            <span class="tool-label">Klavye</span>
+            <span class="tool-label" data-i18n="toolKeypad">Klavye</span>
           </button>
           <button type="button" class="call-tool-btn" data-tool="speaker" aria-pressed="false">
             <span class="tool-circle">
@@ -482,7 +485,7 @@ Acil beni ara!</textarea>
                 <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
               </svg>
             </span>
-            <span class="tool-label">Hoparlör</span>
+            <span class="tool-label" data-i18n="toolSpeaker">Hoparlör</span>
           </button>
           <button type="button" class="call-tool-btn" data-tool="hold" id="holdToolBtn" aria-pressed="false">
             <span class="tool-circle">
@@ -490,7 +493,7 @@ Acil beni ara!</textarea>
                 <rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>
               </svg>
             </span>
-            <span class="tool-label">Beklet</span>
+            <span class="tool-label" data-i18n="toolHold">Beklet</span>
           </button>
           <button type="button" class="call-tool-btn" data-tool="add" aria-pressed="false">
             <span class="tool-circle">
@@ -498,7 +501,7 @@ Acil beni ara!</textarea>
                 <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
               </svg>
             </span>
-            <span class="tool-label">Arama Ekle</span>
+            <span class="tool-label" data-i18n="toolAdd">Arama Ekle</span>
           </button>
           <button type="button" class="call-tool-btn" data-tool="contacts" aria-pressed="false">
             <span class="tool-circle">
@@ -507,7 +510,7 @@ Acil beni ara!</textarea>
                 <circle cx="12" cy="7" r="4"/>
               </svg>
             </span>
-            <span class="tool-label">Kişiler</span>
+            <span class="tool-label" data-i18n="toolContacts">Kişiler</span>
           </button>
         </div>
 
@@ -528,13 +531,13 @@ Acil beni ara!</textarea>
             <button type="button" class="dtmf-key" data-k="0">0</button>
             <button type="button" class="dtmf-key" data-k="#">#</button>
           </div>
-          <button type="button" class="dtmf-hide-btn" id="hideDtmfBtn">Gizle</button>
+          <button type="button" class="dtmf-hide-btn" id="hideDtmfBtn" data-i18n="hideKeypad">Gizle</button>
         </div>
 
         <!-- Cevapla / Reddet Butonları -->
         <div class="call-actions screen-fg" id="callActions">
           <div class="call-btn-wrap" id="declineWrap">
-            <button type="button" class="round-btn btn-decline" id="declineBtn" aria-label="Reddet veya Kapat">
+            <button type="button" class="round-btn btn-decline" id="declineBtn" aria-label="Reddet">
               <svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor" aria-hidden="true">
                 <path d="M12 9c-1.6 0-3.15.25-4.6.72v3.1c0 .39-.23.74-.56.9-.98.49-1.87 1.12-2.66 1.85-.18.18-.43.28-.7.28-.28 0-.53-.11-.71-.29L.29 13.08a.956.956 0 0 1-.29-.7c0-.28.11-.53.29-.71C3.34 8.78 7.46 7 12 7s8.66 1.78 11.71 4.67c.18.18.29.43.29.71 0 .28-.11.53-.29.71l-2.48 2.48c-.18.18-.43.29-.71.29-.27 0-.52-.11-.7-.28a11.27 11.27 0 0 0-2.67-1.85.996.996 0 0 1-.56-.9v-3.1C15.15 9.25 13.6 9 12 9z"/>
               </svg>
@@ -548,7 +551,7 @@ Acil beni ara!</textarea>
                 <path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 0 0-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/>
               </svg>
             </button>
-            <span class="call-btn-label">Cevapla</span>
+            <span class="call-btn-label" data-i18n="acceptLabel">Cevapla</span>
           </div>
         </div>
       </div>
@@ -559,122 +562,27 @@ Acil beni ara!</textarea>
   <div class="modal-backdrop is-hidden" id="tipsModal" role="dialog" aria-modal="true" aria-labelledby="tipsModalTitle">
     <div class="modal-card">
       <div class="modal-header">
-        <h3 id="tipsModalTitle">Gerçekçilik Tüyoları &amp; Kamufle Rehberi</h3>
+        <h3 id="tipsModalTitle" data-i18n="tipsModalTitle">Gerçekçilik Tüyoları &amp; Kamufle Rehberi</h3>
         <button type="button" class="btn-close-mini" id="closeTipsBtn" aria-label="Kapat">×</button>
       </div>
-      <div class="modal-body">
-        <h4>1. Hesap Makinesi Kılığı (Kamufle Mod)</h4>
-        <p>
-          Sağ üstteki <strong>Hesap Makinesi</strong> ikonuna dokunarak uygulamayı gerçek bir hesap makinesine çevirebilirsin. Yanındaki biri baksa normal işlem yaptığını görür.
-        </p>
-        <ul>
-          <li><strong>Gizli Başlatma:</strong> İşlem girmeden sadece bir sayı yazıp <code>=</code> tuşuna bas (ör. <code>15=</code>). Üst köşede belirsiz yeşil nokta yanar ve seçtiğin mod 15 sn sonra sessizce başlar.</li>
-          <li><strong>Normal Hesaplama:</strong> <code>24 + 18 =</code> gibi normal işlemler gerçek hesap makinesi gibi çalışır.</li>
-          <li><strong>İptal / Ayarlara Dön:</strong> Geri sayımı iptal etmek için <code>AC</code> tuşuna iki kez bas; ayarlara dönmek için <code>AC</code> tuşuna <strong>1.5 sn basılı tut</strong>.</li>
-        </ul>
-
-        <h4>2. Tırmanan Senaryo Zinciri &amp; Karşı Taraf Sesi</h4>
-        <ul>
-          <li><strong>Zincir Modu:</strong> Önce normal bir mesaj, ardından acil ikinci mesaj ve hemen üstüne aynı kişiden gelen arama düşer — inandırıcılığı en yüksek moddur.</li>
-          <li><strong>Ahize Filtresi:</strong> Gelişmiş bölümden <em>Telefon Hattı Ortam Sesi</em> veya kendi ses kaydını seçersen, aramayı cevapladığında 300–3400 Hz telefon filtresiyle çalar. Hoparlör tuşuna basınca ses artar, Beklet/Sessiz'de susar.</li>
-          <li><strong>Sessiz SOS:</strong> Gelişmiş bölümde bir numara kaydettiysen, görüşme ekranında <strong>Beklet</strong> tuşuna 2.5 sn basılı tutarak hazır acil SMS ekranını açabilirsin.</li>
-        </ul>
-
-        <h4>3. Duvar Kağıdı, Güç Tuşu &amp; Medya Sesi</h4>
-        <ul>
-          <li><strong>Duvar Kağıdı:</strong> Kilit ekranı SS'i yerine ham duvar kağıdı seçersen saat her zaman gerçek zamanlı kalır.</li>
-          <li><strong>Güç tuşuna basma:</strong> Ekranı kilitlemek yerine 2 saniyede açılan AMOLED siyah modda masaya bırak.</li>
-          <li><strong>Medya sesi:</strong> Başlatmadan önce telefonun <em>Medya</em> ses düzeyini aç.</li>
-        </ul>
-
-        <h4>4. Cihazının Varsayılan Zil Sesi İsimleri</h4>
-        <p>
-          Marka zil sesleri telifli olduğu için koda eklenmez. Kendi cihazının zil sesi adını kopyalayıp güvendiğin bir kaynaktan bulduğun <code>.mp3</code>/<code>.wav</code>/<code>.m4a</code> dosyasını <strong>Kendi Ses Dosyam</strong> alanına ekleyebilirsin:
-        </p>
-
-        <div class="ringtone-guide-list" id="ringtoneGuideList">
-          <div class="rg-item">
-            <div class="rg-info">
-              <strong>iPhone (iOS 17+)</strong>
-              <span>Reflection (Yansıma) / Radial</span>
-            </div>
-            <button type="button" class="copy-pill" data-copy="iPhone Reflection default ringtone">Kopyala</button>
-          </div>
-          <div class="rg-item">
-            <div class="rg-info">
-              <strong>iPhone (Klasik)</strong>
-              <span>Opening (Açılış) / Marimba</span>
-            </div>
-            <button type="button" class="copy-pill" data-copy="iPhone Opening default ringtone">Kopyala</button>
-          </div>
-          <div class="rg-item">
-            <div class="rg-info">
-              <strong>Samsung (One UI)</strong>
-              <span>Over the Horizon / Galaxy Bells</span>
-            </div>
-            <button type="button" class="copy-pill" data-copy="Samsung Over the Horizon default ringtone">Kopyala</button>
-          </div>
-          <div class="rg-item">
-            <div class="rg-info">
-              <strong>Xiaomi (HyperOS / MIUI)</strong>
-              <span>Mi Remix / Mi Jazz</span>
-            </div>
-            <button type="button" class="copy-pill" data-copy="Xiaomi Mi Remix default ringtone">Kopyala</button>
-          </div>
-          <div class="rg-item">
-            <div class="rg-info">
-              <strong>Google Pixel / Saf Android</strong>
-              <span>Your New Adventure</span>
-            </div>
-            <button type="button" class="copy-pill" data-copy="Google Pixel Your New Adventure ringtone">Kopyala</button>
-          </div>
-          <div class="rg-item">
-            <div class="rg-info">
-              <strong>Huawei / Honor</strong>
-              <span>Huawei Tune Living</span>
-            </div>
-            <button type="button" class="copy-pill" data-copy="Huawei Tune Living default ringtone">Kopyala</button>
-          </div>
-        </div>
-      </div>
+      <div class="modal-body" id="tipsModalBody"></div>
       <div class="modal-footer modal-footer-end">
-        <button type="button" class="btn-confirm" id="acceptTipsBtn">Tamam</button>
+        <button type="button" class="btn-confirm" id="acceptTipsBtn" data-i18n="okBtn">Tamam</button>
       </div>
     </div>
   </div>
 
-  <!-- KVKK & Yasal Uyarı Modalı -->
+  <!-- KVKK / GİZLİLİK & YASAL UYARI MODALI -->
   <div class="modal-backdrop is-hidden" id="legalModal" role="dialog" aria-modal="true" aria-labelledby="legalModalTitle">
     <div class="modal-card">
       <div class="modal-header">
-        <h3 id="legalModalTitle">KVKK Aydınlatma &amp; Yasal Uyarı</h3>
+        <h3 id="legalModalTitle" data-i18n="legalModalTitle">KVKK Aydınlatma &amp; Yasal Uyarı</h3>
         <button type="button" class="btn-close-mini" id="closeLegalBtn" aria-label="Kapat">×</button>
       </div>
-      <div class="modal-body">
-        <h4>1. 6698 Sayılı KVKK Kapsamında Gizlilik</h4>
-        <p>
-          <strong>KurtarBeni</strong> tamamen tarayıcınızda (istemci tarafında) çalışan açık kaynaklı bir statik web uygulamasıdır. Hiçbir sunucu, veritabanı, çerez (cookie), reklam ağı, harici yazı tipi veya analitik aracı içermez.
-        </p>
-        <p>
-          Girdiğiniz arayan adı, mesaj metni, acil durum numarası, duvar kağıdı veya özel ses dosyaları <strong>hiçbir şekilde internete gönderilmez</strong> ve geliştirici dahil üçüncü kişilerle paylaşılmaz. Tüm veriler yalnızca kendi cihazınızın yerel tarayıcı deposunda (<code>localStorage</code> / <code>IndexedDB</code>) tutulur.
-        </p>
-
-        <h4>2. Yasal Kullanım ve Sorumluluk Reddi</h4>
-        <p>
-          Bu uygulama yalnızca sosyal ortamlardan nazikçe ayrılmak, kişisel güvenlik hissi sağlamak veya simülasyon amacıyla geliştirilmiştir.
-        </p>
-        <ul>
-          <li>Gerçek bir acil durumda bu uygulama yerine doğrudan <strong>112 Acil Çağrı Merkezi</strong>'ni arayın.</li>
-          <li>Uygulamanın; dolandırıcılık, tehdit, taciz, kişilik haklarına saldırı, sahte delil üretme veya 5237 sayılı Türk Ceza Kanunu'na aykırı herhangi bir amaçla kullanılması kesinlikle yasaktır.</li>
-          <li>Uygulama "olduğu gibi" (MIT Lisansı ile) sunulur; kullanımından doğabilecek tüm hukuki sorumluluk kullanıcıya aittir.</li>
-        </ul>
-
-        <h4>3. Cihaz Verilerini Yönet</h4>
-        <p>Cihazınızda kayıtlı tüm tercihleri, duvar kağıdını, ses dosyalarını, acil durum numarasını ve çevrimdışı önbelleği tek dokunuşla kalıcı olarak silebilirsiniz.</p>
-      </div>
+      <div class="modal-body" id="legalModalBody"></div>
       <div class="modal-footer">
-        <button type="button" class="btn-danger-outline" id="wipeDataBtn">Tüm Yerel Verileri Sil</button>
-        <button type="button" class="btn-confirm" id="acceptLegalBtn">Anladım</button>
+        <button type="button" class="btn-danger-outline" id="wipeDataBtn" data-i18n="wipeBtn">Tüm Yerel Verileri Sil</button>
+        <button type="button" class="btn-confirm" id="acceptLegalBtn" data-i18n="understoodBtn">Anladım</button>
       </div>
     </div>
   </div>
